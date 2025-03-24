@@ -8,14 +8,13 @@ RUN apk add --no-cache \
     git \
     ffmpeg \
     unzip \
-    postgresql-dev \
     oniguruma-dev \
     libzip-dev \
     zip \
     curl
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql pdo_pgsql mbstring zip exif pcntl
+RUN docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -40,12 +39,11 @@ WORKDIR /var/www
 # Install runtime dependencies
 RUN apk add --no-cache \
     ffmpeg \
-    libpq \
     oniguruma \
     libzip
 
-# Install PHP extensions (don't copy from builder, install them again)
-RUN docker-php-ext-install pdo pdo_mysql pdo_pgsql mbstring zip exif pcntl
+# Install PHP extensions (without PostgreSQL)
+RUN docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl
 
 # Set PHP upload limits
 RUN echo "upload_max_filesize = 2048M" > /usr/local/etc/php/conf.d/uploads.ini \
@@ -57,7 +55,7 @@ RUN addgroup -g 1000 www && \
     adduser -u 1000 -G www -h /var/www -D www
 
 # Copy application files with correct permissions
-COPY --chown=www:www . .
+COPY --chown=www:www . . 
 COPY --from=builder --chown=www:www /var/www/vendor ./vendor
 
 # Set storage permissions
