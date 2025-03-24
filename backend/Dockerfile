@@ -7,9 +7,6 @@ WORKDIR /var/www
 RUN apk add --no-cache \
     nodejs \
     npm \
-    python3 \
-    make \
-    g++ \
     git \
     ffmpeg \
     unzip \
