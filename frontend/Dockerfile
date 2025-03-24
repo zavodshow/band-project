@@ -4,7 +4,7 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # First copy only package files for better layer caching
-COPY package.json ./
+COPY package.json package-lock.json ./
 
 # Install dependencies (clean cache afterwards)
 RUN npm ci --omit=dev && npm cache clean --force
