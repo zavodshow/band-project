@@ -96,12 +96,16 @@ COPY --from=builder --chown=www:www /var/www/vendor ./vendor
 COPY --from=builder --chown=www:www /var/www/bootstrap/cache ./bootstrap/cache
 
 # Set storage permissions
-RUN chown -R www:www storage bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache \
-    && php artisan storage:link
+RUN chown -R www:www storage bootstrap/cache
+
+# Copy the entrypoint script and set permissions
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 USER www
 
 EXPOSE 9000
 
-CMD ["bash", "-c", "php artisan config:cache && php artisan migrate --force && php-fpm"]
+# Use the entrypoint script
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+CMD ["php-fpm"]

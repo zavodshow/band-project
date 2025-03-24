@@ -29,11 +29,6 @@ services:
       - laravel_public:/var/www/public
     env_file:
       - ./backend/.env
-    command: >
-      bash -c "while ! nc -z mysql 3306; do sleep 1; done
-              && php artisan migrate --force
-              && php artisan db:seed --force
-              && php-fpm"
     networks:
       - app_network
 
