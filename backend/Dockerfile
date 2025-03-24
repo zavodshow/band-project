@@ -43,6 +43,9 @@ COPY . .
 # Create bootstrap/cache directory
 RUN mkdir -p bootstrap/cache
 
+# Create storage/framework/views directory
+RUN mkdir -p storage/framework/views
+
 # Run any post-install scripts
 RUN composer dump-autoload --optimize
 
