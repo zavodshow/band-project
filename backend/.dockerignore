@@ -17,7 +17,6 @@ phpunit.xml
 *.sql
 *.log
 *.bat
-*.sh
 *.idea
 *.vscode
 *.DS_Store
