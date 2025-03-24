@@ -38,14 +38,14 @@ const nextConfig = {
         protocol: "http",
         hostname: "109.196.100.122",
         // hostname: "localhost",
-        port: "8000",
+        port: "9000",
         // hostname: "bandback-production.up.railway.app",
         pathname: "/storage/uploads/**",
       },
       {
         protocol: "http",
         hostname: "localhost", // Localhost configuration
-        port: "8000", // Port for local development
+        port: "9000", // Port for local development
         pathname: "/storage/uploads/**", // Pattern for image paths
       },
     ],

@@ -3,40 +3,51 @@
 # Exit script on any error
 set -e
 
-# Define a marker file
+# Define marker file
 MARKER_FILE="/var/www/.initialized"
 
-# Check if the application has already been initialized
-if [ ! -f "$MARKER_FILE" ]; then
-  echo "Waiting for database connection at $DB_HOST:$DB_PORT..."
-
-  until nc -z -v -w30 "$DB_HOST" "$DB_PORT"; do
-    echo "Waiting for database connection..."
+# Database connection check with credentials
+check_db_connection() {
+  echo "Checking database connection..."
+  until php artisan db:monitor --timeout=3 --retries=3 > /dev/null 2>&1; do
+    echo "Waiting for database to be ready..."
     sleep 5
   done
+}
 
-  echo "Running migrations..."
+# Check if initialization is needed
+if [ ! -f "$MARKER_FILE" ]; then
+  echo "Starting application initialization..."
+  
+  # Set directory permissions
+  chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+  find /var/www/storage -type d -exec chmod 775 {} \;
+  find /var/www/storage -type f -exec chmod 664 {} \;
+
+  # Verify database connection
+  check_db_connection
+
+  # Run database operations
+  echo "Running database migrations..."
   php artisan migrate --force
 
-  echo "Seeding the database..."
-  php artisan db:seed --force  # Add this line to run the seeders
+  echo "Seeding database..."
+  php artisan db:seed --force
 
-  echo "Caching configuration..."
+  # Cache configuration
   php artisan config:cache
   php artisan route:cache
   php artisan view:cache
 
-  echo "Linking storage..."
-  php artisan storage:link || true  # Prevents failure if symlink already exists
+  # Create storage link (ignore if already exists)
+  php artisan storage:link || true
 
-  echo "Setting correct permissions..."
-  chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
-
-  # Create a marker file to indicate initialization is complete
+  # Mark initialization complete
   touch "$MARKER_FILE"
+  echo "Initialization completed."
 else
-  echo "Application has already been initialized. Skipping setup."
+  echo "Application already initialized. Skipping setup."
 fi
 
-echo "Starting PHP-FPM..."
+# Start PHP-FPM
 exec php-fpm
