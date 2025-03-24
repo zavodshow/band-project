@@ -11,6 +11,8 @@ RUN apk add --no-cache \
     git \
     ffmpeg \
     unzip \
+    mysql-client \
+    netcat-openbsd \
     oniguruma-dev \
     libzip-dev \
     libpng-dev \
