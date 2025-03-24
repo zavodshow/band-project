@@ -27,8 +27,13 @@ services:
     volumes:
       - laravel_storage:/var/www/storage
       - laravel_public:/var/www/public
-    env_file:
-      - ./backend/.env
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=laravel
+      - DB_USERNAME=laraveluser
+      - DB_PASSWORD=laravelpassword
     networks:
       - app_network
 
