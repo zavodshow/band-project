@@ -19,14 +19,14 @@ RUN apk add --no-cache \
 # Install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
-        pdo \
-        pdo_mysql \
-        mbstring \
-        zip \
-        exif \
-        pcntl \
-        gd \
-        opcache
+    pdo \
+    pdo_mysql \
+    mbstring \
+    zip \
+    exif \
+    pcntl \
+    gd \
+    opcache
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -39,6 +39,10 @@ RUN composer install --ignore-platform-reqs --no-scripts --no-dev --prefer-dist 
 
 # Copy application files
 COPY . .
+
+# Create bootstrap/cache directory and set permissions
+RUN mkdir -p bootstrap/cache && \
+    chown -R www:www bootstrap/cache
 
 # Run any post-install scripts
 RUN composer dump-autoload --optimize
