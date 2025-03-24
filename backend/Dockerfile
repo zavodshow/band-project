@@ -40,11 +40,8 @@ RUN composer install --ignore-platform-reqs --no-scripts --no-dev --prefer-dist 
 # Copy application files
 COPY . .
 
-# Create bootstrap/cache directory
-RUN mkdir -p bootstrap/cache
-
-# Create storage/framework/views directory
-RUN mkdir -p storage/framework/views
+# Create necessary directories
+RUN mkdir -p bootstrap/cache storage/framework/views
 
 # Run any post-install scripts
 RUN composer dump-autoload --optimize
@@ -81,19 +78,16 @@ RUN echo "upload_max_filesize = 2048M" > /usr/local/etc/php/conf.d/uploads.ini \
 RUN addgroup -g 1000 www && \
     adduser -u 1000 -G www -h /var/www -D www
 
+# Create directories first
+RUN mkdir -p bootstrap/cache storage/framework/{cache,sessions,testing,views} storage/logs
+
 # Copy application files with correct permissions
 COPY --chown=www:www . .
 COPY --from=builder --chown=www:www /var/www/vendor ./vendor
 
 # Set storage permissions
-RUN mkdir -p storage/framework/{cache,sessions,testing,views} \
-    && mkdir -p storage/logs \
-    && chown -R www:www storage bootstrap/cache \
+RUN chown -R www:www storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=1m \
-    CMD php-fpm-healthcheck || exit 1
 
 USER www
 
