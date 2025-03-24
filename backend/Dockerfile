@@ -3,8 +3,9 @@ FROM php:8.2-fpm-alpine AS builder
 
 WORKDIR /var/www
 
-# Install system dependencies
+# Install system dependencies including bash
 RUN apk add --no-cache \
+    bash \
     nodejs \
     npm \
     git \
@@ -16,7 +17,8 @@ RUN apk add --no-cache \
     libjpeg-turbo-dev \
     freetype-dev \
     zip \
-    curl
+    curl \
+    openssh-client
 
 # Install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
@@ -46,21 +48,25 @@ COPY . .
 RUN mkdir -p bootstrap/cache storage/framework/views
 
 # Run any post-install scripts
-RUN composer dump-autoload --optimize
+RUN composer dump-autoload --optimize \
+    && php artisan config:cache \
+    && php artisan route:cache
 
 # Stage 2: Final production image
 FROM php:8.2-fpm-alpine
 
 WORKDIR /var/www
 
-# Install runtime dependencies
+# Install runtime dependencies including bash
 RUN apk add --no-cache \
+    bash \
     ffmpeg \
     oniguruma \
     libzip \
     libpng \
     libjpeg-turbo \
-    freetype
+    freetype \
+    tzdata
 
 # Copy PHP extensions from builder
 COPY --from=builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
@@ -74,7 +80,8 @@ RUN echo "upload_max_filesize = 2048M" > /usr/local/etc/php/conf.d/uploads.ini \
     && echo "opcache.memory_consumption=128" >> /usr/local/etc/php/conf.d/opcache.ini \
     && echo "opcache.interned_strings_buffer=8" >> /usr/local/etc/php/conf.d/opcache.ini \
     && echo "opcache.max_accelerated_files=4000" >> /usr/local/etc/php/conf.d/opcache.ini \
-    && echo "opcache.revalidate_freq=60" >> /usr/local/etc/php/conf.d/opcache.ini
+    && echo "opcache.revalidate_freq=60" >> /usr/local/etc/php/conf.d/opcache.ini \
+    && echo "opcache.enable_cli=1" >> /usr/local/etc/php/conf.d/opcache.ini
 
 # Create non-root user
 RUN addgroup -g 1000 www && \
@@ -86,13 +93,15 @@ RUN mkdir -p bootstrap/cache storage/framework/{cache,sessions,testing,views} st
 # Copy application files with correct permissions
 COPY --chown=www:www . .
 COPY --from=builder --chown=www:www /var/www/vendor ./vendor
+COPY --from=builder --chown=www:www /var/www/bootstrap/cache ./bootstrap/cache
 
 # Set storage permissions
 RUN chown -R www:www storage bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
+    && chmod -R 775 storage bootstrap/cache \
+    && php artisan storage:link
 
 USER www
 
 EXPOSE 9000
 
-CMD ["php-fpm"]
+CMD ["bash", "-c", "php artisan config:cache && php artisan migrate --force && php-fpm"]
