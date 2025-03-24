@@ -15,11 +15,6 @@ services:
       - ./backend/mysql/my.cnf:/etc/mysql/conf.d/my.cnf:ro
     networks:
       - app_network
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   laravel:
     build:
@@ -35,6 +30,14 @@ services:
       - laravel_public:/var/www/public
     env_file:
       - ./backend/.env
+    command: >
+      sh -c "while ! nc -z mysql_db 3306; do sleep 1; done &&
+          composer install &&
+          php artisan migrate --force &&
+          php artisan config:cache &&
+          php artisan storage:link &&
+          php artisan db:seed --force &&
+          php-fpm"
     networks:
       - app_network
 
