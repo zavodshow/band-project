@@ -68,8 +68,5 @@ networks:
 
 volumes:
   mysql_data:
-    driver: local
   laravel_storage:
-    driver: local
   laravel_public:
-    driver: local
