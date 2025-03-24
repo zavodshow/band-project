@@ -40,9 +40,8 @@ RUN composer install --ignore-platform-reqs --no-scripts --no-dev --prefer-dist 
 # Copy application files
 COPY . .
 
-# Create bootstrap/cache directory and set permissions
-RUN mkdir -p bootstrap/cache && \
-    chown -R www:www bootstrap/cache
+# Create bootstrap/cache directory
+RUN mkdir -p bootstrap/cache
 
 # Run any post-install scripts
 RUN composer dump-autoload --optimize
