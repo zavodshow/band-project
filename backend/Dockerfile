@@ -98,8 +98,8 @@ COPY --from=builder --chown=www:www /var/www/bootstrap/cache ./bootstrap/cache
 # Set storage permissions
 RUN chown -R www:www storage bootstrap/cache
 
-# Copy the entrypoint script and set permissions
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+# Copy the entrypoint script
+COPY --chown=www:www entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 USER www
