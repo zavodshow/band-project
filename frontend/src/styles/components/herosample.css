@@ -1,0 +1,147 @@
+.heroBg {
+  position: relative;
+}
+
+.heroBg img {
+  position: absolute;
+  top: -40px;
+  right: 90px;
+  height: 354px;
+  width: 354px;
+  /* background-position: center; */
+  /* background-size: cover; */
+}
+
+.heroTextWidth {
+  flex: 0 0 225px;
+}
+
+/* Adjust width for mobile devices */
+@media (max-width: 768px) {
+  .heroTextWidth {
+    flex: 0;
+    width: 180px;
+  }
+
+  .heroRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.heroTitleWidth {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  flex: 1;
+  /* width: 90%; */
+}
+
+.heroWhiteTopbtn {
+  margin-left: 5px;
+}
+
+.heroSectionTitle {
+  margin-top: 50px;
+  color: var(--secondaryWhiteColor);
+}
+
+.events .heroLinkWrap .chichaShow div:nth-child(1),
+.tourConcert .heroLinkWrap .chichaShow div:nth-child(1) {
+  margin-left: 100px;
+}
+
+.events .heroLinkWrap .chichaShow div:nth-child(5),
+.tourConcert .heroLinkWrap .chichaShow div:nth-child(3) {
+  margin-left: 230px;
+}
+
+.technical .heroLinkWrap .chichaShow div:nth-child(1) {
+  margin-left: 100px;
+}
+
+.technical .heroLinkWrap .chichaShow div:nth-child(3) {
+  margin-left: 250px;
+}
+
+.heroLinkWrap {
+  margin-top: 65px;
+  align-items: flex-start;
+}
+
+.heroLinkLeft {
+  width: 32%;
+}
+
+.heroLinkLeft1 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.heroLinkRight {
+  width: 66%;
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  z-index: 2;
+}
+
+@media (max-width: 1330px) {
+  .technical .heroLinkWrap .chichaShow div:nth-child(1) {
+    margin-left: 0px;
+  }
+
+  .technical .heroLinkWrap .chichaShow div:nth-child(3) {
+    margin-left: 0px;
+  }
+}
+
+@media (max-width: 1385px) {
+  .events .heroLinkWrap .chichaShow div:nth-child(1),
+  .tourConcert .heroLinkWrap .chichaShow div:nth-child(1) {
+    margin-left: 0px;
+  }
+
+  .events .heroLinkWrap .chichaShow div:nth-child(5),
+  .tourConcert .heroLinkWrap .chichaShow div:nth-child(3) {
+    margin-left: 0px;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroBg img {
+    right: 0px;
+    top: 75px;
+    width: 230px;
+    height: 230px;
+  }
+
+  .heroWhiteTopbtn {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .heroLinkWrap {
+    margin-top: 30px;
+    flex-direction: column-reverse;
+  }
+
+  .heroLinkLeft {
+    width: 100%;
+    margin-top: 40px;
+  }
+
+  .heroLinkRight {
+    width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .visualization .heroLinkWrap .chichaHidden div:nth-child(1) {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+  }
+}
