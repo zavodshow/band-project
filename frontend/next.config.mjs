@@ -5,13 +5,13 @@ const nextConfig = {
   reactStrictMode: true,
   webpack: (config) => {
     config.module.rules.push({
-      test: /\.pdf$/, // Match .pdf files
-      type: "asset/resource", // Handle PDFs as static assets
+      test: /\.pdf$/,
+      type: "asset/resource",
     });
 
     config.module.rules.push({
-      test: /\.(mp4|webm|ogg|avi|mkv)$/, // Match video formats
-      type: "asset/resource", // Handle videos as static assets
+      test: /\.(mp4|webm|ogg|avi|mkv)$/,
+      type: "asset/resource",
     });
 
     return config;
@@ -22,13 +22,13 @@ const nextConfig = {
       {
         protocol: "http",
         hostname: "109.196.100.122",
-        port: "", // Remove port specification
+        port: "9000",
         pathname: "/storage/uploads/**",
       },
       {
         protocol: "http",
         hostname: "localhost",
-        port: "", // Remove port specification
+        port: "9000",
         pathname: "/storage/uploads/**",
       },
     ],
