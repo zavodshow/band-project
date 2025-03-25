@@ -17,18 +17,6 @@ RUN apt-get update && \
     libsodium-dev && \
     rm -rf /var/lib/apt/lists/*
 
-# Configure and install PHP extensions
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
-    docker-php-ext-install -j$(nproc) \
-    gd \
-    sodium \
-    zip \
-    pdo \
-    pdo_mysql \
-    mbstring \
-    exif \
-    pcntl
-
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
@@ -47,8 +35,9 @@ FROM php:8.2-fpm-alpine
 
 WORKDIR /var/www
 
-# Install runtime dependencies with their dev packages (needed for shared libraries)
+# Install runtime dependencies and build tools
 RUN apk add --no-cache --update \
+    # Runtime dependencies
     libpq \
     oniguruma \
     libzip \
@@ -56,16 +45,16 @@ RUN apk add --no-cache --update \
     libjpeg-turbo \
     libpng \
     libsodium \
-    # Add development packages for shared libraries
+    # Build dependencies (will be removed later)
     libzip-dev \
+    oniguruma-dev \
     freetype-dev \
     libjpeg-turbo-dev \
     libpng-dev \
     libsodium-dev \
-    # And build dependencies
     build-base
 
-# Reinstall PHP extensions in Alpine to ensure proper linking
+# Configure and install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
     docker-php-ext-install -j$(nproc) \
     gd \
@@ -78,12 +67,14 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
     pcntl
 
 # Remove build dependencies to keep image small
-RUN apk del build-base \
+RUN apk del \
     libzip-dev \
+    oniguruma-dev \
     freetype-dev \
     libjpeg-turbo-dev \
     libpng-dev \
-    libsodium-dev
+    libsodium-dev \
+    build-base
 
 # Create directory structure
 RUN mkdir -p \
