@@ -1,12 +1,26 @@
-version: "3.8"
+version: '3.8'
 
 services:
+  nginx:
+    image: nginx:alpine
+    container_name: nginx_server
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - laravel_storage:/var/www/storage/app/public
+    networks:
+      - app_network
+    depends_on:
+      - laravel
+      - next
+
   mysql:
     image: mysql:8.0
     container_name: mysql_db
     restart: always
-    ports:
-      - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: laravel
@@ -14,61 +28,41 @@ services:
       MYSQL_PASSWORD: laravelpassword
     volumes:
       - mysql_data:/var/lib/mysql
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "mysqladmin",
-          "ping",
-          "-h",
-          "localhost",
-          "-u",
-          "root",
-          "--password=$$(echo $$MYSQL_ROOT_PASSWORD)",
-        ]
-      interval: 5s
-      timeout: 10s
-      retries: 20
-      start_period: 20s
     networks:
       - app_network
+    command: --default-authentication-plugin=mysql_native_password
 
   laravel:
-      build:
-        context: ./backend
-        dockerfile: Dockerfile
-      container_name: laravel_app
-      restart: unless-stopped
-      depends_on:
-        mysql:
-          condition: service_healthy
-      volumes:
-        - ./backend:/var/www
-        - ./backend/storage:/var/www/storage
-        - ./backend/public:/var/www/public
-      environment:
-        - DB_CONNECTION=mysql
-        - DB_HOST=mysql
-        - DB_PORT=3306
-        - DB_DATABASE=laravel
-        - DB_USERNAME=laraveluser
-        - DB_PASSWORD=laravelpassword
-      command: >
-        bash -c "
-        chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache &&
-        chmod -R 775 /var/www/storage /var/www/bootstrap/cache &&
-        echo 'Waiting for MySQL to be ready...';
-        while ! nc -z mysql 3306; do
-          sleep 5;
-        done;
-        php artisan migrate --force;
-        php artisan config:cache;
-        php artisan route:cache;
-        php artisan view:cache;
-        php-fpm
-        "
-      networks:
-        - app_network
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: laravel_app
+    restart: unless-stopped
+    volumes:
+      - ./backend:/var/www
+      - laravel_storage:/var/www/storage/app/public
+    environment:
+      APP_ENV: production
+      APP_KEY: base64:your_generated_key_here
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: laravel
+      DB_USERNAME: laraveluser
+      DB_PASSWORD: laravelpassword
+    networks:
+      - app_network
+    command: >
+      sh -c "
+      mkdir -p bootstrap/cache storage/framework/{cache,sessions,views} &&
+      chmod -R 777 bootstrap/cache storage &&
+      composer install --optimize-autoloader --no-dev &&
+      php artisan config:cache &&
+      php artisan route:cache &&
+      php artisan view:cache &&
+      php artisan storage:link &&
+      php-fpm
+      "
 
   next:
     build:
@@ -76,27 +70,9 @@ services:
       dockerfile: Dockerfile
     container_name: next_app
     restart: unless-stopped
-    depends_on:
-      - laravel
     environment:
       NODE_ENV: production
-      NEXT_PUBLIC_API_URL: /api
-    networks:
-      - app_network
-
-  nginx:
-    image: nginx:alpine
-    container_name: nginx
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./ssl:/etc/nginx/ssl:ro
-      - laravel_storage:/var/www/storage:ro
-    depends_on:
-      - laravel
-      - next
+      NEXT_PUBLIC_API_URL: http://109.196.100.122/api
     networks:
       - app_network
 
@@ -107,4 +83,3 @@ networks:
 volumes:
   mysql_data:
   laravel_storage:
-  laravel_public:
