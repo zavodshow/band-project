@@ -53,11 +53,10 @@ services:
     command: >
       sh -c "
       echo 'Waiting for MySQL to be ready...'
-      while ! mysqladmin ping -h mysql -u root --password=$$(echo $$MYSQL_ROOT_PASSWORD) --silent; do
+      until mysqladmin ping -h mysql -u $$DB_USERNAME --password=$$(echo $$DB_PASSWORD) --silent; do
         echo 'MySQL not ready yet - sleeping'
         sleep 5
       done
-      echo 'MySQL is ready!'
       php artisan migrate --force
       php-fpm
       "
