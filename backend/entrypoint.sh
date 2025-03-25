@@ -1,43 +1,31 @@
 #!/bin/bash
 
-# Exit script on any error
 set -e
 
-# Define a marker file
 MARKER_FILE="/var/www/.initialized"
 
-# Check if the application has already been initialized
 if [ ! -f "$MARKER_FILE" ]; then
-    echo "Waiting for database connection at $DB_HOST:$DB_PORT..."
+    echo "Waiting for database connection at ${DB_HOST:-mysql}:${DB_PORT:-3306}..."
 
-    # Wait for database to be ready
-    until mysqladmin ping -h "$DB_HOST" -P "$DB_PORT" --silent; do
-        echo "Waiting for database connection..."
+    # Use a loop with a more robust check and backoff
+    while ! mysqladmin ping -h "${DB_HOST:-mysql}" -P "${DB_PORT:-3306}" --silent; do
+        echo "Waiting for database... sleeping 5s"
         sleep 5
     done
 
-    echo "Running database migrations..."
+    # Ensure proper permissions before running commands
+    chown -R www-www-data /var/www/storage /var/www/bootstrap/cache
+
     php artisan migrate --force
-
-    echo "Seeding the database..."
     php artisan db:seed --force
-
-    echo "Caching configuration..."
     php artisan config:cache
     php artisan route:cache
     php artisan view:cache
+    php artisan storage:link || true
 
-    echo "Linking storage..."
-    php artisan storage:link || true # Prevents failure if symlink already exists
-
-    echo "Setting correct permissions..."
-    chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
-
-    # Create a marker file to indicate initialization is complete
     touch "$MARKER_FILE"
 else
-    echo "Application has already been initialized. Skipping setup."
+    echo "Application already initialized."
 fi
 
-echo "Starting PHP-FPM..."
 exec php-fpm
