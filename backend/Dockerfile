@@ -1,88 +1,63 @@
-# Stage 1: Build stage for PHP dependencies
-FROM php:8.2-fpm-alpine AS builder
+# Stage 1: Build
+FROM php:8.2-cli as builder
 
 WORKDIR /var/www
 
 # Install system dependencies
-RUN apk add --no-cache \
-    bash \
-    nodejs \
-    npm \
+RUN apt-get update && apt-get install -y \
     git \
     unzip \
-    mysql-client \
-    oniguruma-dev \
+    libpq-dev \
+    libonig-dev \
     libzip-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
     libpng-dev \
-    libjpeg-turbo-dev \
-    freetype-dev
-
-# Install PHP extensions
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) \
-    pdo \
-    pdo_mysql \
-    mbstring \
-    zip \
-    exif \
-    pcntl \
-    gd \
-    opcache
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd \
+    && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copy only composer files first for better caching
+# Copy composer files
 COPY composer.json composer.lock ./
 
-# Install PHP dependencies (no-dev for production)
-RUN composer install --ignore-platform-reqs --no-scripts --no-dev --prefer-dist --optimize-autoloader
+# Install dependencies
+RUN composer install --ignore-platform-reqs --no-dev --no-scripts --no-autoloader
 
-# Copy application files
+# Copy entire source
 COPY . .
 
-# Create necessary directories
-RUN mkdir -p bootstrap/cache storage/framework/views
+# Optimize autoloader
+RUN composer dump-autoload --optimize
 
-# Stage 2: Final production image
+# Stage 2: Production
 FROM php:8.2-fpm-alpine
 
 WORKDIR /var/www
 
 # Install runtime dependencies
 RUN apk add --no-cache \
-    mysql-client \
-    bash \
+    libpq \
     oniguruma \
     libzip \
-    libpng \
-    libjpeg-turbo \
     freetype \
-    tzdata
+    libjpeg-turbo \
+    libpng
 
-# Copy PHP extensions from builder
+# Copy PHP extensions and config from builder
 COPY --from=builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
-COPY --from=builder /usr/local/lib/php/extensions/no-debug-non-zts-20220829/ /usr/local/lib/php/extensions/no-debug-non-zts-20220829/
+COPY --from=builder /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
+COPY --from=builder /var/www /var/www
 
-# Set PHP settings
+# PHP config
 RUN echo "upload_max_filesize = 2048M" > /usr/local/etc/php/conf.d/uploads.ini \
     && echo "post_max_size = 2048M" >> /usr/local/etc/php/conf.d/uploads.ini \
-    && echo "max_execution_time = 120" >> /usr/local/etc/php/conf.d/uploads.ini
+    && echo "memory_limit = 512M" >> /usr/local/etc/php/conf.d/uploads.ini \
+    && echo "max_execution_time = 300" >> /usr/local/etc/php/conf.d/uploads.ini
 
-# Use existing www-data user instead of creating new one
-RUN chown -R www-data:www-data /var/www
-
-# Create directories with correct permissions
-RUN mkdir -p storage/framework/{cache,sessions,views} storage/logs bootstrap/cache \
-    && chown -R www-data:www-data storage bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
-
-# Copy application files with correct permissions
-COPY --from=builder --chown=www-data:www-data /var/www .
-
-# Switch to non-root user
-USER www-data
-
-EXPOSE 9000
+# Permissions
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
 CMD ["php-fpm"]
