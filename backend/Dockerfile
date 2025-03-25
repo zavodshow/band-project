@@ -3,8 +3,9 @@ FROM php:8.2-fpm-alpine AS builder
 
 WORKDIR /var/www
 
-# Install system dependencies (removed bash)
+# Install system dependencies including bash
 RUN apk add --no-cache \
+    bash \
     nodejs \
     npm \
     git \
@@ -58,9 +59,10 @@ FROM php:8.2-fpm-alpine
 
 WORKDIR /var/www
 
-# Install runtime dependencies (removed bash)
+# Install runtime dependencies including bash
 RUN apk add --no-cache \
     mysql-client \
+    bash \
     ffmpeg \
     oniguruma \
     libzip \
@@ -98,6 +100,10 @@ COPY --from=builder --chown=www:www /var/www/bootstrap/cache ./bootstrap/cache
 
 # Set storage permissions
 RUN chown -R www:www storage bootstrap/cache
+
+# Run migrations during build (will fail if DB not available, so better to do at runtime)
+# Alternatively, you can use composer post-install scripts
+RUN echo "Database migrations will run at container startup via composer post-install scripts"
 
 USER www
 

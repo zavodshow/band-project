@@ -51,13 +51,13 @@ services:
       - DB_USERNAME=laraveluser
       - DB_PASSWORD=laravelpassword
     command: >
-      sh -c "
-      echo 'Waiting for MySQL to be ready...'
-      until mysqladmin ping -h mysql -u $$DB_USERNAME --password=$$(echo $$DB_PASSWORD) --silent; do
-        echo 'MySQL not ready yet - sleeping'
-        sleep 5
-      done
-      php artisan migrate --force
+      bash -c "
+      echo 'Waiting for MySQL to be ready...';
+      while ! mysqladmin ping -h mysql -u $$DB_USERNAME --password=$$DB_PASSWORD --silent; do
+        echo 'MySQL not ready yet - sleeping';
+        sleep 5;
+      done;
+      php artisan migrate --force;
       php-fpm
       "
     networks:
