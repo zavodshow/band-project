@@ -53,8 +53,10 @@ services:
       dockerfile: Dockerfile
     container_name: next_app
     restart: unless-stopped
+    depends_on:
+      - laravel
     environment:
-      NODE_ENV: development
+      NODE_ENV: production
       NEXT_PUBLIC_API_URL: http://109.196.100.122:8000
     networks:
       - app_network
