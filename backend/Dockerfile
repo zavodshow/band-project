@@ -101,14 +101,12 @@ COPY --from=builder --chown=www:www /var/www/bootstrap/cache ./bootstrap/cache
 # Set storage permissions
 RUN chown -R www:www storage bootstrap/cache
 
-# Copy the entrypoint script
-COPY --chown=www:www entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+# Run migrations during build (will fail if DB not available, so better to do at runtime)
+# Alternatively, you can use composer post-install scripts
+RUN echo "Database migrations will run at container startup via composer post-install scripts"
 
 USER www
 
 EXPOSE 9000
 
-# Use the entrypoint script
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["php-fpm"]

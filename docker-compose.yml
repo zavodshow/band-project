@@ -51,6 +51,15 @@ services:
       - DB_DATABASE=laravel
       - DB_USERNAME=laraveluser
       - DB_PASSWORD=laravelpassword
+    command: >
+      sh -c "
+      while ! mysqladmin ping -h mysql --silent; do
+        echo 'Waiting for database...'
+        sleep 5
+      done &&
+      composer run-script post-install-cmd &&
+      php-fpm
+      "
     networks:
       - app_network
 
