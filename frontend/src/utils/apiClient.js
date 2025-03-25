@@ -3,7 +3,7 @@ import endpoint from "../config/config";
 import { logout } from "@/api";
 
 const apiClient = axios.create({
-  baseURL: endpoint,
+  baseURL: `${endpoint}/api`,
 });
 
 // Add a response interceptor to handle 401 errors
