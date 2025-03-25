@@ -23,6 +23,10 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# Create cache directory with proper permissions
+RUN mkdir -p bootstrap/cache storage/framework/{cache,sessions,views} && \
+    chmod -R 775 bootstrap/cache storage
+
 # Copy composer files
 COPY composer.json composer.lock ./
 
@@ -33,7 +37,7 @@ RUN composer install --no-dev --no-scripts --no-autoloader
 COPY . .
 
 # Generate optimized autoloader
-RUN composer dump-autoload --optimize
+RUN composer dump-autoload --optimize --no-scripts
 
 # Stage 2: Production image
 FROM php:8.2-fpm-alpine
