@@ -13,9 +13,13 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
     libpng-dev \
+    libsodium-dev \
+    libzip4 \
+    libjpeg62-turbo \
+    libfreetype6 \
+    libsodium23 \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl \
+    && docker-php-ext-install -j$(nproc) gd sodium zip pdo pdo_mysql mbstring exif pcntl \
     && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
     && php -r "unlink('composer-setup.php');"
@@ -45,10 +49,15 @@ RUN apk add --no-cache \
     freetype \
     libjpeg-turbo \
     libpng \
-    git \
-    && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-    && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
-    && php -r "unlink('composer-setup.php');"
+    libsodium \
+    libzip-dev \
+    freetype-dev \
+    libjpeg-turbo-dev \
+    libpng-dev \
+    libsodium-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd sodium zip pdo pdo_mysql mbstring exif pcntl \
+    && apk del libzip-dev freetype-dev libjpeg-turbo-dev libpng-dev libsodium-dev 
 
 # Create directory structure
 RUN mkdir -p /var/www/bootstrap/cache \
