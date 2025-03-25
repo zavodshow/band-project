@@ -28,7 +28,7 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ["localhost", "109.196.100.122"],
+    domains: ["localhost", "109.196.100.122", "109.196.100.122:8000"],
     remotePatterns: [
       {
         protocol: "http",
@@ -38,11 +38,12 @@ const nextConfig = {
       },
       {
         protocol: "http",
-        hostname: "localhost", // Localhost configuration
-        port: "8000", // Port for local development
-        pathname: "/storage/uploads/**", // Pattern for image paths
+        hostname: "localhost",
+        port: "8000",
+        pathname: "/storage/uploads/**",
       },
     ],
+    unoptimized: true,
   },
 };
 
