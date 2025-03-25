@@ -66,7 +66,7 @@ RUN mkdir -p \
     /var/www/storage/logs
 
 # Copy artifacts from builder
-COPY --from=builder /usr/local/bin/composer /usr/local/bin/composer
+COPY --from=builder /usr/bin/composer /usr/bin/composer
 COPY --from=builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
 COPY --from=builder /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
 COPY --from=builder /var/www /var/www
