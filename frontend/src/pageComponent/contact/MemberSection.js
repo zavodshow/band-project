@@ -5,7 +5,7 @@ import { teamOfficeInfo } from "../../constant/group";
 const MemberSection = () => (
   <div className="contactAddress meberSquare">
     {teamOfficeInfo.map((item, index) => (
-      <div key={index} className="flexWrap itemCenter spaceBetween memberInfo">
+      <div key={index} className="flexWrap spaceBetween memberInfo">
         <div className="smallHalfWidth memberType">
           {item.title ? (
             <div>
