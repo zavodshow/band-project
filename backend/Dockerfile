@@ -47,7 +47,7 @@ FROM php:8.2-fpm-alpine
 
 WORKDIR /var/www
 
-# Install runtime dependencies (no dev packages needed)
+# Install runtime dependencies with their dev packages (needed for shared libraries)
 RUN apk add --no-cache --update \
     libpq \
     oniguruma \
@@ -55,7 +55,35 @@ RUN apk add --no-cache --update \
     freetype \
     libjpeg-turbo \
     libpng \
-    libsodium
+    libsodium \
+    # Add development packages for shared libraries
+    libzip-dev \
+    freetype-dev \
+    libjpeg-turbo-dev \
+    libpng-dev \
+    libsodium-dev \
+    # And build dependencies
+    build-base
+
+# Reinstall PHP extensions in Alpine to ensure proper linking
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
+    docker-php-ext-install -j$(nproc) \
+    gd \
+    sodium \
+    zip \
+    pdo \
+    pdo_mysql \
+    mbstring \
+    exif \
+    pcntl
+
+# Remove build dependencies to keep image small
+RUN apk del build-base \
+    libzip-dev \
+    freetype-dev \
+    libjpeg-turbo-dev \
+    libpng-dev \
+    libsodium-dev
 
 # Create directory structure
 RUN mkdir -p \
@@ -65,10 +93,7 @@ RUN mkdir -p \
     /var/www/storage/framework/sessions \
     /var/www/storage/logs
 
-# Copy artifacts from builder
-COPY --from=builder /usr/bin/composer /usr/bin/composer
-COPY --from=builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
-COPY --from=builder /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
+# Copy application files from builder
 COPY --from=builder /var/www /var/www
 
 # Set permissions

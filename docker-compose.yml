@@ -45,11 +45,6 @@ services:
       php artisan storage:link &&
       php-fpm
       "
-    healthcheck:
-      test: ["CMD", "php", "artisan", "migrate:status"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   next:
     build:
@@ -62,11 +57,6 @@ services:
       NEXT_PUBLIC_API_URL: http://109.196.100.122/api
     networks:
       - app_network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   nginx:
     image: nginx:alpine
@@ -81,10 +71,8 @@ services:
     networks:
       - app_network
     depends_on:
-      laravel:
-        condition: service_healthy
-      next:
-        condition: service_healthy
+      - laravel
+      - next
 
 networks:
   app_network:
