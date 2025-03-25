@@ -1,9 +1,11 @@
+# Stage 1: Builder - Use Debian-based image for better compatibility
 FROM php:8.2-cli as builder
 
 WORKDIR /var/www
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
+# Install system dependencies with retry logic
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     git \
     unzip \
     libpq-dev \
@@ -12,27 +14,27 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
     libpng-dev \
-    libsodium-dev
+    libsodium-dev && \
+    rm -rf /var/lib/apt/lists/*
 
-# Install PHP extensions
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) \
+# Configure and install PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
+    docker-php-ext-install -j$(nproc) \
+    gd \
+    sodium \
+    zip \
     pdo \
     pdo_mysql \
-    pdo_pgsql \
     mbstring \
-    zip \
     exif \
-    pcntl \
-    gd \
-    sodium
+    pcntl
 
 # Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Copy composer files and install dependencies
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-scripts --no-autoloader
+RUN composer install --ignore-platform-reqs --no-dev --no-scripts --no-autoloader
 
 # Copy application code
 COPY . .
@@ -40,41 +42,20 @@ COPY . .
 # Generate optimized autoloader
 RUN composer dump-autoload --optimize --no-scripts
 
-# Final stage
+# Stage 2: Production - Use Alpine with pre-installed extensions
 FROM php:8.2-fpm-alpine
 
 WORKDIR /var/www
 
-# Install runtime dependencies
-RUN apk add --no-cache \
-    postgresql-libs \
+# Install runtime dependencies (no dev packages needed)
+RUN apk add --no-cache --update \
     libpq \
+    oniguruma \
     libzip \
     freetype \
     libjpeg-turbo \
     libpng \
     libsodium
-
-# Install PHP extensions
-RUN apk add --no-cache --virtual .build-deps \
-    postgresql-dev \
-    libzip-dev \
-    freetype-dev \
-    libjpeg-turbo-dev \
-    libpng-dev \
-    libsodium-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) \
-    pdo \
-    pdo_mysql \
-    pdo_pgsql \
-    mbstring \
-    zip \
-    exif \
-    pcntl \
-    gd \
-    sodium \
-    && apk del .build-deps
 
 # Create directory structure
 RUN mkdir -p \
