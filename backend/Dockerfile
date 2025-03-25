@@ -3,24 +3,19 @@ FROM php:8.2-fpm-alpine AS builder
 
 WORKDIR /var/www
 
-# Install system dependencies including bash
+# Install system dependencies
 RUN apk add --no-cache \
     bash \
     nodejs \
     npm \
     git \
-    ffmpeg \
     unzip \
     mysql-client \
-    netcat-openbsd \
     oniguruma-dev \
     libzip-dev \
     libpng-dev \
     libjpeg-turbo-dev \
-    freetype-dev \
-    zip \
-    curl \
-    openssh-client
+    freetype-dev
 
 # Install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
@@ -49,21 +44,15 @@ COPY . .
 # Create necessary directories
 RUN mkdir -p bootstrap/cache storage/framework/views
 
-# Run any post-install scripts
-RUN composer dump-autoload --optimize \
-    && php artisan config:cache \
-    && php artisan route:cache
-
 # Stage 2: Final production image
 FROM php:8.2-fpm-alpine
 
 WORKDIR /var/www
 
-# Install runtime dependencies including bash
+# Install runtime dependencies
 RUN apk add --no-cache \
     mysql-client \
     bash \
-    ffmpeg \
     oniguruma \
     libzip \
     libpng \
@@ -75,37 +64,28 @@ RUN apk add --no-cache \
 COPY --from=builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
 COPY --from=builder /usr/local/lib/php/extensions/no-debug-non-zts-20220829/ /usr/local/lib/php/extensions/no-debug-non-zts-20220829/
 
-# Set PHP upload limits and opcache settings
-RUN echo "upload_max_filesize = 2048M" > /usr/local/etc/php/conf.d/uploads.ini \
-    && echo "post_max_size = 2048M" >> /usr/local/etc/php/conf.d/uploads.ini \
-    && echo "max_execution_time = 300" >> /usr/local/etc/php/conf.d/uploads.ini \
-    && echo "opcache.enable=1" > /usr/local/etc/php/conf.d/opcache.ini \
-    && echo "opcache.memory_consumption=128" >> /usr/local/etc/php/conf.d/opcache.ini \
-    && echo "opcache.interned_strings_buffer=8" >> /usr/local/etc/php/conf.d/opcache.ini \
-    && echo "opcache.max_accelerated_files=4000" >> /usr/local/etc/php/conf.d/opcache.ini \
-    && echo "opcache.revalidate_freq=60" >> /usr/local/etc/php/conf.d/opcache.ini \
-    && echo "opcache.enable_cli=1" >> /usr/local/etc/php/conf.d/opcache.ini
+# Set PHP settings
+RUN echo "upload_max_filesize = 128M" > /usr/local/etc/php/conf.d/uploads.ini \
+    && echo "post_max_size = 128M" >> /usr/local/etc/php/conf.d/uploads.ini \
+    && echo "memory_limit = 256M" >> /usr/local/etc/php/conf.d/uploads.ini \
+    && echo "max_execution_time = 120" >> /usr/local/etc/php/conf.d/uploads.ini
 
-# Create non-root user
-RUN addgroup -g 1000 www && \
-    adduser -u 1000 -G www -h /var/www -D www
+# Create non-root user (www-data is standard for PHP-FPM)
+RUN addgroup -g 1000 www-data && \
+    adduser -u 1000 -G www-data -h /var/www -D www-data
 
-# Create directories first
-RUN mkdir -p bootstrap/cache storage/framework/{cache,sessions,testing,views} storage/logs
+# Create directories with correct permissions
+RUN mkdir -p storage/framework/{cache,sessions,views} storage/logs bootstrap/cache
 
 # Copy application files with correct permissions
-COPY --chown=www:www . .
-COPY --from=builder --chown=www:www /var/www/vendor ./vendor
-COPY --from=builder --chown=www:www /var/www/bootstrap/cache ./bootstrap/cache
+COPY --from=builder --chown=www-data:www-data /var/www .
 
-# Set storage permissions
-RUN chown -R www:www storage bootstrap/cache
+# Set proper permissions
+RUN chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
-# Run migrations during build (will fail if DB not available, so better to do at runtime)
-# Alternatively, you can use composer post-install scripts
-RUN echo "Database migrations will run at container startup via composer post-install scripts"
-
-USER www
+# Switch to non-root user
+USER www-data
 
 EXPOSE 9000
 
