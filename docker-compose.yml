@@ -12,9 +12,6 @@ services:
       MYSQL_PASSWORD: laravelpassword
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./backend/mysql/my.cnf:/etc/mysql/conf.d/my.cnf:ro
-    networks:
-      - app_network
     healthcheck:
       test:
         [
@@ -25,12 +22,14 @@ services:
           "localhost",
           "-u",
           "root",
-          "-p",
-          "rootpassword",
+          "--password=$$(echo $$MYSQL_ROOT_PASSWORD)",
         ]
-      interval: 15s
-      timeout: 5s
-      retries: 5
+      interval: 5s
+      timeout: 10s
+      retries: 20
+      start_period: 20s
+    networks:
+      - app_network
 
   laravel:
     build:
@@ -53,11 +52,13 @@ services:
       - DB_PASSWORD=laravelpassword
     command: >
       sh -c "
-      while ! mysqladmin ping -h mysql --silent; do
-        echo 'Waiting for database...'
+      echo 'Waiting for MySQL to be ready...'
+      while ! mysqladmin ping -h mysql -u root --password=$$(echo $$MYSQL_ROOT_PASSWORD) --silent; do
+        echo 'MySQL not ready yet - sleeping'
         sleep 5
-      done &&
-      composer run-script post-install-cmd &&
+      done
+      echo 'MySQL is ready!'
+      php artisan migrate --force
       php-fpm
       "
     networks:
