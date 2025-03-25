@@ -65,24 +65,20 @@ COPY --from=builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
 COPY --from=builder /usr/local/lib/php/extensions/no-debug-non-zts-20220829/ /usr/local/lib/php/extensions/no-debug-non-zts-20220829/
 
 # Set PHP settings
-RUN echo "upload_max_filesize = 128M" > /usr/local/etc/php/conf.d/uploads.ini \
-    && echo "post_max_size = 128M" >> /usr/local/etc/php/conf.d/uploads.ini \
-    && echo "memory_limit = 256M" >> /usr/local/etc/php/conf.d/uploads.ini \
+RUN echo "upload_max_filesize = 2048M" > /usr/local/etc/php/conf.d/uploads.ini \
+    && echo "post_max_size = 2048M" >> /usr/local/etc/php/conf.d/uploads.ini \
     && echo "max_execution_time = 120" >> /usr/local/etc/php/conf.d/uploads.ini
 
-# Create non-root user (www-data is standard for PHP-FPM)
-RUN addgroup -g 1000 www-data && \
-    adduser -u 1000 -G www-data -h /var/www -D www-data
+# Use existing www-data user instead of creating new one
+RUN chown -R www-data:www-data /var/www
 
 # Create directories with correct permissions
-RUN mkdir -p storage/framework/{cache,sessions,views} storage/logs bootstrap/cache
+RUN mkdir -p storage/framework/{cache,sessions,views} storage/logs bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
 # Copy application files with correct permissions
 COPY --from=builder --chown=www-data:www-data /var/www .
-
-# Set proper permissions
-RUN chown -R www-data:www-data storage bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
 
 # Switch to non-root user
 USER www-data
