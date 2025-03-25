@@ -1,5 +1,5 @@
 # Stage 1: Builder - Install dependencies
-FROM php:8.2-cli as builder
+FROM php:8.2-cli AS builder
 
 WORKDIR /var/www
 
