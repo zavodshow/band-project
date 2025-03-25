@@ -28,9 +28,9 @@ services:
           "-p",
           "rootpassword",
         ]
-      interval: 5s
+      interval: 15s
       timeout: 5s
-      retries: 20
+      retries: 5
 
   laravel:
     build:
