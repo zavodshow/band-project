@@ -1,9 +1,8 @@
-# Stage 1: Builder
 FROM php:8.2-cli as builder
 
 WORKDIR /var/www
 
-# Install system dependencies and Composer
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -13,70 +12,100 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
     libpng-dev \
-    libsodium-dev \
-    libzip4 \
-    libjpeg62-turbo \
-    libfreetype6 \
-    libsodium23 \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd sodium zip pdo pdo_mysql mbstring exif pcntl \
-    && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-    && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
-    && php -r "unlink('composer-setup.php');"
+    libsodium-dev
 
-# Copy composer files
+# Install PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) \
+    pdo \
+    pdo_mysql \
+    pdo_pgsql \
+    mbstring \
+    zip \
+    exif \
+    pcntl \
+    gd \
+    sodium
+
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Copy composer files and install dependencies
 COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-scripts --no-autoloader
 
-# Install dependencies
-RUN composer install --ignore-platform-reqs --no-dev --no-scripts --no-autoloader
-
-# Copy entire source
+# Copy application code
 COPY . .
 
 # Generate optimized autoloader
 RUN composer dump-autoload --optimize --no-scripts
 
-# Stage 2: Production
+# Final stage
 FROM php:8.2-fpm-alpine
 
 WORKDIR /var/www
 
-# Install runtime dependencies and Composer
+# Install runtime dependencies
 RUN apk add --no-cache \
+    postgresql-libs \
     libpq \
-    oniguruma \
     libzip \
     freetype \
     libjpeg-turbo \
     libpng \
-    libsodium \
+    libsodium
+
+# Install PHP extensions
+RUN apk add --no-cache --virtual .build-deps \
+    postgresql-dev \
     libzip-dev \
     freetype-dev \
     libjpeg-turbo-dev \
     libpng-dev \
     libsodium-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd sodium zip pdo pdo_mysql mbstring exif pcntl \
-    && apk del libzip-dev freetype-dev libjpeg-turbo-dev libpng-dev libsodium-dev 
+    && docker-php-ext-install -j$(nproc) \
+    pdo \
+    pdo_mysql \
+    pdo_pgsql \
+    mbstring \
+    zip \
+    exif \
+    pcntl \
+    gd \
+    sodium \
+    && apk del .build-deps
 
 # Create directory structure
-RUN mkdir -p /var/www/bootstrap/cache \
-    && mkdir -p /var/www/storage/framework/{cache,views,sessions} \
-    && mkdir -p /var/www/storage/logs
+RUN mkdir -p \
+    /var/www/bootstrap/cache \
+    /var/www/storage/framework/cache \
+    /var/www/storage/framework/views \
+    /var/www/storage/framework/sessions \
+    /var/www/storage/logs
 
-# Copy from builder
+# Copy artifacts from builder
+COPY --from=builder /usr/local/bin/composer /usr/local/bin/composer
 COPY --from=builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
 COPY --from=builder /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
 COPY --from=builder /var/www /var/www
 
 # Set permissions
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
-    && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+RUN chown -R www-data:www-data \
+    /var/www/storage \
+    /var/www/bootstrap/cache \
+    && chmod -R 775 \
+    /var/www/storage \
+    /var/www/bootstrap/cache
 
-# PHP config
-RUN echo "upload_max_filesize = 2048M" > /usr/local/etc/php/conf.d/uploads.ini \
+# PHP configuration
+RUN echo "upload_max_filesize = 2048M" >> /usr/local/etc/php/conf.d/uploads.ini \
     && echo "post_max_size = 2048M" >> /usr/local/etc/php/conf.d/uploads.ini \
     && echo "memory_limit = 512M" >> /usr/local/etc/php/conf.d/uploads.ini \
     && echo "max_execution_time = 300" >> /usr/local/etc/php/conf.d/uploads.ini
 
-    CMD ["sh", "-c", "composer install --optimize-autoloader --no-dev && php-fpm"]
+# Set default command
+CMD ["sh", "-c", "composer install --no-dev --optimize-autoloader && php-fpm"]
+
+# Expose port for web server
+EXPOSE 9000
