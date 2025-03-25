@@ -61,6 +61,7 @@ WORKDIR /var/www
 
 # Install runtime dependencies including bash
 RUN apk add --no-cache \
+    mysql-client \
     bash \
     ffmpeg \
     oniguruma \

@@ -15,6 +15,22 @@ services:
       - ./backend/mysql/my.cnf:/etc/mysql/conf.d/my.cnf:ro
     networks:
       - app_network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p",
+          "rootpassword",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
   laravel:
     build:
@@ -23,7 +39,8 @@ services:
     container_name: laravel_app
     restart: unless-stopped
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     volumes:
       - laravel_storage:/var/www/storage
       - laravel_public:/var/www/public
