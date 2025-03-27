@@ -35,8 +35,6 @@ services:
       DB_PASSWORD: laravelpassword
     networks:
       - app_network
-    ports:
-      - "8000:8000" # Expose Laravel's built-in server
     command: >
       sh -c "
       mkdir -p bootstrap/cache storage/framework/{cache,sessions,views} &&
@@ -58,23 +56,37 @@ services:
       - laravel
     environment:
       NODE_ENV: production
-      NEXT_PUBLIC_API_URL: http://109.196.100.122:8000
+      NEXT_PUBLIC_API_URL: https://zavodshow.ru/api
     networks:
       - app_network
-    # ports:
-    #   - "3000:3000"
 
   nginx:
     image: nginx:alpine
     container_name: nginx_server
     restart: unless-stopped
-    volumes:
-      - ./nginx:/etc/nginx/conf.d
     depends_on:
       - next
       - laravel
     ports:
       - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
+      - ./nginx/autoreload.sh:/docker-entrypoint.d/autoreload.sh
+    networks:
+      - app_network
+
+  certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    depends_on:
+      - nginx
     networks:
       - app_network
 
