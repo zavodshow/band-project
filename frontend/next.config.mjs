@@ -28,16 +28,26 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ["localhost", "109.196.100.122", "109.196.100.122:8000"],
+    domains: ["localhost", "109.196.100.122", "109.196.100.122:8000", "zavodshow.ru", "www.zavodshow.ru"],
     remotePatterns: [
       {
-        protocol: "http",
+        protocol: "https",
+        hostname: "zavodshow.ru",
+        pathname: "/storage/uploads/**",
+      },
+      {
+        protocol: "https",
+        hostname: "www.zavodshow.ru",
+        pathname: "/storage/uploads/**",
+      },
+      {
+        protocol: "https",
         hostname: "109.196.100.122",
         port: "8000",
         pathname: "/storage/uploads/**",
       },
       {
-        protocol: "http",
+        protocol: "https",
         hostname: "localhost",
         port: "8000",
         pathname: "/storage/uploads/**",
