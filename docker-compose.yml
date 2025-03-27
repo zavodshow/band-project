@@ -56,7 +56,7 @@ services:
       - laravel
     environment:
       NODE_ENV: production
-      NEXT_PUBLIC_API_URL: https://zavodshow.ru/api
+      NEXT_PUBLIC_API_URL: https://zavodshow.ru
     networks:
       - app_network
 
