@@ -24,6 +24,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./backend:/var/www
+      - /var/www/vendor
       - laravel_storage:/var/www/storage/app/public
     environment:
       DB_CONNECTION: mysql
