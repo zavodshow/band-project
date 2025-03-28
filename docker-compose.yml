@@ -80,6 +80,7 @@ services:
 
   certbot:
     image: certbot/certbot
+    container_name: certbot_ssl
     restart: unless-stopped
     volumes:
       - ./nginx/certbot/conf:/etc/letsencrypt
