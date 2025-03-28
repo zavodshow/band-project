@@ -4,8 +4,8 @@ domains=("zavodshow.ru" "www.zavodshow.ru")
 rsa_key_size=4096
 data_path="./nginx/certbot"
 email="zavodshowdev@gmail.com"
-staging=0 # Set to 1 if testing
-max_retries=3
+staging=1 # Set to 1 if testing
+max_retries=0
 retry_delay=300 # 5 minutes between retries
 
 if [ -d "$data_path" ]; then
@@ -66,6 +66,7 @@ for i in $(seq 1 $max_retries); do
         $domain_args \
         --rsa-key-size $rsa_key_size \
         --agree-tos \
+        --reuse-key \
         --keep-until-expiring" certbot; then
     echo "Certificate successfully obtained!"
     break
