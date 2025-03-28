@@ -179,10 +179,11 @@ video {
   color: var(--secondaryWhiteColor);
   letter-spacing: -0.02em;
   font-weight: 400;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 @media (min-width: 992px) {
-  /* Adjust breakpoint as needed */
   .pageTitle-1 {
     margin-bottom: 40px;
     margin-top: 32px;
