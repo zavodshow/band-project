@@ -6,6 +6,7 @@ WORKDIR /var/www
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
+    ffmpeg \
     unzip \
     libzip-dev \
     libpng-dev \
@@ -47,6 +48,7 @@ WORKDIR /var/www
 # Install runtime dependencies
 RUN apk add --no-cache \
     libzip \
+    ffmpeg \
     libpng \
     libjpeg-turbo \
     freetype \
