@@ -69,12 +69,12 @@ services:
       - laravel
     ports:
       - "80:80"
-      - "443:443"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
       - ./nginx/certbot/conf:/etc/letsencrypt
       - ./nginx/certbot/www:/var/www/certbot
       - ./nginx/autoreload.sh:/docker-entrypoint.d/autoreload.sh
+      - laravel_storage:/var/www/storage/app/public:ro
     networks:
       - app_network
 
