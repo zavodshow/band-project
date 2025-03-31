@@ -44,11 +44,11 @@ const SitesTable = ({ id }) => {
         firstBlogId: firstId,
         secondBlogId: secondId,
       };
-      swapId(formData, 'sites').then(() => {
+      swapId(formData, "sites").then(() => {
         getSite().then((data) => {
           let temp = addId(data);
           setSites(temp);
-          setTableData(data)
+          setTableData(data);
         });
       });
     }
@@ -105,20 +105,20 @@ const SitesTable = ({ id }) => {
       const handleUpdate = () => {
         let url = `/admin/${type}`;
         let Data = params.row;
-        const queryParams = new URLSearchParams();
-        
-        // Convert the Data object to query parameters
-        Object.keys(Data).forEach(key => {
-          // Handle arrays specially
-          if (Array.isArray(Data[key])) {
-            queryParams.append(key, JSON.stringify(Data[key]));
-          } else {
-            queryParams.append(key, Data[key]);
-          }
-        });
+        // const queryParams = new URLSearchParams();
+
+        // // Convert the Data object to query parameters
+        // Object.keys(Data).forEach(key => {
+        //   // Handle arrays specially
+        //   if (Array.isArray(Data[key])) {
+        //     queryParams.append(key, JSON.stringify(Data[key]));
+        //   } else {
+        //     queryParams.append(key, Data[key]);
+        //   }
+        // });
 
         // Navigate with query parameters
-        navigate.push(`${url}?${queryParams.toString()}`);
+        navigate.push(`${url}?id=${Data.id}`);
       };
 
       return (
@@ -191,7 +191,7 @@ const SitesTable = ({ id }) => {
 
   return (
     <div className="wrapper">
-      <div className="section1"> 
+      <div className="section1">
         <ChichaBox
           content={
             <Box id={id}>

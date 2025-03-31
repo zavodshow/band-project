@@ -19,7 +19,7 @@ const TopCaseEventSection = ({ caseOne }) => {
         <div className="flexWrapBetween caseTopWrapper">
           <div className="caseTitleWrapper">
             <h2 className="caseTitle">{caseOne?.name}</h2>
-            <CaseButton title={caseOne?.blog_type?.[0] || ""} />
+            <CaseButton title={caseOne?.blog_type || ""} />
           </div>
           <div className="caseTopItem spaceBetween">
             <div className="caseTopGap">
@@ -31,12 +31,12 @@ const TopCaseEventSection = ({ caseOne }) => {
                   style={{ marginRight: "clamp(6px, 2vw, 12px)" }}
                   alt="flagImg"
                   src={
-                    caseOne?.blog_type?.[0] === "Тур" ? positionIcon : flagIcon
+                    caseOne?.blog_type === "Тур" ? positionIcon : flagIcon
                   }
                 />
-                {caseOne.blog_type?.[0] === "Тур"
+                {caseOne.blog_type === "Тур"
                   ? caseOne?.cities?.length
-                  : caseOne?.cities?.[0]}
+                  : caseOne?.cities}
                 {/* {`${caseOne?.cities?.length}`} */}
               </div>
               <div
@@ -47,7 +47,7 @@ const TopCaseEventSection = ({ caseOne }) => {
                   style={{ marginRight: "clamp(6px, 2vw, 12px)" }}
                   alt="positionImg"
                   src={
-                    caseOne?.blog_type?.[0] === "Тур" ? starIcon1 : positionIcon
+                    caseOne?.blog_type === "Тур" ? starIcon1 : positionIcon
                   }
                 />
                 {caseOne?.venue}
@@ -75,10 +75,10 @@ const TopCaseEventSection = ({ caseOne }) => {
                   style={{ marginRight: "clamp(6px, 2vw, 12px)" }}
                   alt="userIcon"
                   src={
-                    caseOne?.blog_type?.[0] === "Тур" ? lengthIcon : userIcon
+                    caseOne?.blog_type === "Тур" ? lengthIcon : userIcon
                   }
                 />{" "}
-                {caseOne.blog_type?.[0] === "Тур"
+                {caseOne.blog_type === "Тур"
                   ? `${caseOne?.guests}`
                   : caseOne?.guests}{" "}
               </div>

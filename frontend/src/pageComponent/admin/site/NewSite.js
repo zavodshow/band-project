@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { insertSite, updateSite } from "@/api/siteAPI";
+import { insertSite, updateSite, getSiteById } from "@/api/siteAPI";
 import { CreatePageWrapper } from "../AdminSection";
 import { Input, SelectBox } from "@/components/Inputs";
 import { TabButton } from "@/components/Buttons";
@@ -135,40 +135,72 @@ const typeEquipment = ["Парковка", "Гримёрные комнаты", 
 
 const NewSite = () => {
   const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    site_type: [],
+    capacity: "",
+    address: "",
+    link_page: "",
+    tags: [],
+    siteTags: [],
+    equipment_type: [],
+    queue: 0,
+    cities: "",
+    title: "",
+    keyword: "",
+    description: "",
+  });
+
   const searchParams = useSearchParams();
+  const currentId = searchParams.get("id");
   const navigate = useRouter();
 
-  const getInitialData = () => {
-    if (!searchParams.size) return null;
+  useEffect(() => {
+    const getInitialData = async () => {
+      if (!currentId) return;
 
-    let data = {};
-    searchParams.forEach((value, key) => {
+      setLoading(true);
       try {
-        data[key] = JSON.parse(value);
-      } catch {
-        data[key] = value;
+        const response = await getSiteById(currentId);
+        if (!response) return;
+
+        const processedData = {};
+
+        // Process each field in the response data
+        Object.entries(response).forEach(([key, value]) => {
+          try {
+            // Try to parse JSON if the value is a string
+            processedData[key] =
+              typeof value === "string" ? JSON.parse(value) : value;
+          } catch {
+            processedData[key] = value;
+          }
+        });
+
+        setFormData({
+          name: processedData.name || "",
+          site_type: processedData.site_type || [],
+          capacity: processedData.capacity || "",
+          address: processedData.address || "",
+          link_page: processedData.link_page || "",
+          tags: processedData.tags || [],
+          siteTags: processedData.siteTags || [],
+          equipment_type: processedData.equipment_type || [],
+          queue: processedData.queue || 0,
+          cities: processedData.cities?.[0] || "",
+          title: processedData.title || "",
+          keyword: processedData.keyword || "",
+          description: processedData.description || "",
+        });
+      } catch (error) {
+        console.error("Error fetching initial data:", error);
+      } finally {
+        setLoading(false);
       }
-    });
-    return data;
-  };
+    };
 
-  const Data = getInitialData();
-
-  const [formData, setFormData] = useState({
-    name: Data?.name || "",
-    site_type: Data?.site_type || [],
-    capacity: Data?.capacity || "",
-    address: Data?.address || "",
-    link_page: Data?.link_page || "",
-    tags: Data?.tags || [],
-    siteTags: Data?.siteTags || [],
-    equipment_type: Data?.equipment_type || [],
-    queue: Data?.queue || 0,
-    cities: Data?.cities?.[0] || "",
-    title: Data?.title || "",
-    keyword: Data?.keyword || "",
-    description: Data?.description || "",
-  });
+    getInitialData();
+  }, [currentId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -183,7 +215,6 @@ const NewSite = () => {
   };
 
   const handleSubmit = (e) => {
-
     e.preventDefault();
     setLoading(true);
     let newFormData = new FormData();

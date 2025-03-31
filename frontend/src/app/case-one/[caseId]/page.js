@@ -10,7 +10,7 @@ export async function generateMetadata({ params }) {
     // If no data is found, return default metadata
     if (!caseData) {
       return {
-        title: 'Case Not Found',
+        title: 'Кейсы | ЗАВОД ШОУ',
         description: 'The requested case could not be found',
       };
     }

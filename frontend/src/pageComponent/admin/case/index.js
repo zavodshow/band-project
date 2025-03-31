@@ -16,7 +16,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import DatePicker from "react-datepicker";
-import { insertCase, updateCase } from "@/api/caseAPI";
+import { insertCase, updateCase, getCaseById } from "@/api/caseAPI";
 import { getSite } from "@/api/siteAPI";
 import MultipleValueTextInput from "react-multivalue-text-input";
 import { Dropzone, FileMosaic } from "@files-ui/react";
@@ -122,6 +122,7 @@ const NewCase = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const searchParams = useSearchParams();
+  const currentId = searchParams.get("id");
 
   const [formData, setFormData] = useState({
     cities: [],
@@ -153,54 +154,63 @@ const NewCase = () => {
   }, []);
 
   useEffect(() => {
-    if (searchParams.size) {
-      const initialData = {};
-      searchParams.forEach((value, key) => {
-        try {
-          const parsedValue = JSON.parse(value);
-          if (parsedValue !== null) {
-            initialData[key] = parsedValue;
+    if (currentId) {
+      getCaseById(currentId).then((data) => {
+        if (data) {
+          const initialData = {};
+
+          // Process each field in the data
+          Object.entries(data).forEach(([key, value]) => {
+            try {
+              // Try to parse JSON if the value is a string
+              const parsedValue =
+                typeof value === "string" ? JSON.parse(value) : value;
+              if (parsedValue !== null) {
+                initialData[key] = parsedValue;
+              }
+            } catch {
+              if (value !== null) {
+                initialData[key] = value;
+              }
+            }
+          });
+
+          // Parse the startDate and endDate from the data
+          const parseRussianDate = (dateString) => {
+            if (!dateString) return null;
+            const months = {
+              января: 0,
+              февраля: 1,
+              марта: 2,
+              апреля: 3,
+              мая: 4,
+              июня: 5,
+              июля: 6,
+              августа: 7,
+              сентября: 8,
+              октября: 9,
+              ноября: 10,
+              декабря: 11,
+            };
+            const [day, month, year] = dateString.split(" ");
+            return new Date(year, months[month.toLowerCase()], day);
+          };
+
+          if (initialData.startDate) {
+            const startDate = parseRussianDate(initialData.startDate);
+            setSelectedDate(startDate);
           }
-        } catch {
-          if (value !== null) {
-            initialData[key] = value;
+
+          if (initialData.endDate) {
+            const endDate = parseRussianDate(initialData.endDate);
+            setSelectedEndDate(endDate);
           }
+
+          setFormData((prev) => ({ ...prev, ...initialData }));
         }
       });
-
-      // Parse the startDate and endDate from the search parameters
-      const parseRussianDate = (dateString) => {
-        const months = {
-          января: 0,
-          февраля: 1,
-          марта: 2,
-          апреля: 3,
-          мая: 4,
-          июня: 5,
-          июля: 6,
-          августа: 7,
-          сентября: 8,
-          октября: 9,
-          ноября: 10,
-          декабря: 11,
-        };
-        const [day, month, year] = dateString.split(" ");
-        return new Date(year, months[month.toLowerCase()], day);
-      };
-
-      if (initialData.startDate) {
-        const startDate = parseRussianDate(initialData.startDate);
-        setSelectedDate(startDate);
-      }
-
-      if (initialData.endDate) {
-        const endDate = parseRussianDate(initialData.endDate);
-        setSelectedEndDate(endDate);
-      }
-
-      setFormData((prev) => ({ ...prev, ...initialData }));
     }
-  }, [searchParams]);
+  }, [currentId]);
 
   const handleAddCity = (item) => {
     setFormData((prev) => ({

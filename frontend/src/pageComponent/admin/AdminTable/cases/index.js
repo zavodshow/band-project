@@ -96,21 +96,23 @@ const CasesTable = () => {
       const handleUpdate = () => {
         let url = `/admin/case`;
         let Data = params.row;
+
         // Instead of using localStorage, use query parameters
-        const queryParams = new URLSearchParams();
+        // const queryParams = new URLSearchParams();
         
         // Convert the Data object to query parameters
-        Object.keys(Data).forEach(key => {
-          // Handle arrays specially
-          if (Array.isArray(Data[key])) {
-            queryParams.append(key, JSON.stringify(Data[key]));
-          } else {
-            queryParams.append(key, Data[key]);
-          }
-        });
+        // Object.keys(Data).forEach(key => {
+        //   // Handle arrays specially
+        //   if (Array.isArray(Data[key])) {
+        //     queryParams.append(key, JSON.stringify(Data[key]));
+        //   } else {
+        //     queryParams.append(key, Data[key]);
+        //   }
+        // });
 
         // Navigate with query parameters
-        navigate.push(`${url}?${queryParams.toString()}`);
+        // navigate.push(`${url}?${queryParams.toString()}`);
+        navigate.push(`${url}?id=${Data.id}`);
       };
 
 
