@@ -423,7 +423,7 @@ const NewCase = () => {
               />
             ) : (
               <Input
-                value={formData[inputInfo[8].name]}
+                value={formData?.cities[0]}
                 item={inputInfo[8]}
                 handleChange={handleOneCity}
               />

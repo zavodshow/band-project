@@ -2,6 +2,7 @@ import Image from "next/image";
 import { positionIcon, userIcon, worldIcon } from "@/assets";
 import { CaseButton } from "@/components/Buttons";
 import { TitleGoBack } from "@/components/Titles";
+import { Margin } from "@mui/icons-material";
 
 const TopSiteEventSection = ({ siteOne }) => {
   return (
@@ -10,8 +11,12 @@ const TopSiteEventSection = ({ siteOne }) => {
         <TitleGoBack title="← ВСЕ ПЛОЩАДКИ" />
         <div className="flexWrap caseTopWrapper">
           <div className="caseTitleWrapper">
-            <h2 className="caseTitle">{siteOne?.name}</h2>
-            <CaseButton title="Банкетный зал" />
+            <h2 className="caseTitle">{siteOne?.name}</h2>{" "}
+            <div className="flexWrap" style={{ gap: "5px" }}>
+              {siteOne?.site_type?.map((site, index) => (
+                <CaseButton key={index} title={site} />
+              ))}
+            </div>
           </div>
           <div className="caseTopItem spaceBetween">
             <div className="caseTopGap">

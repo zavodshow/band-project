@@ -1570,7 +1570,7 @@ const CatalogInfo = {
     ],
     selectBoxInfo: [
       {
-        name: "blog_types",
+        name: "blog_type",
         label: "Вид мероприятия",
         label2: "Все виды мероприятий",
         option: [
@@ -1590,7 +1590,7 @@ const CatalogInfo = {
         option: [],
       },
       {
-        name: "site_type",
+        name: "venue",
         label: "Площадка",
         label2: "Все площадки",
         option: [],
@@ -1667,7 +1667,7 @@ const CatalogInfo = {
         option: [],
       },
       {
-        name: "default_site",
+        name: "site_type",
         label: "Тип площадки",
         label2: "Все типы площадок",
         option: [

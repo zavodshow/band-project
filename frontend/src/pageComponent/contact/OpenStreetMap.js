@@ -39,6 +39,7 @@ const MapComponent = () => {
           center={coordinates}
           zoom={13}
           style={{ height: "100%", width: "100%", zIndex: "1" }}
+          attributionControl={false}
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

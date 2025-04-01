@@ -35,7 +35,7 @@ const CatalogOfSites = ({ progress, type, catalogInfo }) => {
     const filtered = sites.filter(
       (item) =>
         item.name.toLowerCase().includes(value) ||
-        item.cities.some((cities) => cities.toLowerCase().includes(value))
+        item.cities.toLowerCase().includes(value)
     );
     setFilteredData(filtered);
   };

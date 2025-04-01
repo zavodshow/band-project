@@ -159,7 +159,7 @@ const DetailSection = ({
           return {
             ...field,
             option: Array.from(
-              new Set(data?.map((item) => item.equipment_names).flat())
+              new Set(data?.map((item) => item.site_type).flat())
             ).filter((name) => name !== null && name !== undefined),
           };
         case "site_type":
@@ -206,6 +206,8 @@ const DetailSection = ({
     setSliceData(data?.slice(0, 8));
   }, [data, fieldInfo]);
 
+  // console.log(searchData);
+
   const handleClick = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
 
@@ -248,12 +250,12 @@ const DetailSection = ({
   const handleSearch = (e) => {
     e.preventDefault();
     handleClose();
+
     const filteredData = data.filter(
       (item) =>
         (!searchData.blog_type ||
-          item.blog_type.some((blog_type) =>
-            blog_type.toUpperCase().includes(searchData.blog_type.toUpperCase())
-          )) &&
+          item.blog_type.toUpperCase() ===
+            searchData.blog_type.toUpperCase()) &&
         (!searchData.blog_types ||
           (item.blog_types != null &&
             item.blog_types.some((blog_type) =>
@@ -272,19 +274,22 @@ const DetailSection = ({
             .toUpperCase()
             .includes(searchData.startDate.toUpperCase())) &&
         (!searchData.venue ||
-          item.venue.toUpperCase().includes(searchData.venue.toUpperCase())) &&
+          item.venue.toUpperCase() === searchData.venue.toUpperCase()) &&
         (!searchData.cities ||
-          item.cities.some((cities) =>
-            cities.toUpperCase().includes(searchData.cities.toUpperCase())
-          )) &&
+          (item.cities != null &&
+            (Array.isArray(item.cities) ? item.cities : [item.cities]).some(
+              (cities) =>
+                cities.toLowerCase().includes(searchData.cities.toLowerCase())
+            ))) &&
         (!searchData.equipment ||
-          item.equipment_names.some((equipment) =>
-            equipment.toUpperCase().includes(searchData.equipment.toUpperCase())
+          item.site_type.some(
+            (equipment) =>
+              equipment.toUpperCase() === searchData.equipment.toUpperCase()
           )) &&
         (!searchData.eventTitle || item.eventTitle === searchData.eventTitle) &&
         (!searchData.default_equipment ||
-          searchData.default_equipment.every((default_equipment) =>
-            item.equipment_type.includes(default_equipment)
+          searchData.default_equipment.every((equipment) =>
+            item.equipment_type.includes(equipment)
           )) &&
         (!searchData.name || item.name.includes(searchData.name)) &&
         (!searchData.visualization || item?.tags?.includes("3Д")) &&
