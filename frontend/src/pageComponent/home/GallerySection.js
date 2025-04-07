@@ -5,7 +5,7 @@ import { getCasesWithTags } from "../../api/caseAPI";
 import { useRouter } from "next/navigation";
 
 const GallerySection = ({ title, galleryType }) => {
-  const [screenSize, setScreenSize] = useState(window.innerWidth);
+  const [screenSize, setScreenSize] = useState(null);
   const [galleryInfo, setGalleryInfo] = useState(gallery);
   const navigate = useRouter();
 
@@ -30,6 +30,7 @@ const GallerySection = ({ title, galleryType }) => {
     const handleResize = () => {
       setScreenSize(window.innerWidth);
     };
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
