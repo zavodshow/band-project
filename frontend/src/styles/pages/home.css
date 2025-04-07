@@ -187,7 +187,6 @@
   color: var(--primaryWhiteColor);
   margin: clamp(12px, 6vw, 84px) 0 0 0;
   margin-top: 50px;
-  margin-bottom: 250px;
 }
 
 .gallery div img {

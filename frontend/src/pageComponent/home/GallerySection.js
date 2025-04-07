@@ -5,7 +5,7 @@ import { getCasesWithTags } from "../../api/caseAPI";
 import { useRouter } from "next/navigation";
 
 const GallerySection = ({ title, galleryType }) => {
-  const [screenSize, setScreenSize] = useState(1440);
+  const [screenSize, setScreenSize] = useState(window.innerWidth);
   const [galleryInfo, setGalleryInfo] = useState(gallery);
   const navigate = useRouter();
 
@@ -103,7 +103,7 @@ const GallerySection = ({ title, galleryType }) => {
             </div>
           ))}
         </div>
-        <div style={{ marginTop: "100px" }}>
+        <div style={{ marginTop: "10px" }}>
           <ArrowDefaultButton
             title="ВСЕ КЕЙСЫ ЗАВОД ШОУ"
             onClick={() => handleLink("/cases")}

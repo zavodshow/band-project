@@ -25,6 +25,7 @@
 
 .questionButton {
   background-color: var(--secondaryWhiteHover);
+  color: #171717;
   height: clamp(27px, 2.5vw, 33px);
   padding: 10px clamp(5px, 0.5vw, 10px);
   white-space: nowrap;
