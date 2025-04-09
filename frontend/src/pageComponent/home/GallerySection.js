@@ -77,6 +77,8 @@ const GallerySection = ({ title, galleryType }) => {
                     marginTop: `${screenSize > 768 ? image.top : 0}px`,
                     width: "100%",
                     height: "auto",
+                    // aspectRatio: "16 / 9",
+                    // objectFit: "cover",
                   }}
                   onClick={() => {
                     navigate.push(`/case-one/${image?.id}`);

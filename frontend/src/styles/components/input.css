@@ -82,8 +82,9 @@
   padding: 10px 15px;
   margin-top: 17px;
   gap: 6px;
-  background: var(--secondaryWhiteColor);
   border-radius: 3px;
+  background: var(--secondaryWhiteColor);
+  color: var(--primaryBgColor);
 }
 
 .newCaseSelect{
