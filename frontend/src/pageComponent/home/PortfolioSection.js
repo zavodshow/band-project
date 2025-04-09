@@ -22,7 +22,7 @@ const PortfolioSection = () => {
       <div className="spaceBetween sectionHeader section2">
         <h2
           className="sectionTitle sectionTitle-Center"
-          style={{ display: "flex", alignItems: "center"}}
+          style={{ display: "flex", alignItems: "center" }}
         >
           Работаем на площадках
         </h2>

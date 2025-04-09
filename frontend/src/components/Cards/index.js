@@ -59,7 +59,15 @@ const PublicationCard = ({ item }) => {
     item.video?.endsWith(".ogg");
 
   return (
-    <div className="publicationCard">
+    <div
+      className="publicationCard"
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        alignItems: "start",
+      }}
+    >
       <div style={{ position: "relative" }}>
         {isVideo ? (
           <video src={`${item.video}`} alt="publicationImage" />
