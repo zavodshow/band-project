@@ -94,6 +94,7 @@
   display: grid;
   gap: clamp(7px, 2vw, 10px);
   font-weight: 300;
+  margin-bottom: 48px;
 }
 
 .inviteSec {

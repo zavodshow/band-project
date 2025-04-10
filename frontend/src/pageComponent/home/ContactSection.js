@@ -91,8 +91,7 @@ const ContactMiddle = ({
           className="x14 uploadDescription"
           style={{ width: "clamp(160px, 16vw, 167px)" }}
         >
-          Файлы до 3 МБ. DOC,
-          <br /> PDF, JPG, форматы Exel
+          Файлы до 3 МБ: DOC, PDF, JPG, XLS.
         </p>
       </div>
     </div>
@@ -122,7 +121,7 @@ const ContactFooter = () => (
       </p>
       <p className="x18 alignCenter" style={{ gap: "11px" }}>
         <Image src={whitePhone} alt="icon" />
-        <ToPhone phoneNumber="+7 495 720-12-82" />
+        <ToPhone phoneNumber="+7 (906) 065-28-33" />
       </p>
     </div>
     <div style={{ display: "grid", gap: "5px" }}>

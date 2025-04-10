@@ -1,41 +1,28 @@
-import { useEffect, useState } from "react";
-import { plantShowInfo } from "../../constant/group";
+import { plantShowMobileInfo } from "../../constant/group";
 
-const PlantShowSection = ({ team }) => {
-  const [data, setData] = useState(plantShowInfo);
+const PlantShowSection = () => {
+  // Split the info into chunks of 2 for layout (2 per column block)
+  const chunkedInfo = [];
+  for (let i = 0; i < plantShowMobileInfo.length; i += 2) {
+    chunkedInfo.push(plantShowMobileInfo.slice(i, i + 2));
+  }
 
-  useEffect(() => {
-    const updatedData = plantShowInfo.map((item, index) => {
-      return {
-        ...item,
-        content: team && team[`tag${index + 1}`],
-      };
-    });
-    setData(updatedData);
-  }, [team]);
   return (
     <div className="sectionWrapper">
       <div className="section2">
         <div className="sectionHeader">
-          <h2 className="pageTitle" style={{ textAlign: " center" }}>
-            ЗАВОД ШОУ - это ценности
-          </h2>
+          <h2 className="pageTitle text-center">ЗАВОД ШОУ — это ценности</h2>
         </div>
+
         <div className="plantShowTopics flexWrapAround">
-          {["", "", "", ""].map((_, index) => (
-            <div
-              key={index}
-              className="plantTopicsItem"
-              style={{ gap: "clamp(50px, 6vw, 72px)" }}
-            >
-              <div className="plantTopicsItem">
-                <p className="x24Font_1">{data[index]?.topic}</p>
-                <p className="x18Font_4">{data[index]?.content}</p>
-              </div>
-              <div className="plantTopicsItem">
-                <p className="x24Font_1">{data[index + 4]?.topic}</p>
-                <p className="x18Font_4">{data[index + 4]?.content}</p>
-              </div>
+          {chunkedInfo.map((pair, index) => (
+            <div key={index} className="plantTopicsColumn">
+              {pair.map((item, i) => (
+                <div key={i} className="plantTopicsItem">
+                  <p className="x24Font_1">{item.topic}</p>
+                  <p className="x18Font_4">{item.content}</p>
+                </div>
+              ))}
             </div>
           ))}
         </div>

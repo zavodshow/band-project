@@ -44,7 +44,7 @@ const Team = () => {
       <section className="wrapper">
         <PlantHero team={teamPageInfo} avatar={data?.avatar} />
         <div className="container">
-          <PlantShowSection team={teamPageInfo[0]} />
+          <PlantShowSection />
           <MasterSection links={data?.links} teamImg={data?.teamPic} />
         </div>
       </section>

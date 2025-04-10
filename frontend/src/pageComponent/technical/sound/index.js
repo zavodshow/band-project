@@ -32,7 +32,7 @@ const SoundPage = () => {
       </div>
       <SwiperSection displayType="Технические услуги" />
       <div className="container">
-        <ContactSection title="Рассчитать звук" />
+        <ContactSection title="Заказать расчёт" />
         <BlogSection />
       </div>
     </section>

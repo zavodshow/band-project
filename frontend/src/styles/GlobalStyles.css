@@ -175,7 +175,7 @@ video {
 .pageTitle {
   font-family: var(--font-russo-one);
   font-size: clamp(30px, 6vw, 78px);
-  line-height: clamp(40px, 1vw, 93.99px);
+  line-height: 1.2;
   color: var(--secondaryWhiteColor);
   letter-spacing: -0.02em;
   font-weight: 400;

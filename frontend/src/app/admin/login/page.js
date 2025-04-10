@@ -62,7 +62,7 @@ const AdminLogin = () => {
     <div className="sectionWrapper itemCenter">
       <form className="adminLoginSection" onSubmit={handleSubmit}>
         <div className="adminLoginHeader">
-          <Image src={adminLoginLogo} alt="adminLoginLogo" />
+          <Image src={adminLoginLogo} alt="adminLoginLogo" width={180} />
           <p className="adminLoginTitle">
             Страница
             <br />
@@ -71,7 +71,10 @@ const AdminLogin = () => {
         </div>
         {inputinfo.map((item, index) => (
           <div key={index}>
-            <p className="x16" style={{ marginBottom: "12px" }}>
+            <p
+              className="x16"
+              style={{ marginBottom: "12px", textAlign: "left" }}
+            >
               {item.title}
             </p>
             <Input item={item} handleChange={handleChange} />
@@ -79,7 +82,7 @@ const AdminLogin = () => {
         ))}
         <div className="alignCenter" style={{ gap: "30px" }}>
           <DefaultButton type="submit" title="Войти на страницу" />
-          <p className="x14">
+          <p className="x14" style={{ textAlign: "left" }}>
             Данные для входа доступны по запросу: <br />{" "}
             <span style={{ fontWeight: 700 }}>admin@zavodshow.ru</span>
           </p>

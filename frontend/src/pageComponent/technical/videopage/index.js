@@ -32,7 +32,7 @@ const VideoPage = () => {
       </div>
       <SwiperSection displayType="Технические услуги" />
       <div className="container">
-        <ContactSection title="Рассчитать видео" />
+        <ContactSection title="Заказать расчёт" />
         <BlogSection />
       </div>
     </section>

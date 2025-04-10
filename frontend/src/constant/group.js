@@ -732,7 +732,6 @@ const heroSectionInfo = [
     heroTopWhiteBtn: [
       "КАБУКИ →",
       "РАЗДВИЖНОЙ ЗАНАВЕС →",
-      "РАЗДВИЖНОЙ ЗАНАВЕС →",
     ],
     defaultBtn: {
       title: "рассчитать одежду и покрытие сцены",
@@ -1253,7 +1252,7 @@ const equipmentsCardInfo = {
       content: [
         "1) Оперативно решим критические проблемы",
         "2) Проконтролируем работу оборудования на площадке",
-        "3) Профессионально установим декорации и линолеум",
+        "3) Установим декорации и линолеум",
       ],
     },
     {
@@ -1369,41 +1368,6 @@ const kabukiInfo = {
   ],
 };
 
-const plantShowInfo = [
-  {
-    topic: "#Надежность",
-    content: "",
-  },
-  {
-    topic: "#Внимательность",
-    content: "",
-  },
-  {
-    topic: "#Вежливость",
-    content: "",
-  },
-  {
-    topic: "#Патриотизм",
-    content: "",
-  },
-  {
-    topic: "#Аккуратность",
-    content: "",
-  },
-  {
-    topic: "#Инициатива",
-    content: "",
-  },
-  {
-    topic: "#Своевременность",
-    content: "",
-  },
-  {
-    topic: "#Эмоции",
-    content: "",
-  },
-];
-
 const plantShowMobileInfo = [
   {
     topic: "#Надежность",
@@ -1419,9 +1383,9 @@ const plantShowMobileInfo = [
     content: "Проявляем заботу о команде и артистах",
   },
   {
-    topic: "#Инициатива",
+    topic: "#Эмоции",
     content:
-      "Мы не перекладываем ответственность, а стараемся помогать коллегам в начинаниях",
+      "Мы воплощаем шоу и позитив, создаем бодрую атмосферу как на сцене, так и в офисе",
   },
   {
     topic: "#Вежливость",
@@ -1437,9 +1401,9 @@ const plantShowMobileInfo = [
     content: "Мы любим свою страну и помогаем её защитникам",
   },
   {
-    topic: "#Эмоции",
+    topic: "#Инициатива",
     content:
-      "Мы воплощаем шоу и позитив, создаем бодрую атмосферу как на сцене, так и в офисе",
+      "Мы не перекладываем ответственность, а стараемся помогать коллегам в начинаниях",
   },
 ];
 
@@ -1461,7 +1425,7 @@ const teamOfficeInfo = [
     ],
   },
   {
-    description: `ФИНАНСЫ, \u00A0 \u00A0 \u00A0 ДОКУМЕНТЫ, ОПЛАТЫ`,
+    description: `БУХГАЛТЕРИЯ`,
     content: [
       { icon: miniPhone, value: "доб. 300" },
       { icon: miniMail, value: "fin@zavodshow.ru" },
@@ -1469,7 +1433,7 @@ const teamOfficeInfo = [
     ],
   },
   {
-    description: "ЛОГИСТИКА, СРОКИ ДОСТАВКИ, СОТР-ВО",
+    description: "ЛАРЕНДА ЛИНОЛЕУМА",
     content: [
       { icon: miniPhone, value: "доб. 800" },
       { icon: miniMail, value: "delivery@zavodshow.ru" },
@@ -1783,12 +1747,12 @@ const CatalogInfo = {
 const teamPageInfo = [
   {
     competencies: [
+      "4500+ частных мероприятий",
+      "10000+ мероприятий с 2015 года",
+      "50+ специалистов",
       "20 лет в индустрии",
-      "4016 мероприятий с 2015 года",
       "85 городов в РФ и мире",
-      "350 частных мероприятий",
       "Постоянное обучение и развитие",
-      "50 специалистов",
     ],
     links:
       "https://docs.google.com/forms/d/e/1FAIpQLSfKs1AfpUNM591y2wKODacMoENNU2QHJFu16zMQs6IDmCp-jQ/alreadyresponded",
@@ -1829,7 +1793,6 @@ export {
   equipmentsCardInfo,
   equipmentsCategoryInfo,
   kabukiInfo,
-  plantShowInfo,
   plantShowMobileInfo,
   teamOfficeInfo,
   SwiperVideoImgInfo,

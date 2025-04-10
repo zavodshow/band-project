@@ -1,6 +1,6 @@
 //icons
 import logo from "./logo.svg";
-import footerLogo from "./icon/footerLogo.png";
+import footerLogo from "./icon/footerLogo.svg";
 import adminLoginLogo from "./adminLoginLogo.svg";
 import adminUser from "./icon/adminUser.svg";
 import lightLogout from "./icon/lightLogout.svg";

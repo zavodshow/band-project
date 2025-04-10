@@ -57,6 +57,7 @@ const GallerySection = ({ title, galleryType }) => {
             textAlign: "center",
             position: "sticky",
             top: "clamp(100px, 15vw, 200px)",
+            zIndex: 50
           }}
         >
           {title}
@@ -67,6 +68,7 @@ const GallerySection = ({ title, galleryType }) => {
               key={index}
               style={{
                 width: `${screenSize > 768 ? image.width + "px" : "100%"}`,
+                zIndex: 10
               }}
             >
               {isVideo(image.video) ? (

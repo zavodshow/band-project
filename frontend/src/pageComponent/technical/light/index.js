@@ -32,7 +32,7 @@ const LightPage = () => {
       </div>
       <SwiperSection displayType="Технические услуги" />
       <div className="container">
-        <ContactSection title="Рассчитать cвет" />
+        <ContactSection title="Заказать расчёт" />
         <BlogSection />
       </div>
     </section>
