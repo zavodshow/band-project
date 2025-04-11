@@ -43,7 +43,7 @@ const ShowDevelopmentPage = () => {
         />
         <WorkProcess
           arrowWidth="115px"
-          title1="Подготовка, реализация и проведение шоу"
+          title1="Подготовка, реализация и проведение шоу"
           data={workProcessInfo2}
           url="/documents/Этапы работы над туром.docx"
           fileName="Этапы работы над туро - 2.docx"
@@ -59,10 +59,10 @@ const ShowDevelopmentPage = () => {
           }}
         />
         <UserList
-          title="Создавали шоу вместе с нами"
+          title="Создавали шоу вместе с нами"
           userListInfo={participant}
         />
-        <ContactSection title="Заказать расчёт шоу" />
+        <ContactSection title="Заказать расчёт" />
         <BlogSection />
       </div>
     </div>

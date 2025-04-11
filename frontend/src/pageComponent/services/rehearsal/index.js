@@ -40,7 +40,7 @@ const RehearsalPage = () => {
           userListInfo={participant}
         />
         <RentalCost />
-        <ContactSection title="Заказать расчёт аренды" />
+        <ContactSection title="Заказать расчёт" />
         <BlogSection />
       </div>
     </div>

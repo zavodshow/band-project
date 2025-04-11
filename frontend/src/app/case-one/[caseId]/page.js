@@ -18,7 +18,7 @@ export async function generateMetadata({ params }) {
     // Return metadata based on the case data
     return {
       title: caseData.title || "Кейсы | ЗАВОД ШОУ", // Use your actual data field
-      description: caseData.description || 'Каталог кейсов: подробный список реализованных проектов с фильтрами и поиском. Найдите решения и стейдж-дизайн для мероприятия или концерта.', // Use your actual data field
+      description: caseData.description || 'Каталог кейсов: подробный список реализованных проектов с фильтрами и поиском. Найдите решения и стейдж-дизайн для мероприятия или концерта.', // Use your actual data field
       keywords: caseData.keyword || 'Кейсы мероприятий, решения для площадок, продакшн шоу, Кейсы туров, Кейсы концертов, Каталог кейсов',
     };
   } catch (error) {
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }) {
     // Return default metadata if there's an error
     return {
       title: caseData.title || "Кейсы | ЗАВОД ШОУ", // Use your actual data field
-      description: caseData.description || 'Каталог кейсов: подробный список реализованных проектов с фильтрами и поиском. Найдите решения и стейдж-дизайн для мероприятия или концерта.', // Use your actual data field
+      description: caseData.description || 'Каталог кейсов: подробный список реализованных проектов с фильтрами и поиском. Найдите решения и стейдж-дизайн для мероприятия или концерта.', // Use your actual data field
       keywords: caseData.keyword || 'Кейсы мероприятий, решения для площадок, продакшн шоу, Кейсы туров, Кейсы концертов, Каталог кейсов',
     };
   }

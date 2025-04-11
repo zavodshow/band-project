@@ -11,7 +11,7 @@ const PendingSection = () => {
         style={{ color: `var(--primaryBgColor)`, width: "90%" }}
       >
         Проверьте идею заранее
-        <br /> и сократите риски
+        <br /> и сократите риски
       </h2>
       <div className="flexWrap" style={{ gap: "40px" }}>
         {pendingCardInfo.map((item, index) => (

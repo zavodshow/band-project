@@ -107,7 +107,7 @@ const SimpleCaptcha = ({ handleSubmit, setOpen }) => {
       </div>
       <div className="alignCenter spaceBetween">
         <p className="x24Font_2">
-          Введите цифры <br /> с картинки:
+          Введите цифры <br /> с картинки:
         </p>
         <canvas
           ref={canvasRef}
@@ -122,7 +122,7 @@ const SimpleCaptcha = ({ handleSubmit, setOpen }) => {
         </span>
       </div>
       <div className="alignCenter spaceBetween">
-        <p className="x24Font_2">Цифры с картинки: </p>
+        <p className="x24Font_2">Цифры с картинки: </p>
         <form style={{ width: "242px", padding: "10px 0" }}>
           <Input
             item={captchaInputInfo}

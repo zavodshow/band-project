@@ -24,6 +24,7 @@ const GallerySection = ({ title, galleryType }) => {
       .catch((error) => {
         console.error("Error fetching cases:", error);
       });
+    console.log("galleryInfo", galleryInfo);
   }, [galleryType]);
 
   useEffect(() => {
@@ -77,10 +78,10 @@ const GallerySection = ({ title, galleryType }) => {
                   alt={image.name}
                   style={{
                     marginTop: `${screenSize > 768 ? image.top : 0}px`,
-                    width: "100%",
+                    width: `${screenSize > 768 ? image.width + "px" : "100%"}`,
                     height: "auto",
-                    // aspectRatio: "16 / 9",
-                    // objectFit: "cover",
+                    aspectRatio: "16 / 9",
+                    objectFit: "cover",
                   }}
                   onClick={() => {
                     navigate.push(`/case-one/${image?.id}`);
@@ -92,7 +93,7 @@ const GallerySection = ({ title, galleryType }) => {
                   alt={image.name}
                   style={{
                     marginTop: `${screenSize > 768 ? image.top : 0}px`,
-                    width: "100%",
+                    width: `${screenSize > 768 ? image.width + "px" : "100%"}`,
                     height: "auto",
                     aspectRatio: "16 / 9",
                     objectFit: "cover",

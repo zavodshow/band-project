@@ -43,7 +43,7 @@ const StageClothesPage = () => {
       </div>
       <SwiperSection displayType="Технические услуги" />
       <div className="container">
-        <ContactSection title="Рассчитать одежду сцены" />
+        <ContactSection title="Заказать расчёт" />
         <BlogSection />
       </div>
     </section>

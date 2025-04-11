@@ -308,7 +308,7 @@ const NewCase = () => {
       {
         condition: formData.title.length > 250 || formData.keyword.length > 250,
         message:
-          "Длина заголовка и ключевых слов не должна превышать 250 символов.",
+          "Длина заголовка и ключевых слов не должна превышать 250 символов.",
       },
       {
         condition: formData.description.length > 500,

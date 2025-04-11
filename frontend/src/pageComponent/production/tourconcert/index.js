@@ -50,7 +50,7 @@ const TourConcertPage = () => {
       <SwiperSection displayType="Продакшн" />
       <div className="container">
         <PendingSection />
-        <ContactSection title="Рассчитать концерт/Тур" />
+        <ContactSection title="Заказать расчёт" />
         <BlogSection />
       </div>
     </section>

@@ -31,7 +31,7 @@ const SitePage = () => {
           title="На этой площадке проводились"
           cases={siteOne?.blogs}
         />
-        <ContactSection title="Рассчитать cобытие на этой площадке" />
+        <ContactSection title="Заказать расчёт" />
       </div>
     </section>
   );

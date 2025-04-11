@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useRouter } from "next/navigation";
 import { chicha123, chicha94 } from "../../assets";
 import {
@@ -17,30 +18,66 @@ import { TwoChichas } from "../../components/Chichas";
 import { menuItemsData } from "../../constant/group";
 import { Link } from "react-scroll";
 import { heroVideo2 } from "../../assets";
-// heroVideo1
+
+const eventTypes = [
+  "частных мероприятий",
+  "корпоративных событий",
+  "государственных событий",
+  "конференций",
+  "концертов",
+  "туров",
+];
 
 const HeroSection = () => {
   const navigate = useRouter();
   const buttonGroupClassInfo = ["firstGroup", "secondGroup", "thirdGroup"];
+  const [currentEventIndex, setCurrentEventIndex] = useState(0);
+  const [displayText, setDisplayText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [typingSpeed, setTypingSpeed] = useState(150);
 
-  // const valuse = ['10', '20', '30', '40', '50', '60', '70', '80', '90']
-  // valuse.map((value, index) => {
-  //   const radians = (value * Math.PI) / 180;
+  useEffect(() => {
+    let timer;
+    const currentEvent = eventTypes[currentEventIndex];
+    
+    if (!isDeleting) {
+      // Typing phase
+      if (displayText === currentEvent) {
+        // Finished typing, pause then start deleting
+        timer = setTimeout(() => {
+          setIsDeleting(true);
+          setTypingSpeed(30);
+        }, 1000);
+      } else {
+        // Continue typing
+        timer = setTimeout(() => {
+          setDisplayText(currentEvent.substring(0, displayText.length + 1));
+        }, typingSpeed);
+      }
+    } else {
+      // Deleting phase
+      if (displayText === '') {
+        // Finished deleting, move to next event
+        setIsDeleting(false);
+        setTypingSpeed(150);
+        setCurrentEventIndex((prevIndex) => 
+          prevIndex === eventTypes.length - 1 ? 0 : prevIndex + 1
+        );
+      } else {
+        // Continue deleting
+        timer = setTimeout(() => {
+          setDisplayText(currentEvent.substring(0, displayText.length - 1));
+        }, typingSpeed);
+      }
+    }
 
-  //   const sine = Math.sin(radians);  // Calculate sine
-  //   const cosine = Math.cos(radians);
-
-  //   let x = 100 - 100 * cosine
-  //   let y = 100 * sine
-  // })
+    return () => clearTimeout(timer);
+  }, [displayText, isDeleting, currentEventIndex, typingSpeed]);
 
   const handleLink = (url) => {
     navigate.push(url);
   };
 
-  const handleNavigation = (url) => {
-    window.open(url, "_blank");
-  };
   return (
     <div className="sectionWrapper" style={{ position: "relative" }}>
       <div className="heroSection">
@@ -67,16 +104,14 @@ const HeroSection = () => {
             <h1 className="pageTitle pageTitle-1" style={{ textAlign: "left" }}>
               Технический продакшн
             </h1>
-            <h1
-              className="pageTitle pageTitle-2"
-              style={{ textAlign: "right" }}
-            >
-              частных мероприятий
+            <h1 className="pageTitle pageTitle-2" style={{ textAlign: "right", height: "80px" }}>
+              {displayText}
+              <span className="cursor">|</span>
             </h1>
             <div className="itemCenter">
               <div
                 className="chichaHidden"
-                style={{ gap: "4px", marginTop: "32px" }}
+                style={{ gap: "4px", marginTop: "16px" }}
               >
                 {menuItemsData[1].submenu.map((item, index) => (
                   <SmallTransButton
@@ -94,8 +129,8 @@ const HeroSection = () => {
                 title="зАПОЛНИТЬ БРИФ"
                 onClick={() => {
                   const link = document.createElement("a");
-                  link.href = "/documents/Бриф по проекту.xlsx"; // Path to your file
-                  link.download = "Бриф по проекту"; // Name of the downloaded file
+                  link.href = "/documents/Бриф по проекту.xlsx";
+                  link.download = "Бриф по проекту";
                   document.body.appendChild(link);
                   link.click();
                   document.body.removeChild(link);

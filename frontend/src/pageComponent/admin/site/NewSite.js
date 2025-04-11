@@ -131,7 +131,7 @@ const tagCurrencies = [
   "Репетиционная база",
 ];
 
-const typeEquipment = ["Парковка", "Гримёрные комнаты", "Проекторы и экраны"];
+const typeEquipment = ["Парковка", "Гримёрные комнаты", "Проекторы и экраны"];
 
 const NewSite = () => {
   const [loading, setLoading] = useState(false);

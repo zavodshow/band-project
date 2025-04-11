@@ -32,7 +32,7 @@ const AboutSection = () => {
           >
             <TwoChichas img1={chicha72} img2={chicha94} rotate="-15deg" />
           </div>
-          <h2 className="sectionTitle">Спроектируем и настроим</h2>
+          <h2 className="sectionTitle">Спроектируем и настроим</h2>
           <div
             style={{
               position: "absolute",

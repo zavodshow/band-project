@@ -16,7 +16,7 @@ const inputinfo = [
     title: "Данные участника",
     name: "name",
     type: "text",
-    placeholder: "Введите фамилию и имя",
+    placeholder: "Введите фамилию и имя",
   },
   {
     title: "Ссылка",

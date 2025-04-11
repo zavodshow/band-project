@@ -100,7 +100,7 @@ const FooterMiddle = () => {
             События
           </Link>
           <Link href="/production/tourconcert" className="middleLink">
-            Концерты и туры
+            Концерты и туры
           </Link>
         </div>
         <div className="middleOne box3">

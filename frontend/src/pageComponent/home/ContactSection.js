@@ -30,7 +30,7 @@ const ContactHeader = ({ title }) => (
     <div className="flexWrapBetween alignCenter" style={{ gap: "10px" }}>
       <h2 className="sectionTitle">{title}</h2>
       <p className="x14_2 chichaShow" style={{ maxWidth: "225px" }}>
-        Оставьте заявку, и мы свяжемся с вами в ближайшее время
+        Оставьте заявку, и мы свяжемся с вами в ближайшее время
       </p>
     </div>
     <hr className="hrStyle" />
@@ -38,7 +38,7 @@ const ContactHeader = ({ title }) => (
       className="x14_2 chichaHidden"
       style={{ maxWidth: "225px", marginBottom: "30px" }}
     >
-      Оставьте заявку, и мы свяжемся с вами в ближайшее время
+      Оставьте заявку, и мы свяжемся с вами в ближайшее время
     </p>
   </div>
 );

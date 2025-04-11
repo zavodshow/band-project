@@ -36,7 +36,7 @@ const ExampleCase = () => {
     <section className="sectionWrapper section2">
       <div className="sectionHeader">
         <h2 className="sectionTitle" style={{ textAlign: "center" }}>
-          Примеры кейсов с 3D-визуализацией
+          Примеры кейсов с 3D-визуализацией
         </h2>
       </div>
       <div className="flexWrapBetween" style={{ gap: "30px" }}>

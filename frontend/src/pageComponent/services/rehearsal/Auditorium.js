@@ -20,7 +20,7 @@ const Auditorium = () => {
       </div>
       <div className="audiSmallTextWrap">
         <p>
-          Между 11-м и 12-м
+          Между 11-м и 12-м
           <br />
           рядами в центре зала
         </p>

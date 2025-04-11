@@ -49,13 +49,13 @@ const EventPage = () => {
         <BigVideoBox
           item={{
             titleCenter: false,
-            title: "Видео с мероприятия",
+            title: "Видео с мероприятия",
             src: `${caseData?.video || productionEvent}`,
             videoTitle: caseData?.venue,
             videoDescription: caseData?.name,
           }}
         />
-        <ContactSection title="Рассчитать продакшн" />
+        <ContactSection title="Заказать расчёт" />
         <BlogSection />
       </div>
     </section>

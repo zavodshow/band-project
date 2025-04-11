@@ -187,11 +187,11 @@ video {
 
 @media (min-width: 992px) {
   .pageTitle-1 {
-    margin-bottom: 40px;
-    margin-top: 32px;
+    margin-top: 8px;
+    margin-bottom: 0;
   }
   .pageTitle-2 {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     margin-top: 0;
   }
 }
