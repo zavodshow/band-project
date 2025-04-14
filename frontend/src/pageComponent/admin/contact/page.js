@@ -201,17 +201,21 @@ const ContactEditPage = () => {
   }, []);
 
   // Handle form submission
-  const handleSubmit = useCallback(async () => {
-    try {
-      setLoading(true);
-      const response = await updateContactInfo(formData);
-    } catch (error) {
-      console.error("Error updating contact info:", error);
-      alert("Failed to update contact information");
-    } finally {
-      setLoading(false);
-    }
-  }, [formData]);
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      try {
+        setLoading(true);
+        await updateContactInfo(formData);
+      } catch (error) {
+        console.error("Error updating contact info:", error);
+        alert("Failed to update contact information");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [formData]
+  );
 
   if (initialLoad) {
     return <LoadingProgress />;
