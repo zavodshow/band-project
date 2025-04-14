@@ -23,6 +23,31 @@ class RentalController extends Controller
 
         return response()->json($rental);
     }
+    // Add this to your RentalController
+    public function downloadFile($filename)
+    {
+        // Sanitize the filename to prevent directory traversal
+        $filename = basename($filename);
+        $path = 'uploads/rental/' . $filename;
+
+        if (!\Storage::disk('public')->exists($path)) {
+            return response()->json(['message' => 'File not found'], 404);
+        }
+
+        // Get the full path to the file
+        $fullPath = \Storage::disk('public')->path($path);
+
+        // Get the original filename from storage (if needed)
+        $originalName = $filename;
+
+        // Set appropriate headers
+        $headers = [
+            'Content-Type' => \Storage::disk('public')->mimeType($path),
+            'Content-Disposition' => 'attachment; filename="' . $originalName . '"',
+        ];
+
+        return response()->download($fullPath, $originalName, $headers);
+    }
 
     public function store(Request $request)
     {
@@ -65,6 +90,4 @@ class RentalController extends Controller
             }
         }
     }
-
-   
 }

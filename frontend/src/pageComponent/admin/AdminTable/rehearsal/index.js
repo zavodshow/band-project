@@ -4,35 +4,25 @@ import React, { useEffect, useState } from "react";
 import { OutLinedButton } from "@/components/Buttons";
 import { Box, Typography } from "@mui/material";
 import { ChichaBox } from "@/components/ChichaBox";
-import { BlackButton, TabButton } from "@/components/Buttons";
+import { BlackButton, TabButton, TabButton2 } from "@/components/Buttons";
 import { DataTable } from "@/components/Tables";
 import { getUserInfo } from "@/api/adminAPI";
 import { greyArrow, greyPencil, moveDown, moveUp, redTrash } from "@/assets";
 import { getRental, insertRental } from "@/api/rentalAPI";
 import { deleteParticipant, getParticipant } from "@/api/participantAPI";
 import { Input } from "@/components/Inputs";
-import { darkAdd } from "@/assets";
+import { darkAdd, darkDownloadIcon } from "@/assets";
 import { swapId } from "@/api/caseAPI";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { handleDownload } from "@/constant/defaultLink";
+import {filenameList} from "@/constant/group";
 
 const RehearsalTable = ({ id }) => {
   const navigate = useRouter();
   const [userInfo, setUserInfo] = useState(null);
   const [participant, setParticipant] = useState([]);
   const [rental, setRental] = useState({ cost: "", files: [] });
-
-  const handleFileChange = (e, index) => {
-    const file = e.target.files[0];
-    setRental((prevState) => {
-      const updatedFiles = [...(prevState.files || [])];
-      updatedFiles[index] = file;
-      return {
-        ...prevState,
-        files: updatedFiles,
-      };
-    });
-  };
 
   const createActionColumn = (
     type,
@@ -68,9 +58,9 @@ const RehearsalTable = ({ id }) => {
         let url = `/admin/${type}`;
         let Data = params.row;
         const queryParams = new URLSearchParams();
-        
+
         // Convert the Data object to query parameters
-        Object.keys(Data).forEach(key => {
+        Object.keys(Data).forEach((key) => {
           // Handle arrays specially
           if (Array.isArray(Data[key])) {
             queryParams.append(key, JSON.stringify(Data[key]));
@@ -163,7 +153,7 @@ const RehearsalTable = ({ id }) => {
         firstBlogId: firstId,
         secondBlogId: secondId,
       };
-      swapId(formData, 'participant').then(() => {
+      swapId(formData, "participant").then(() => {
         getRental().then((data) => {
           let temp = addId(data);
           setRental(temp);
@@ -207,6 +197,12 @@ const RehearsalTable = ({ id }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!rental.cost) {
+      alert("Please enter rental cost");
+      return;
+    }
+
     let newFormData = new FormData();
     Object.keys(rental).forEach((key) => {
       if (key === "files") {
@@ -216,7 +212,7 @@ const RehearsalTable = ({ id }) => {
       }
     });
     insertRental(newFormData).then((data) => {
-      console.log("data", data);
+      setRental({ cost: data.cost, files: data.files });
     });
   };
 
@@ -227,8 +223,8 @@ const RehearsalTable = ({ id }) => {
   useEffect(() => {
     getRental()
       .then((data) => {
-        if (data) {
-          setRental(data);
+        if (data && data.length > 0) {
+          setRental({ cost: data[0].cost, files: data[0].files });
         } else {
           setRental({ cost: "", files: [] });
         }
@@ -251,6 +247,24 @@ const RehearsalTable = ({ id }) => {
   }, []);
 
   const fileList = ["3D-макеты сцены", "Тех.райдер площадки", "Архив фото"];
+
+  const handleFileDownload = (index) => {
+    if (index >= 2) return;
+    handleDownload(rental.files[index], filenameList[index]);
+  };
+
+  const handleFileChange = (e, index) => {
+    if (index > 1) return;
+    const file = e.target.files[0];
+    setRental((prevState) => {
+      const updatedFiles = [...(prevState.files || [])];
+      updatedFiles[index] = file;
+      return {
+        ...prevState,
+        files: updatedFiles,
+      };
+    });
+  };
 
   return (
     <div className="wrapper">
@@ -278,34 +292,43 @@ const RehearsalTable = ({ id }) => {
               <div>
                 <form
                   onSubmit={handleSubmit}
-                  style={{ display: "flex", gap: "18px" }}
-                  className="itemCenter"
+                  style={{ gap: "18px" }}
+                  className="flexWrap"
                 >
                   <div
                     style={{ display: "flex", gap: "10px" }}
-                    className="itemCenter"
+                    className="alignCenter"
                   >
                     <p className="x16">{inputinfo.title}:</p>
                     <Input
                       value={rental.cost || ""}
                       item={inputinfo}
+                      name={inputinfo.name}
                       handleChange={handleChange}
                     />
                   </div>
-                  <div style={{ display: "flex", gap: "10px" }}>
+                  <div
+                    style={{ display: "flex", gap: "10px" }}
+                    className="flexWrap"
+                  >
                     {fileList.map((item, index) => (
-                      <div key={index}>
-                        <TabButton
-                          icon={darkAdd}
-                          title={item}
-                          onChange={(e) => handleFileChange(e, index)}
+                      <div style={{ display: "flex", gap: "10px" }} key={index}>
+                        <div>
+                          <TabButton
+                            icon={darkAdd}
+                            title={item}
+                            onChange={(e) => handleFileChange(e, index)}
+                          />
+                          {rental.files && rental.files[index] && (
+                            <Typography>{rental.files[index].name}</Typography>
+                          )}
+                        </div>
+
+                        <TabButton2
+                          icon={darkDownloadIcon}
+                          title={""}
+                          onClick={() => handleFileDownload(index)}
                         />
-                        {rental.files && rental.files[index] && (
-                          <Typography>
-                            {" "}
-                            Выбрать видео: {rental.files[index].name}
-                          </Typography>
-                        )}
                       </div>
                     ))}
                   </div>

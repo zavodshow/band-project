@@ -6,13 +6,13 @@ import { getRental } from "@/api/rentalAPI";
 const rentalDocumentInfo = [
   {
     text: "3D-макеты сцены",
-    url: "/documents/Репетиционная база.pdf",
+    url: "Репетиционная база.pdf",
     download: "Репетиционная база.pdf",
     size: "PDF 0.9 Мб",
   },
   {
     text: "Тех. райдер площадки",
-    url: "/documents/Оборудование ДК МИР.docx",
+    url: "Оборудование ДК МИР.docx",
     download: "Оборудование ДК МИР.docx",
     size: "DOC 1.9 Мб",
   },
@@ -36,7 +36,7 @@ const RentalCost = () => {
   const RentalDocument = ({ documentFile }) => (
     <div className="flexWrapBetween">
       {rentalDocumentInfo.map((item, index) => (
-        <RentalCostDocCard key={index} item={item} />
+        <RentalCostDocCard key={index} item={item} fileURL={rental[0]?.files[index]}/>
       ))}
     </div>
   );

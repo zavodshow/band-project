@@ -112,7 +112,7 @@ const NewParticipant = () => {
               <div key={index} style={{ marginBottom: "10px" }}>
                 <label>{item.title}</label>
                 <Input
-                  value={formData[item.name]} // Dynamically fetch the correct field value
+                  value={formData[item.name]} 
                   item={item}
                   handleChange={handleChange}
                   required={false}

@@ -1770,7 +1770,14 @@ const teamPageInfo = [
   },
 ];
 
+const filenameList = [
+  "Репетиционная база-0.pdf",
+  "Оборудование ДК МИР-0.docx",
+  "Репетиционная база-0.zip",
+];
+
 export {
+  filenameList,
   adminDirectoryInfo,
   menuItemsData,
   footerTopLink,

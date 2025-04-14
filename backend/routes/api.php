@@ -154,7 +154,9 @@ Route::prefix('participant')->middleware(['auth:sanctum','throttle:5000,1'])->gr
 Route::prefix('rental')->middleware('throttle:5000,1')->group(function () {
     Route::get('/', [RentalController::class, 'index']);
     Route::get('/{id}', [RentalController::class, 'show']);
+    Route::get('/download/{filename}', [RentalController::class, 'downloadFile']);
 });
+
 Route::prefix('rental')->middleware(['auth:sanctum','throttle:5000,1'])->group(function () {
     Route::post('/',[RentalController::class,'store'])->middleware('admin:adding');
 });

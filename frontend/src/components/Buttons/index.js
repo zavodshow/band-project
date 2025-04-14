@@ -36,10 +36,31 @@ const TabButton1 = ({ icon, title, onClick }) => (
   </button>
 );
 
-const TabButton = ({ icon, title, onChange }) => (
-  <label className="fileUploadButton">
-    <input type="file" name="video" hidden onChange={onChange} />
+const TabButton2 = ({ icon, title, onClick }) => (
+  <button
+    className="button tabButton"
+    onClick={onClick}
+    style={{ background: `var(--secondaryWhiteColor)` }}
+    type="button"
+  >
     <Image src={icon} alt="darkAdd" />
+    {title}
+  </button>
+);
+
+const TabButton = ({ icon, title, onChange, disabled = false }) => (
+  <label className="fileUploadButton">
+    <input
+      type="file"
+      name="video"
+      hidden
+      onChange={(e) => {
+        e.stopPropagation();
+        onChange(e);
+      }}
+      disabled={disabled}
+    />
+    <Image src={icon} alt="icon" />
     {title}
   </label>
 );
@@ -241,6 +262,7 @@ export {
   DefaultButton,
   BlackButton,
   TabButton1,
+  TabButton2,
   TabButton,
   SmallTabButton,
   CircleButton,

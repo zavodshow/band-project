@@ -164,6 +164,9 @@ const ContactEditPage = () => {
     advertising_manager_contact1: null,
     advertising_manager_contact2: null,
     advertising_manager_contact3: null,
+    order_manager_contact1: null,
+    order_manager_contact2: null,
+    order_manager_contact3: null,
   });
 
   // Fetch initial data
@@ -207,6 +210,7 @@ const ContactEditPage = () => {
       try {
         setLoading(true);
         await updateContactInfo(formData);
+        alert("Contact information updated successfully");
       } catch (error) {
         console.error("Error updating contact info:", error);
         alert("Failed to update contact information");
@@ -463,6 +467,33 @@ const ContactEditPage = () => {
               label="Контакт по рекламе 3"
               contactData={
                 formData.advertising_manager_contact3 || { icon: "", link: "" }
+              }
+              onContactChange={handleContactChange}
+            />
+          </ContactSubSection>
+
+          <ContactSubSection title="ЗАКАЗ ИНТРО">
+            <ContactField
+              fieldName="order_manager_contact1"
+              label="Контакт менеджера по заказам 1"
+              contactData={
+                formData.order_manager_contact1 || { icon: "", link: "" }
+              }
+              onContactChange={handleContactChange}
+            />
+            <ContactField
+              fieldName="order_manager_contact2"
+              label="Контакт менеджера по заказам 2"
+              contactData={
+                formData.order_manager_contact2 || { icon: "", link: "" }
+              }
+              onContactChange={handleContactChange}
+            />
+            <ContactField
+              fieldName="order_manager_contact3"
+              label="Контакт менеджера по заказам 3"
+              contactData={
+                formData.order_manager_contact3 || { icon: "", link: "" }
               }
               onContactChange={handleContactChange}
             />

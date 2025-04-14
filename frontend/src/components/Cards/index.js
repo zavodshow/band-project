@@ -254,7 +254,7 @@ const RentalCostCard = ({ cost }) => (
   </div>
 );
 
-const RentalCostDocCard = ({ item }) => {
+const RentalCostDocCard = ({ item, fileURL }) => {
   return (
     <div className="rentalCostDocCard">
       <Image src={greyDocument} alt="greyDocument" />
@@ -264,7 +264,7 @@ const RentalCostDocCard = ({ item }) => {
         style={{ cursor: "pointer" }}
         onClick={() => {
           if (item.download !== "") {
-            handleDownload(item.url, item.download);
+            handleDownload(fileURL, item.download);
           } else {
             window.open("https://t.me/zavodshowbase", "_blank");
           }

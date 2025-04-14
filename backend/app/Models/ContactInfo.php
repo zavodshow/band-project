@@ -65,5 +65,8 @@ class ContactInfo extends Model
         'advertising_manager_contact1' => 'array',
         'advertising_manager_contact2' => 'array',
         'advertising_manager_contact3' => 'array',
+        'order_manager_contact1' => 'array',
+        'order_manager_contact2' => 'array',
+        'order_manager_contact3' => 'array',
     ];
 }
