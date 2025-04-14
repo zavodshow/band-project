@@ -31,17 +31,22 @@ class ContactInfoController extends Controller
     public function createOrUpdateContactInfo(Request $request)
     {
         try {
+            // Validate the request data if needed
+            // $validated = $request->validate([...]);
+            
             $contactInfo = ContactInfo::latest()->first();
 
             if ($contactInfo) {
-                $contactInfo->update($validatedData);
+                // Pass the validated data as an array to update()
+                $contactInfo->update($request->all());
                 return response()->json([
                     'message' => 'Contact info updated successfully',
                     'data' => $contactInfo
                 ], 200);
             }
 
-            $newContactInfo = ContactInfo::create($validatedData);
+            // Create a new record with the request data
+            $newContactInfo = ContactInfo::create($request->all());
             return response()->json([
                 'message' => 'Contact info created successfully',
                 'data' => $newContactInfo

@@ -14,7 +14,7 @@ export const getContactInfo = async () => {
 export const updateContactInfo = async (formdata) => {
   try {
     const token = sessionStorage.getItem("token");
-    const response = await apiClient.post("/contact/update", formdata, {
+    const response = await apiClient.post("/contact", formdata, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
