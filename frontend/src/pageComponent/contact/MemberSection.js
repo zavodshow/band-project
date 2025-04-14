@@ -1,108 +1,245 @@
 import Image from "next/image";
+import { useState, useEffect } from "react";
 import { miniClock, miniMail, miniPhone, miniTelegram } from "../../assets";
 import { teamOfficeInfo } from "../../constant/group";
+import { getContactInfo } from "@/api/contactAPI";
 
-const MemberSection = () => (
-  <div className="contactAddress meberSquare">
-    {teamOfficeInfo.map((item, index) => (
-      <div key={index} className="flexWrap spaceBetween memberInfo">
-        <div className="smallHalfWidth memberType">
-          {item.title ? (
-            <div>
-              {item.title === "" ? (
-                <h1 className="x16_2" style={{ marginBottom: "15px" }}>
-                  {item.title}
-                </h1>
-              ) : (
-                <h2 className="x16_2" style={{ marginBottom: "15px" }}>
-                  {item.title}
-                </h2>
-              )}
-              <p className="x15_1">{item.description}</p>
-            </div>
-          ) : (
-            item.flag !== 1 && <p className="x12Font">{item.description}</p>
-          )}
-          {item.flag === 1 && (
-            <div>
-              <p className="x12Font">{item.description[0]}</p>
-              <p className="x12Font" style={{ marginTop: "10px" }}>
-                {item.description[1]}
-              </p>
-            </div>
-          )}
-        </div>
-        <div className="smallHalfWidth memberData">
-          {item.title ? (
-            <>
-              <p className="mobileShow"> &nbsp;</p>
-              <div className="alignCenter">
-                <Image src={item.content[0]?.icon} alt="icon" />
-                &nbsp;
-                <span className="x15_1">{item.content[0]?.value}</span>
-              </div>
-              <div className="alignCenter">
-                <Image src={item.content[1]?.icon} alt="icon" />
-                &nbsp;
-                <span className="x15_1">
-                  Пн-Сб: &nbsp;{item.content[1]?.value}
-                </span>
-              </div>
-            </>
-          ) : (
-            <>
-              {item.flag !== 1 && (
-                <>
-                  <div className="alignCenter">
-                    <Image src={item.content[0]?.icon} alt="icon" />
-                    &nbsp;
-                    <span className="x14_3">{item.content[0]?.value}</span>
-                  </div>
-                  <div
-                    className="alignCenter"
-                    style={{ display: item.content[1] ? "block" : "none" }}
-                  >
-                    <Image src={item.content[1]?.icon} alt="icon" />
-                    &nbsp;
-                    <span className="x14_3">{item.content[1]?.value}</span>
-                  </div>
-                </>
-              )}
-              <div
-                className="alignCenter"
-                style={{ display: item.content[2] ? "block" : "none" }}
-              >
-                <Image src={item.content[2]?.icon} alt="icon" />
-                &nbsp;
-                <span className="x14_3">{item.content[2]?.value}</span>
-              </div>
-            </>
-          )}
-          {item.flag === 1 && (
-            <div>
-              <div className="alignCenter">
-                <Image src={item.content[0]?.icon} alt="icon" />
-                &nbsp;
-                <span className="x14_3">{item.content[0]?.value}</span>
-              </div>
-              <div
-                className="alignCenter"
-                style={{
-                  display: item.content[1] ? "block" : "none",
-                  // marginTop: "15px",
-                }}
-              >
-                <Image src={item.content[1]?.icon} alt="icon" />
-                &nbsp;
-                <span className="x14_3">{item.content[1]?.value}</span>
-              </div>
-            </div>
-          )}
-        </div>
-        {index === 3 && <hr className="thirdLine" />}
+const MemberSection = () => {
+  const [loading, setLoading] = useState(false);
+  const [contactData, setContactData] = useState(teamOfficeInfo);
+
+  // Map icon strings to actual icon components
+  const iconMap = {
+    miniPhone,
+    miniMail,
+    miniClock,
+    miniTelegram,
+  };
+
+  // Fetch initial data
+  useEffect(() => {
+    const fetchContactInfo = async () => {
+      try {
+        setLoading(true);
+        const data = await getContactInfo();
+
+        if (data) {
+          // Transform API data to required format
+          const transformedData = [
+            {
+              title: "ОФИС КОМАНДЫ",
+              contents: [
+                {
+                  description: data.team_office_address,
+                  content: [
+                    {
+                      icon: iconMap[data.team_office_contact1?.icon],
+                      value: data.team_office_contact1?.link || "",
+                    },
+                    {
+                      icon: iconMap[data.team_office_contact2?.icon],
+                      value: data.team_office_contact2?.link || "",
+                    },
+                    {
+                      icon: iconMap[data.team_office_contact3?.icon],
+                      value: data.team_office_contact3?.link || "",
+                    },
+                  ],
+                },
+                {
+                  description: "МЕНЕДЖЕРЫ ПРОЕКТОВ, АРЕНДА ОБОРУДОВАНИЯ",
+                  content: [
+                    {
+                      icon: iconMap[data.project_manager_contact1?.icon],
+                      value: data.project_manager_contact1?.link || "",
+                    },
+                    {
+                      icon: iconMap[data.project_manager_contact2?.icon],
+                      value: data.project_manager_contact2?.link || "",
+                    },
+                    {
+                      icon: iconMap[data.project_manager_contact3?.icon],
+                      value: data.project_manager_contact3?.link || "",
+                    },
+                  ],
+                },
+                {
+                  description: "БУХГАЛТЕРИЯ",
+                  content: [
+                    {
+                      icon: iconMap[data.account_manager_contact1?.icon],
+                      value: data.account_manager_contact1?.link || "",
+                    },
+                    {
+                      icon: iconMap[data.account_manager_contact2?.icon],
+                      value: data.account_manager_contact2?.link || "",
+                    },
+                    {
+                      icon: iconMap[data.account_manager_contact3?.icon],
+                      value: data.account_manager_contact3?.link || "",
+                    },
+                  ],
+                },
+                {
+                  description: "АРЕНДА ЛИНОЛЕУМА",
+                  content: [
+                    {
+                      icon: iconMap[data.delivery_manager_contact1?.icon],
+                      value: data.delivery_manager_contact1?.link || "",
+                    },
+                    {
+                      icon: iconMap[data.delivery_manager_contact2?.icon],
+                      value: data.delivery_manager_contact2?.link || "",
+                    },
+                    {
+                      icon: iconMap[data.delivery_manager_contact3?.icon],
+                      value: data.delivery_manager_contact3?.link || "",
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              title: "СКЛАД (24 ЧАСА)",
+              contents: [
+                {
+                  description: data.warehouse_address,
+                  content: [
+                    {
+                      icon: iconMap[data.warehouse_contact1?.icon],
+                      value: data.warehouse_contact1?.link || "",
+                    },
+                    {
+                      icon: iconMap[data.warehouse_contact2?.icon],
+                      value: `Пн-Сб: ${data.warehouse_contact2?.link || ""}`,
+                    },
+                    {
+                      icon: iconMap[data.warehouse_contact3?.icon],
+                      value: data.warehouse_contact3?.link || "",
+                    },
+                  ],
+                },
+                {
+                  description: "ОТГРУЗКИ, ПРОЕЗД НА СКЛАД",
+                  content: [
+                    {
+                      icon: iconMap[data.travel_manager_contact1?.icon],
+                      value: data.travel_manager_contact1?.link || "",
+                    },
+                    {
+                      icon: iconMap[data.travel_manager_contact2?.icon],
+                      value: data.travel_manager_contact2?.link || "",
+                    },
+                    {
+                      icon: iconMap[data.travel_manager_contact3?.icon],
+                      value: data.travel_manager_contact3?.link || "",
+                    },
+                  ],
+                },
+                {
+                  description: "АРЕНДА ЗАЛА",
+                  content: [
+                    {
+                      icon: iconMap[data.rental_hall_manager_contact1?.icon],
+                      value: data.rental_hall_manager_contact1?.link || "",
+                    },
+                    {
+                      icon: iconMap[data.rental_hall_manager_contact2?.icon],
+                      value: data.rental_hall_manager_contact2?.link || "",
+                    },
+                    {
+                      icon: iconMap[data.rental_hall_manager_contact3?.icon],
+                      value: data.rental_hall_manager_contact3?.link || "",
+                    },
+                  ],
+                },
+                {
+                  description: "ИНФОРМАЦИОННОЕ ОБЕСПЕЧЕНИЕ, РЕКЛАМА",
+                  content: [
+                    {
+                      icon: iconMap[data.advertising_manager_contact1?.icon],
+                      value: data.advertising_manager_contact1?.link || "",
+                    },
+                    {
+                      icon: iconMap[data.advertising_manager_contact2?.icon],
+                      value: data.advertising_manager_contact2?.link || "",
+                    },
+                    {
+                      icon: iconMap[data.advertising_manager_contact3?.icon],
+                      value: data.advertising_manager_contact3?.link || "",
+                    },
+                  ],
+                },
+              ],
+            },
+          ];
+
+          setContactData(transformedData);
+        }
+      } catch (error) {
+        console.error("Error fetching contact info:", error);
+        // Fallback to hardcoded data (already set as default)
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchContactInfo();
+  }, []);
+
+  // Helper function to render contact items
+  const renderContactItem = (item, index) => {
+    if (!item?.icon || !item?.value) return null;
+
+    return (
+      <div key={index} className="alignCenter">
+        <Image src={item.icon} alt="icon" style={{ marginRight: "8px" }} />
+        <span className="x14_3">{item.value}</span>
       </div>
-    ))}
-  </div>
-);
+    );
+  };
+
+  return (
+    <div className="contactAddress meberSquare">
+      {loading ? (
+        <div className="loading">Loading...</div>
+      ) : (
+        contactData.map((section, sectionIndex) => (
+          <div key={sectionIndex}>
+            {/* Section Title */}
+            <div className="smallHalfWidth memberType">
+              <h2 className="x16_2" style={{ marginBottom: "15px" }}>
+                {section.title}
+              </h2>
+            </div>
+
+            {/* Section Contents */}
+            {(section.contents || []).map((item, itemIndex) => (
+              <div
+                key={`${sectionIndex}-${itemIndex}`}
+                className="flexWrap spaceBetween memberInfo"
+                style={{ marginBottom: "30px" }}
+              >
+                {/* Item Description */}
+                <div className="smallHalfWidth memberType">
+                  <p className="x15_1">{item.description}</p>
+                </div>
+
+                {/* Item Content/Contacts */}
+                <div className="smallHalfWidth memberData">
+                  {(item.content || []).map((contact, contactIndex) =>
+                    renderContactItem(contact, contactIndex)
+                  )}
+                </div>
+              </div>
+            ))}
+
+            {sectionIndex === 0 && <hr className="thirdLine" />}
+          </div>
+        ))
+      )}
+    </div>
+  );
+};
 
 export default MemberSection;

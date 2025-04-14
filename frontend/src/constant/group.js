@@ -206,7 +206,7 @@ const swiperData = [
 ];
 
 const gallery = [
-  { img: portfolio1, width: 540, top: 0},
+  { img: portfolio1, width: 540, top: 0 },
   { img: portfolio2, width: 440, top: 212 },
   { img: portfolio3, width: 400, top: 38 },
   { img: portfolio4, width: 480, top: 27 },
@@ -1407,66 +1407,72 @@ const plantShowMobileInfo = [
 const teamOfficeInfo = [
   {
     title: "ОФИС КОМАНДЫ",
-    description: "г. Москва, Реутов пл.Академика Челомея, оф. 102",
-    content: [
-      { icon: miniPhone, value: "+7 (495)-720-12-82" },
-      { icon: miniClock, value: "10-19 МСК" },
-    ],
-  },
-  {
-    description: "МЕНЕДЖЕРЫ ПРОЕКТОВ, АРЕНДА ОБОРУДОВАНИЯ",
-    content: [
-      { icon: miniPhone, value: "доб. 203" },
-      { icon: miniTelegram, value: "@afonnikova_irina_zavodshow" },
-      { icon: miniTelegram, value: "@sedov_alexey_zavodshow" },
-    ],
-  },
-  {
-    description: `БУХГАЛТЕРИЯ`,
-    content: [
-      { icon: miniPhone, value: "доб. 300" },
-      { icon: miniMail, value: "fin@zavodshow.ru" },
-      { icon: miniTelegram, value: "@Timofeev_ZS" },
-    ],
-  },
-  {
-    description: "АРЕНДА ЛИНОЛЕУМА",
-    content: [
-      { icon: miniPhone, value: "доб. 800" },
-      { icon: miniMail, value: "delivery@zavodshow.ru" },
-      { icon: miniTelegram, value: "@afonnikova_irina_zavodshow" },
+    contents: [
+      {
+        description: "г. Москва, Реутов пл.Академика Челомея, оф. 102",
+        content: [
+          { icon: miniPhone, value: "+7 (495)-720-12-82" },
+          { icon: miniClock, value: "Пн-Сб: 10-19 МСК" },
+        ],
+      },
+      {
+        description: "МЕНЕДЖЕРЫ ПРОЕКТОВ, АРЕНДА ОБОРУДОВАНИЯ",
+        content: [
+          { icon: miniPhone, value: "доб. 203" },
+          { icon: miniTelegram, value: "@afonnikova_irina_zavodshow" },
+          { icon: miniTelegram, value: "@sedov_alexey_zavodshow" },
+        ],
+      },
+      {
+        description: "БУХГАЛТЕРИЯ",
+        content: [
+          { icon: miniPhone, value: "доб. 300" },
+          { icon: miniMail, value: "fin@zavodshow.ru" },
+          { icon: miniTelegram, value: "@Timofeev_ZS" },
+        ],
+      },
+      {
+        description: "АРЕНДА ЛИНОЛЕУМА",
+        content: [
+          { icon: miniPhone, value: "доб. 800" },
+          { icon: miniMail, value: "delivery@zavodshow.ru" },
+          { icon: miniTelegram, value: "@afonnikova_irina_zavodshow" },
+        ],
+      },
     ],
   },
   {
     title: "СКЛАД (24 ЧАСА)",
-    description: "г. Москва, Реутов пл.Академика Челомея, оф. 105",
-    content: [
-      { icon: miniPhone, value: "+7 (495)-720-12-82" },
-      { icon: miniClock, value: "10-19 МСК" },
-    ],
-  },
-  {
-    description: "ОТГРУЗКИ, ПРОЕЗД НА СКЛАД",
-    content: [
-      { icon: miniPhone, value: "доб. 400" },
-      { icon: miniMail, value: "cargo@zavodshow.ru" },
-      { icon: miniTelegram, value: "@office_zavodshow" },
-    ],
-  },
-  {
-    flag: 1,
-    description: ["АРЕНДА ЗАЛА"],
-    content: [
-      { icon: miniPhone, value: "+7 (906)-052-28-80" },
-      { icon: miniTelegram, value: "@office_zavodshow" },
-    ],
-  },
-  {
-    flag: 1,
-    description: ["ИНФОРМАЦИОННОЕ ОБЕСПЕЧЕНИЕ, РЕКЛАМА"],
-    content: [
-      { icon: miniPhone, value: "+7 (906)-051-78-79" },
-      { icon: miniTelegram, value: "@pr_zavodshow" },
+    contents: [
+      {
+        description: "г. Москва, Реутов пл.Академика Челомея, оф. 105",
+        content: [
+          { icon: miniPhone, value: "+7 (495)-720-12-82" },
+          { icon: miniClock, value: "Пн-Сб: 10-19 МСК" },
+        ],
+      },
+      {
+        description: "ОТГРУЗКИ, ПРОЕЗД НА СКЛАД",
+        content: [
+          { icon: miniPhone, value: "доб. 400" },
+          { icon: miniMail, value: "cargo@zavodshow.ru" },
+          { icon: miniTelegram, value: "@office_zavodshow" },
+        ],
+      },
+      {
+        description: "АРЕНДА ЗАЛА",
+        content: [
+          { icon: miniPhone, value: "+7 (906)-052-28-80" },
+          { icon: miniTelegram, value: "@office_zavodshow" },
+        ],
+      },
+      {
+        description: "ИНФОРМАЦИОННОЕ ОБЕСПЕЧЕНИЕ, РЕКЛАМА",
+        content: [
+          { icon: miniPhone, value: "+7 (906)-051-78-79" },
+          { icon: miniTelegram, value: "@pr_zavodshow" },
+        ],
+      },
     ],
   },
 ];

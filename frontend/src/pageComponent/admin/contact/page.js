@@ -205,13 +205,6 @@ const ContactEditPage = () => {
     try {
       setLoading(true);
       const response = await updateContactInfo(formData);
-
-      if (response.status === 200) {
-        // Optionally show success message
-        alert("Contact information updated successfully!");
-      } else {
-        lert("Contact information failed!");
-      }
     } catch (error) {
       console.error("Error updating contact info:", error);
       alert("Failed to update contact information");
