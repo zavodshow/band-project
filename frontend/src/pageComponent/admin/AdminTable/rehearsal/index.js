@@ -213,21 +213,20 @@ const RehearsalTable = ({ id }) => {
       }
     });
     insertRental(newFormData).then((data) => {
-      setRental({ cost: data.cost, files: data.files });
-      setDownloadPath(data.files);
+      setRental({ cost: data?.rental?.cost, files: data?.rental?.files });
+      setDownloadPath(data?.rental?.files);
     });
   };
 
   const handleNewCreate = (url) => {
     navigate.push(url);
   };
-
   useEffect(() => {
     getRental()
       .then((data) => {
         if (data && data.length > 0) {
           setRental({ cost: data[0].cost, files: data[0].files });
-          setDownloadPath(data[0].files);
+          setDownloadPath([...data[0].files]);
         } else {
           setRental({ cost: "", files: [] });
         }
@@ -323,7 +322,11 @@ const RehearsalTable = ({ id }) => {
                             onChange={(e) => handleFileChange(e, index)}
                           />
                           {rental.files && rental.files[index] && (
-                            <Typography>{rental.files[index].name}</Typography>
+                            <Typography>
+                              {rental.files[index].name
+                                ? rental.files[index].name
+                                : filenameList[index]}
+                            </Typography>
                           )}
                         </div>
 
