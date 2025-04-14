@@ -33,6 +33,7 @@ const AdminHeader = () => {
         { title: "реп. база", link: "/admin/rehearsalTable" },
         { title: "3D-визуализация", link: "/admin/visualizationTable" },
         { title: "команда", link: "/admin/team" },
+        { title: "контакты", link: "/admin/contact" },
       ],
     },
     setting: {

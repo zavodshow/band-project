@@ -17,6 +17,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\ContactInfoController;
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -158,7 +159,6 @@ Route::prefix('rental')->middleware(['auth:sanctum','throttle:5000,1'])->group(f
     Route::post('/',[RentalController::class,'store'])->middleware('admin:adding');
 });
 
-
 // Team Routes
 Route::prefix('team')->middleware('throttle:5000,1')->group(function () {
     Route::get('/', [TeamController::class, 'getTeam']);
@@ -166,6 +166,13 @@ Route::prefix('team')->middleware('throttle:5000,1')->group(function () {
 Route::prefix('team')->middleware(['auth:sanctum','throttle:5000,1'])->group(function () {
     Route::post('/', [TeamController::class, 'createOrUpdateTeam'])->middleware('admin:editing');
     Route::post('/swap/order', [TeamController::class, 'swapTeamQueue'])->middleware('admin:editing');
+});
+
+Route::prefix('contact')->middleware('throttle:5000,1')->group(function () {
+    Route::get('/', [ContactInfoController::class, 'getContactInfo']);
+});
+Route::prefix('contact')->middleware(['auth:sanctum','throttle:5000,1'])->group(function () {
+    Route::post('/', [ContactInfoController::class, 'createOrUpdateContactInfo'])->middleware('admin:editing');
 });
 
 //Search Route

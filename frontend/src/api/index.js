@@ -11,3 +11,4 @@ export * from "./teamAPI";
 export * from "./threeAPI";
 export * from "./authAPI";
 export * from "./adminAPI";
+export * from "./contactAPI";
