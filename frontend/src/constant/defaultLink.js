@@ -5,7 +5,7 @@ const storageUrlToDownloadUrl = (url) => {
   if (!url) return url;
   const base = "https://zavodshow.ru/storage/uploads/rental/";
   const apiBase = "https://zavodshow.ru/api/rental/download/";
-
+  console.log(url);
   if (url.startsWith(base)) {
     return url.replace(base, apiBase);
   }
@@ -14,19 +14,18 @@ const storageUrlToDownloadUrl = (url) => {
 
 // In defaultLink.js
 export const handleDownload = async (fileUrl, filename) => {
-  fileUrl = storageUrlToDownloadUrl(fileUrl);
   if (!fileUrl) {
     console.error("No file URL provided");
     return;
   }
 
-  const url =
+  let url =
     typeof fileUrl === "string" ? fileUrl : fileUrl.url || fileUrl.path || "";
-
   if (!url) {
     console.error("Could not determine file URL");
     return;
   }
+  url = storageUrlToDownloadUrl(url);
 
   try {
     // Extract filename from URL if not provided

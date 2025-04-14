@@ -154,7 +154,7 @@ const MemberSection = () => {
                   ],
                 },
                 {
-                  description: "ИНФОРМАЦИОННОЕ ОБЕСПЕЧЕНИЕ, РЕКЛАМА",
+                  description: "ИНФОРМАЦИОННОЕ ОБЕСПЕЧЕНИЕ, РЕКЛАМА; ЗАКАЗ ИНТРО",
                   content: [
                     {
                       icon: iconMap[data.advertising_manager_contact1?.icon],
@@ -170,23 +170,23 @@ const MemberSection = () => {
                     },
                   ],
                 },
-                {
-                  description: "ЗАКАЗ ИНТРО",
-                  content: [
-                    {
-                      icon: iconMap[data.order_manager_contact1?.icon],
-                      value: data.order_manager_contact1?.link || "",
-                    },
-                    {
-                      icon: iconMap[data.order_manager_contact2?.icon],
-                      value: data.order_manager_contact2?.link || "",
-                    },
-                    {
-                      icon: iconMap[data.order_manager_contact3?.icon],
-                      value: data.order_manager_contact3?.link || "",
-                    },
-                  ],
-                },
+                // {
+                //   description: "ЗАКАЗ ИНТРО",
+                //   content: [
+                //     {
+                //       icon: iconMap[data.order_manager_contact1?.icon],
+                //       value: data.order_manager_contact1?.link || "",
+                //     },
+                //     {
+                //       icon: iconMap[data.order_manager_contact2?.icon],
+                //       value: data.order_manager_contact2?.link || "",
+                //     },
+                //     {
+                //       icon: iconMap[data.order_manager_contact3?.icon],
+                //       value: data.order_manager_contact3?.link || "",
+                //     },
+                //   ],
+                // },
               ],
             },
           ];

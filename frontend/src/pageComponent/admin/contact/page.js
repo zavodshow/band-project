@@ -445,7 +445,7 @@ const ContactEditPage = () => {
             />
           </ContactSubSection>
 
-          <ContactSubSection title="ИНФОРМАЦИОННОЕ ОБЕСПЕЧЕНИЕ, РЕКЛАМА">
+          <ContactSubSection title="ИНФОРМАЦИОННОЕ ОБЕСПЕЧЕНИЕ, РЕКЛАМА; ЗАКАЗ ИНТРО">
             <ContactField
               fieldName="advertising_manager_contact1"
               label="Контакт по рекламе 1"
@@ -472,7 +472,7 @@ const ContactEditPage = () => {
             />
           </ContactSubSection>
 
-          <ContactSubSection title="ЗАКАЗ ИНТРО">
+          {/* <ContactSubSection title="ЗАКАЗ ИНТРО">
             <ContactField
               fieldName="order_manager_contact1"
               label="Контакт менеджера по заказам 1"
@@ -497,7 +497,7 @@ const ContactEditPage = () => {
               }
               onContactChange={handleContactChange}
             />
-          </ContactSubSection>
+          </ContactSubSection> */}
 
           {loading && <LoadingProgress />}
         </>

@@ -16,13 +16,14 @@ import { swapId } from "@/api/caseAPI";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { handleDownload } from "@/constant/defaultLink";
-import {filenameList} from "@/constant/group";
+import { filenameList } from "@/constant/group";
 
 const RehearsalTable = ({ id }) => {
   const navigate = useRouter();
   const [userInfo, setUserInfo] = useState(null);
   const [participant, setParticipant] = useState([]);
   const [rental, setRental] = useState({ cost: "", files: [] });
+  const [downloadPath, setDownloadPath] = useState(null);
 
   const createActionColumn = (
     type,
@@ -213,6 +214,7 @@ const RehearsalTable = ({ id }) => {
     });
     insertRental(newFormData).then((data) => {
       setRental({ cost: data.cost, files: data.files });
+      setDownloadPath(data.files);
     });
   };
 
@@ -225,6 +227,7 @@ const RehearsalTable = ({ id }) => {
       .then((data) => {
         if (data && data.length > 0) {
           setRental({ cost: data[0].cost, files: data[0].files });
+          setDownloadPath(data[0].files);
         } else {
           setRental({ cost: "", files: [] });
         }
@@ -250,7 +253,7 @@ const RehearsalTable = ({ id }) => {
 
   const handleFileDownload = (index) => {
     if (index >= 2) return;
-    handleDownload(rental.files[index], filenameList[index]);
+    handleDownload(downloadPath[index], filenameList[index]);
   };
 
   const handleFileChange = (e, index) => {
