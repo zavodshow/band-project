@@ -511,12 +511,12 @@ const DetailSection = ({
               {sliceData.length === result.length ? (
                 <DefaultButton
                   onClick={reduceUsers}
-                  title={`СКРЫТЬ БОЛЬШЕ ${moreTitle}`}
+                  title={`СКРЫТЬ БОЛЬШЕ`}
                 />
               ) : (
                 <DefaultButton
                   onClick={addUsers}
-                  title={`СМОТРЕТЬ ЕЩЁ ${moreTitle}`}
+                  title={`СМОТРЕТЬ ЕЩЁ`}
                 />
               )}
             </>
