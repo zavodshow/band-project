@@ -7,34 +7,31 @@ import { DetailDataInput } from "@/components/Inputs";
 import { Link } from "react-scroll";
 import VideoPreview from "@/components/Cards/UserCard/Preview/VideoPreview";
 
+const slidingInfo = [
+  {
+    text: "Дорога троссовая с веревочным приводом",
+    number: "12 метров",
+  },
+  {
+    text: "Длина",
+    number: "X метров",
+  },
+  {
+    text: "Вес ткани",
+    number: "YY кг",
+  },
+  {
+    text: "Нагрузка ",
+    number: "до 30 кг",
+  },
+];
+
 const SlidingCurtain = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(true);
   };
 
-  const slidingInfo = [
-    {
-      text: "Ширина",
-      number: "12 метров",
-    },
-    {
-      text: "Длина",
-      number: "X метров",
-    },
-    {
-      text: "Вес ткани",
-      number: "YY кг",
-    },
-    {
-      text: "Нагрузка ",
-      number: "до 750 кг",
-    },
-    {
-      text: "Раздвижной занавес до 12 метров",
-      number: "",
-    },
-  ];
   const content = (
     <section>
       <h2

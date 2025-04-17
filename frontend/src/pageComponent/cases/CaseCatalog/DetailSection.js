@@ -286,7 +286,8 @@ const DetailSection = ({
             (equipment) =>
               equipment.toUpperCase() === searchData.equipment.toUpperCase()
           )) &&
-        (!searchData.eventTitle || item.eventTitle === searchData.eventTitle) &&
+        (!searchData.eventTitle ||
+          item.eventTitle.includes(searchData.eventTitle)) &&
         (!searchData.default_equipment ||
           searchData.default_equipment.every((equipment) =>
             item.equipment_type.includes(equipment)

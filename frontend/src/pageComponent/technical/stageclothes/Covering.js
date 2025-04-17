@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-scroll";
 import { ArrowDefaultButton } from "@/components/Buttons";
-import { Svideo07} from "@/assets";
+import { Svideo07 } from "@/assets";
 import { ChichaBoxRightCard, ChichaBoxVideoCard } from "@/components/Cards";
 import VideoPreview from "@/components/Cards/UserCard/Preview/VideoPreview";
 
@@ -59,8 +59,8 @@ const Covering = () => {
                 }}
               >
                 При монтаже используется балетный скотч для танцевального
-                линолеума PRO-DANCE производства TUCHLER (Германия) Весь
-                линолеум шириной 2 м. и длинной от 2 до 20.
+                линолеума PRO-DANCE производства TUCHLER (Германия) <br />{" "}
+                Линолеум шириной 2 м. и длинной от 2 до 20.
               </p>
             </>
           }

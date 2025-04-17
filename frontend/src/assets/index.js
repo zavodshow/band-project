@@ -153,12 +153,12 @@ import plusIcon from "./icon/plus.svg";
 import cancelIcon from "./icon/cancel.svg";
 
 //EventWorks
-import event1 from "./eventworks/event1.png";
-import event2 from "./eventworks/event2.png";
-import event3 from "./eventworks/event3.png";
-import event4 from "./eventworks/event4.png";
-import event5 from "./eventworks/event5.png";
-import event6 from "./eventworks/event6.png";
+import event1 from "./eventworks/event1.jpg";
+import event2 from "./eventworks/event2.jpg";
+import event3 from "./eventworks/event3.jpg";
+import event4 from "./eventworks/event4.jpg";
+import event5 from "./eventworks/event5.jpg";
+import event6 from "./eventworks/event6.jpg";
 
 //Equipments
 import light1 from "./equipments/light1.png";
@@ -208,12 +208,6 @@ import caseCatalogPic7 from "./casecatalog/CasesCatalog7.png";
 import caseCatalogPic8 from "./casecatalog/CasesCatalog8.png";
 
 //event
-import eventImg1 from "./event/eventImg1.png";
-import eventImg2 from "./event/eventImg2.png";
-import eventImg3 from "./event/eventImg3.png";
-import eventImg4 from "./event/eventImg4.png";
-import eventImg5 from "./event/eventImg5.png";
-import eventImg6 from "./event/eventImg6.png";
 import cristalRoom from "./event/cristalRoomImg.png";
 import SwiperImg1 from "./event/SwiperImg1.png";
 import SwiperImg2 from "./event/SwiperImg2.png";
@@ -435,12 +429,6 @@ export {
   caseCatalogPic8,
 
   //event
-  eventImg1,
-  eventImg2,
-  eventImg3,
-  eventImg4,
-  eventImg5,
-  eventImg6,
   cristalRoom,
 
   //caseSolutionChiCha

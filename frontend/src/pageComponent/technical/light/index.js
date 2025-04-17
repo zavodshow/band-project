@@ -24,8 +24,8 @@ const LightPage = () => {
         <BigVideoBox
           item={{
             src: Svideo01,
-            videoTitle: "Cветовой Меч",
-            videoDescription: "Световой концерт",
+            // videoTitle: "Cветовой Меч",
+            // videoDescription: "Световой концерт",
           }}
         />
         {/* <EquipmentCategorySection type="свет" type1="light" /> */}

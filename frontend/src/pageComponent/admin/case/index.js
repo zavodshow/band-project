@@ -98,7 +98,8 @@ const inputInfo = [
     title: "Хедлайнер",
     name: "eventTitle",
     type: "text",
-    placeholder: "Введите хедлайнера",
+    placeholder:
+      "ВВведите хедлайнеры, разделяя их ЗАПЯТОЙ или нажимая клавишу ENTER.",
   },
 ];
 
@@ -138,7 +139,7 @@ const NewCase = () => {
     video: {},
     site_type: [],
     images: [],
-    eventTitle: "",
+    eventTitle: [],
     title: "",
     keyword: "",
     description: "",
@@ -223,6 +224,20 @@ const NewCase = () => {
     setFormData((prev) => ({
       ...prev,
       cities: prev.cities.filter((city) => city !== item),
+    }));
+  };
+
+  const handleAddHeadliner = (item) => {
+    setFormData((prev) => ({
+      ...prev,
+      eventTitle: [...prev.eventTitle, item],
+    }));
+  };
+
+  const handleDeleteHeadliner = (item) => {
+    setFormData((prev) => ({
+      ...prev,
+      eventTitle: prev.eventTitle.filter((heading) => heading !== item),
     }));
   };
 
@@ -489,11 +504,14 @@ const NewCase = () => {
                 ? "Хедлайнер для фильтрации кейсов"
                 : "Хедлайнер"}
             </p>
-            <Input
-              value={formData[inputInfo[9].name]}
-              item={inputInfo[9]}
-              handleChange={handleChange}
-              required={false}
+            <MultipleValueTextInput
+              className="InputText x14 alignCenter"
+              onItemAdded={handleAddHeadliner}
+              onItemDeleted={handleDeleteHeadliner}
+              name="headliner-input"
+              placeholder={inputInfo[9].placeholder}
+              values={formData?.eventTitle}
+              // required={false}
             />
           </div>
           <div>

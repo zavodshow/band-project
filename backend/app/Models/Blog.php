@@ -46,6 +46,7 @@ class Blog extends Model
         'blog_type' => 'array',
         'site_type' => 'array',
         'equipment_type' => 'array',
+        'eventTitle' => 'array',
     ];
 
     public function site()

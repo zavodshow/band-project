@@ -40,7 +40,7 @@ const EventPage = () => {
           data={workProcessInfo3}
           url="/documents/Чек-лист Ивент.xls"
           fileName="Чек-лист Ивент.xls"
-          sizeStr="XLS 1.8 Мб"
+          sizeStr="XLS 1,8 Мб"
         />
       </div>
       <SwiperSection displayType="Продакшн" />

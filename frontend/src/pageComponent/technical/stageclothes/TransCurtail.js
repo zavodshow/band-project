@@ -7,9 +7,9 @@ import { DetailDataInput } from "@/components/Inputs";
 import Image from "next/image";
 
 const transparentCurtainInfo = [
-  { text: "Ширина", number: "110 метров" },
-  { text: "Длина", number: "X метров" },
-  { text: "Вес ткани", number: "90г/м²" },
+  { text: "Ширина", number: "6 ~ 12 метров" },
+  { text: "Длина", number: "4 ~ 6 метров" },
+  // { text: "Вес ткани", number: "90г/м²" },
   { text: "Цвет", number: "Белый" },
   {
     text: "Применяется в качестве проекционного материала в театре и шоу, а так же для натяжных потолков, стен выставочных стендов, архитектурных элементов",

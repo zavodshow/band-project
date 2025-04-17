@@ -27,32 +27,35 @@ export const Input = ({
   };
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: "relative" }}>
       <input
         className="InputText x14 alignCenter"
         style={{ backgroundColor: disabled ? "#f9f9f9" : color }}
         placeholder={item.placeholder}
         name={item.name}
-        type={isPasswordVisible && item.type === 'password' ? 'text' : item.type}
+        type={
+          isPasswordVisible && item.type === "password" ? "text" : item.type
+        }
         onChange={handleChange}
         value={value}
         onKeyDown={onKeyDown}
         required
         disabled={disabled}
       />
-      {item.type === 'password' && (
+      {item.type === "password" && (
         <span
           onClick={togglePasswordVisibility}
           style={{
-            position: 'absolute',
-            right: '10px',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            cursor: 'pointer',
-            color: 'gray'
+            position: "absolute",
+            right: "10px",
+            top: "50%",
+            transform: "translateY(-50%)",
+            cursor: "pointer",
+            color: "gray",
           }}
         >
-          {isPasswordVisible ? 'Скрыть' : 'Показать'} {/* Use icons or text for show/hide */}
+          {isPasswordVisible ? "Скрыть" : "Показать"}{" "}
+          {/* Use icons or text for show/hide */}
         </span>
       )}
     </div>

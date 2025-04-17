@@ -300,7 +300,7 @@ const blogTextCard = {
   url: textBlog,
   content:
     "Площадки ЗАВОД ШОУ - Площадки | Ивент | Концерт | Мероприятия | Решения и концепции",
-  viewNumber: "481",
+  viewNumber: "758",
 };
 
 const blogCardInfo = [
@@ -309,7 +309,7 @@ const blogCardInfo = [
     url: textBlog,
     content:
       "Площадки ЗАВОД ШОУ - Площадки | Ивент | Концерт | Мероприятия | Решения и концепции",
-    viewNumber: "481",
+    viewNumber: "758",
   },
   {
     type: "video",
@@ -433,7 +433,7 @@ const heroSectionInfo = [
   {
     flag: 1,
     bgUrl: heroLampImg,
-    title: "Стейдж дизайн: &&от идеи до реализации",
+    title: "Стейдж-дизайн: &&от идеи до реализации",
     heroTopButton: "ФИРМЕННЫЕ УСЛУГИ",
     defaultBtn: {
       title: "заказать расчёт",
@@ -484,7 +484,7 @@ const heroSectionInfo = [
     flag: 2,
     bgUrl: circleHeroImg,
     title: "Технический продакшн для любых событий",
-    text: ["+ 3D-визуализация", "сокращение рисков неуспеха события"],
+    text: ["+ 3D-визуализация", "Вы заранее увидите концепцию события"],
     heroTopButton: "ПРОДАКШН",
     defaultBtn: {
       title: "Рассчитать продакшн",
@@ -500,7 +500,7 @@ const heroSectionInfo = [
         url: "",
       },
       {
-        title: "Корпоративные встречи",
+        title: "Корпоративные события",
         url: "",
       },
       {
@@ -520,7 +520,7 @@ const heroSectionInfo = [
         url: "",
       },
       {
-        title: "ТВ-проекты",
+        title: "Концерты",
         url: "",
       },
     ],
@@ -542,7 +542,7 @@ const heroSectionInfo = [
         url: "",
       },
       {
-        title: "ТВ-проекты",
+        title: "Концерты",
         url: "",
       },
       {
@@ -1058,11 +1058,9 @@ const creationInfo = [
       "1) Подбираем необходимое оборудование из нашего парка",
       "2) Составляем смету для реализации и тайминг шоу",
     ],
-    contentTitle: "Какие есть статьи расходов:",
+    contentTitle: "",
     contentText: [
-      "— Аренда оборудования",
-      "— Услуги подрядчиков",
-      "— Транспорт",
+      "",
     ],
     bgColor: "#DCDBDB",
   },
@@ -1074,10 +1072,10 @@ const creationInfo = [
       "3) Контролируем технические аспекты на всех этапах",
     ],
     buttonIcon: smallDownload,
-    buttonTitle: "Скачать пример документации",
+    buttonTitle: "Скачать чеклист",
     url: "/documents/Этапы работы над туром.docx",
     download: "Этапы работы над туром.docx",
-    sizeText: "DOC 1.9 Мб",
+    sizeText: "DOC 1,9 Мб",
     bgColor: "#CECDCD",
   },
 ];
@@ -1100,7 +1098,7 @@ const eventCardInfo = [
   },
   {
     img: event4,
-    title: "ТВ-проекты",
+    title: "Концерты",
     tags: ["Студия", "Открытые площадки"],
   },
   {
@@ -1348,7 +1346,7 @@ const kabukiInfo = {
     },
     {
       text: "Длина",
-      number: "13,5 м",
+      number: "13,5 см",
     },
     {
       text: "Высота",

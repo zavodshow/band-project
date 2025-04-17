@@ -32,8 +32,8 @@ const StageClothesPage = () => {
         <BigVideoBox
           item={{
             src: Svideo04,
-            videoTitle: "Тайм-лапс возведение сцены",
-            videoDescription: "Перед концертом Кипелова",
+            // videoTitle: "Тайм-лапс возведение сцены",
+            // videoDescription: "Перед концертом Кипелова",
           }}
         />
         <Covering />

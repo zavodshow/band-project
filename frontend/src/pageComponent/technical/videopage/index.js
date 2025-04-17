@@ -24,8 +24,8 @@ const VideoPage = () => {
         <BigVideoBox
           item={{
             src: Svideo03,
-            videoTitle: "Видео-драйв",
-            videoDescription: "Фэндом-концерт Райна Гослинга",
+            // videoTitle: "Видео-драйв",
+            // videoDescription: "Фэндом-концерт Райна Гослинга",
           }}
         />
         {/* <EquipmentCategorySection type="видео" /> */}

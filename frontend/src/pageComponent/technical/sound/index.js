@@ -24,8 +24,8 @@ const SoundPage = () => {
         <BigVideoBox
           item={{
             src: Svideo02,
-            videoTitle: "Звуковая волна",
-            videoDescription: "Рейв-фестиваль",
+            // videoTitle: "Звуковая волна",
+            // videoDescription: "Рейв-фестиваль",
           }}
         />
         {/* <EquipmentCategorySection type="звук" /> */}
