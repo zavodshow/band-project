@@ -142,7 +142,7 @@ const Svideo9 = "/video/Svideo9.mp4";
 const Svideo10 = "/video/Svideo10.mp4";
 const showdevelopment = "/video/showdevelopment.mp4";
 const coveringVideo = "/video/coveringVideo.mp4";
-const kabukiVideo = "/video/kabukiVideo.mp4";
+const kabukiVideo01 = "/video/kabukiVideo01.mp4";
 const eventVideo = "/video/eventVideo.mp4";
 const productionEvent = "/video/productionEvent.mp4";
 const ProductionConcert = "/video/ProductionConcert.mp4";
@@ -379,7 +379,7 @@ export {
   Svideo8,
   showdevelopment,
   coveringVideo,
-  kabukiVideo,
+  kabukiVideo01,
   eventVideo,
   Svideo9,
   Svideo10,

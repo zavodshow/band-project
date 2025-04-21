@@ -4,7 +4,7 @@ import {
   kabukiImg2,
   kabukiImg3,
   kabukiImg4,
-  kabukiVideo,
+  kabukiVideo01,
 } from "@/assets";
 import { ArrowDefaultButton } from "@/components/Buttons";
 import { kabukiInfo } from "@/constant/group";
@@ -110,7 +110,7 @@ const Kabuki = () => {
         <div className="kabukiBody">
           <div className="flexWrapBetween" style={{ gap: "20px" }}>
             <ChichaBoxVideoCard
-              video={kabukiVideo}
+              video={kabukiVideo01}
               width="clamp(300px, 40vw, 640px)"
               height="clamp(210px, 40vw, 544px)"
               onClick={handleOpen}
@@ -121,7 +121,7 @@ const Kabuki = () => {
           <KabukiBottom />
         </div>
       </div>
-      <VideoPreview open={open} setOpen={setOpen} avatar={kabukiVideo} />
+      <VideoPreview open={open} setOpen={setOpen} avatar={kabukiVideo01} />
     </section>
   );
 };
