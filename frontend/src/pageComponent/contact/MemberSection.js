@@ -4,17 +4,16 @@ import { miniClock, miniMail, miniPhone, miniTelegram } from "../../assets";
 import { teamOfficeInfo } from "../../constant/group";
 import { getContactInfo } from "@/api/contactAPI";
 
+const iconMap = {
+  miniPhone,
+  miniTelegram,
+  miniMail,
+  miniClock,
+};
+
 const MemberSection = () => {
   const [loading, setLoading] = useState(false);
   const [contactData, setContactData] = useState(teamOfficeInfo);
-
-  // Map icon strings to actual icon components
-  const iconMap = {
-    miniPhone,
-    miniMail,
-    miniClock,
-    miniTelegram,
-  };
 
   // Fetch initial data
   useEffect(() => {
@@ -33,15 +32,15 @@ const MemberSection = () => {
                   description: data.team_office_address,
                   content: [
                     {
-                      icon: iconMap[data.team_office_contact1?.icon],
+                      icon: data.team_office_contact1?.icon,
                       value: data.team_office_contact1?.link || "",
                     },
                     {
-                      icon: iconMap[data.team_office_contact2?.icon],
+                      icon: data.team_office_contact2?.icon,
                       value: data.team_office_contact2?.link || "",
                     },
                     {
-                      icon: iconMap[data.team_office_contact3?.icon],
+                      icon: data.team_office_contact3?.icon,
                       value: data.team_office_contact3?.link || "",
                     },
                   ],
@@ -50,15 +49,15 @@ const MemberSection = () => {
                   description: "МЕНЕДЖЕРЫ ПРОЕКТОВ, АРЕНДА ОБОРУДОВАНИЯ",
                   content: [
                     {
-                      icon: iconMap[data.project_manager_contact1?.icon],
+                      icon: data.project_manager_contact1?.icon,
                       value: data.project_manager_contact1?.link || "",
                     },
                     {
-                      icon: iconMap[data.project_manager_contact2?.icon],
+                      icon: data.project_manager_contact2?.icon,
                       value: data.project_manager_contact2?.link || "",
                     },
                     {
-                      icon: iconMap[data.project_manager_contact3?.icon],
+                      icon: data.project_manager_contact3?.icon,
                       value: data.project_manager_contact3?.link || "",
                     },
                   ],
@@ -67,15 +66,15 @@ const MemberSection = () => {
                   description: "БУХГАЛТЕРИЯ",
                   content: [
                     {
-                      icon: iconMap[data.account_manager_contact1?.icon],
+                      icon: data.account_manager_contact1?.icon,
                       value: data.account_manager_contact1?.link || "",
                     },
                     {
-                      icon: iconMap[data.account_manager_contact2?.icon],
+                      icon: data.account_manager_contact2?.icon,
                       value: data.account_manager_contact2?.link || "",
                     },
                     {
-                      icon: iconMap[data.account_manager_contact3?.icon],
+                      icon: data.account_manager_contact3?.icon,
                       value: data.account_manager_contact3?.link || "",
                     },
                   ],
@@ -84,15 +83,15 @@ const MemberSection = () => {
                   description: "АРЕНДА ЛИНОЛЕУМА",
                   content: [
                     {
-                      icon: iconMap[data.delivery_manager_contact1?.icon],
+                      icon: data.delivery_manager_contact1?.icon,
                       value: data.delivery_manager_contact1?.link || "",
                     },
                     {
-                      icon: iconMap[data.delivery_manager_contact2?.icon],
+                      icon: data.delivery_manager_contact2?.icon,
                       value: data.delivery_manager_contact2?.link || "",
                     },
                     {
-                      icon: iconMap[data.delivery_manager_contact3?.icon],
+                      icon: data.delivery_manager_contact3?.icon,
                       value: data.delivery_manager_contact3?.link || "",
                     },
                   ],
@@ -106,15 +105,15 @@ const MemberSection = () => {
                   description: data.warehouse_address,
                   content: [
                     {
-                      icon: iconMap[data.warehouse_contact1?.icon],
+                      icon: data.warehouse_contact1?.icon,
                       value: data.warehouse_contact1?.link || "",
                     },
                     {
-                      icon: iconMap[data.warehouse_contact2?.icon],
-                      value: `Пн-Сб: ${data.warehouse_contact2?.link || ""}`,
+                      icon: data.warehouse_contact2?.icon,
+                      value: data.warehouse_contact2?.link || "",
                     },
                     {
-                      icon: iconMap[data.warehouse_contact3?.icon],
+                      icon: data.warehouse_contact3?.icon,
                       value: data.warehouse_contact3?.link || "",
                     },
                   ],
@@ -123,15 +122,15 @@ const MemberSection = () => {
                   description: "ОТГРУЗКИ, ПРОЕЗД НА СКЛАД",
                   content: [
                     {
-                      icon: iconMap[data.travel_manager_contact1?.icon],
+                      icon: data.travel_manager_contact1?.icon,
                       value: data.travel_manager_contact1?.link || "",
                     },
                     {
-                      icon: iconMap[data.travel_manager_contact2?.icon],
+                      icon: data.travel_manager_contact2?.icon,
                       value: data.travel_manager_contact2?.link || "",
                     },
                     {
-                      icon: iconMap[data.travel_manager_contact3?.icon],
+                      icon: data.travel_manager_contact3?.icon,
                       value: data.travel_manager_contact3?.link || "",
                     },
                   ],
@@ -140,32 +139,33 @@ const MemberSection = () => {
                   description: "АРЕНДА ЗАЛА",
                   content: [
                     {
-                      icon: iconMap[data.rental_hall_manager_contact1?.icon],
+                      icon: data.rental_hall_manager_contact1?.icon,
                       value: data.rental_hall_manager_contact1?.link || "",
                     },
                     {
-                      icon: iconMap[data.rental_hall_manager_contact2?.icon],
+                      icon: data.rental_hall_manager_contact2?.icon,
                       value: data.rental_hall_manager_contact2?.link || "",
                     },
                     {
-                      icon: iconMap[data.rental_hall_manager_contact3?.icon],
+                      icon: data.rental_hall_manager_contact3?.icon,
                       value: data.rental_hall_manager_contact3?.link || "",
                     },
                   ],
                 },
                 {
-                  description: "ИНФОРМАЦИОННОЕ ОБЕСПЕЧЕНИЕ, РЕКЛАМА; ЗАКАЗ ИНТРО",
+                  description:
+                    "ИНФОРМАЦИОННОЕ ОБЕСПЕЧЕНИЕ, РЕКЛАМА; ЗАКАЗ ИНТРО",
                   content: [
                     {
-                      icon: iconMap[data.advertising_manager_contact1?.icon],
+                      icon: data.advertising_manager_contact1?.icon,
                       value: data.advertising_manager_contact1?.link || "",
                     },
                     {
-                      icon: iconMap[data.advertising_manager_contact2?.icon],
+                      icon: data.advertising_manager_contact2?.icon,
                       value: data.advertising_manager_contact2?.link || "",
                     },
                     {
-                      icon: iconMap[data.advertising_manager_contact3?.icon],
+                      icon: data.advertising_manager_contact3?.icon,
                       value: data.advertising_manager_contact3?.link || "",
                     },
                   ],
@@ -174,15 +174,15 @@ const MemberSection = () => {
                 //   description: "ЗАКАЗ ИНТРО",
                 //   content: [
                 //     {
-                //       icon: iconMap[data.order_manager_contact1?.icon],
+                //       icon: data.order_manager_contact1?.icon,
                 //       value: data.order_manager_contact1?.link || "",
                 //     },
                 //     {
-                //       icon: iconMap[data.order_manager_contact2?.icon],
+                //       icon: data.order_manager_contact2?.icon,
                 //       value: data.order_manager_contact2?.link || "",
                 //     },
                 //     {
-                //       icon: iconMap[data.order_manager_contact3?.icon],
+                //       icon: data.order_manager_contact3?.icon,
                 //       value: data.order_manager_contact3?.link || "",
                 //     },
                 //   ],
@@ -204,13 +204,81 @@ const MemberSection = () => {
     fetchContactInfo();
   }, []);
 
-  // Helper function to render contact items
+  // Helper function to render contact items with clickable links
   const renderContactItem = (item, index) => {
     if (!item?.icon || !item?.value) return null;
+    // Check if it's a phone number (miniPhone icon)
 
+    const iconSrc = iconMap[item.icon]; // Get actual image
+
+    if (item.icon === "miniPhone") {
+      // Clean phone number - remove all non-digit characters
+      const phoneNumber = item.value.replace(/[^\d+]/g, "");
+      return (
+        <div key={index} className="alignCenter">
+          <Image src={iconSrc} alt="icon" style={{ marginRight: "8px" }} />
+          <a
+            href={`tel:${phoneNumber}`}
+            className="x14_3"
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            {item.value}
+          </a>
+        </div>
+      );
+    }
+
+    // Check if it's a Telegram link (miniTelegram icon)
+    if (item.icon === "miniTelegram") {
+      // Check if it's already a proper Telegram link
+      let telegramLink = item.value;
+      if (!telegramLink.startsWith("http") && !telegramLink.startsWith("@")) {
+        // If it's just a username without @, add it
+        telegramLink = telegramLink.startsWith("@")
+          ? telegramLink
+          : `@${telegramLink}`;
+      }
+      if (!telegramLink.startsWith("http")) {
+        telegramLink = `https://t.me/${telegramLink.replace("@", "")}`;
+      }
+
+      return (
+        <div key={index} className="alignCenter">
+          <Image src={iconSrc} alt="icon" style={{ marginRight: "8px" }} />
+          <a
+            href={telegramLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="x14_3"
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            {item.value}
+          </a>
+        </div>
+      );
+    }
+
+    // Check if it's an email address (miniMail icon)
+    if (item.icon === "miniMail") {
+      console.log(item.name);
+      return (
+        <div key={index} className="alignCenter">
+          <Image src={iconSrc} alt="icon" style={{ marginRight: "8px" }} />
+          <a
+            href={`mailto:${item.value}`}
+            className="x14_3"
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            {item.value}
+          </a>
+        </div>
+      );
+    }
+
+    // Default case (non-clickable)
     return (
       <div key={index} className="alignCenter">
-        <Image src={item.icon} alt="icon" style={{ marginRight: "8px" }} />
+        <Image src={iconSrc} alt="icon" style={{ marginRight: "8px" }} />
         <span className="x14_3">{item.value}</span>
       </div>
     );

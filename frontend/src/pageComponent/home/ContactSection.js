@@ -57,7 +57,11 @@ const ContactMiddle = ({
           <p className="x16" style={{ marginBottom: "12px" }}>
             {item.title}
           </p>
-          <Input item={item} handleChange={handleChange} />
+          <Input
+            item={item}
+            handleChange={handleChange}
+            value={sendData[item.name]}
+          />
         </div>
       ))}
     </div>
@@ -89,9 +93,14 @@ const ContactMiddle = ({
         />
         <p
           className="x14 uploadDescription"
-          style={{ width: "clamp(160px, 16vw, 167px)" }}
+          style={{ marginLeft: "32px" }}
         >
-          Файлы до 3 МБ: DOC, PDF, JPG, XLS.
+          {sendData.file
+            ? `${sendData.file.name} / ${(
+                sendData.file.size /
+                (1024 * 1024)
+              ).toFixed(2)} МБ`
+            : "Файлы до 3 МБ: DOC, PDF, JPG, XLS."}
         </p>
       </div>
     </div>
@@ -138,6 +147,7 @@ const ContactSection = ({ title }) => {
     name: "",
     email: "",
     content: "",
+    file: null,
   });
 
   const [error, setError] = useState(false);

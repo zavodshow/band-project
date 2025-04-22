@@ -133,13 +133,13 @@ const SimpleCaptcha = ({ handleSubmit, setOpen }) => {
       </div>
       <div style={{ textAlign: "right", paddingBottom: "10px" }}>
         {isVerified === true && (
-          <p style={{ color: "green" }}>CAPTCHA Verified!</p>
+          <p style={{ color: "green" }}>CAPTCHA проверена!</p>
         )}
         {isVerified === false && (
-          <p style={{ color: "red" }}>Incorrect CAPTCHA. Try again.</p>
+          <p style={{ color: "red" }}>Неверная CAPTCHA. Попробуйте еще раз!</p>
         )}
       </div>
-      <CaptchaButton title="Войти" onClick={handleVerify}></CaptchaButton>
+      <CaptchaButton title="Отправить" onClick={handleVerify}></CaptchaButton>
     </div>
   );
 };

@@ -25,10 +25,6 @@ import {
   light2,
   light3,
   lightHeroImg,
-  miniClock,
-  miniMail,
-  miniPhone,
-  miniTelegram,
   pending1,
   pending2,
   portfolio1,
@@ -1409,32 +1405,32 @@ const teamOfficeInfo = [
       {
         description: "г. Москва, Реутов пл.Академика Челомея, оф. 102",
         content: [
-          { icon: miniPhone, value: "+7 (495)-720-12-82" },
-          { icon: miniClock, value: "Пн-Сб: 10-19 МСК" },
+          { icon: "miniPhone", value: "+7 (495)-720-12-82" },
+          { icon: "miniClock", value: "Пн-Сб: 10-19 МСК" },
         ],
       },
       {
         description: "МЕНЕДЖЕРЫ ПРОЕКТОВ, АРЕНДА ОБОРУДОВАНИЯ",
         content: [
-          { icon: miniPhone, value: "доб. 203" },
-          { icon: miniTelegram, value: "@afonnikova_irina_zavodshow" },
-          { icon: miniTelegram, value: "@sedov_alexey_zavodshow" },
+          { icon: "miniPhone", value: "доб. 203" },
+          { icon: "miniTelegram", value: "@afonnikova_irina_zavodshow" },
+          { icon: "miniTelegram", value: "@sedov_alexey_zavodshow" },
         ],
       },
       {
         description: "БУХГАЛТЕРИЯ",
         content: [
-          { icon: miniPhone, value: "доб. 300" },
-          { icon: miniMail, value: "fin@zavodshow.ru" },
-          { icon: miniTelegram, value: "@Timofeev_ZS" },
+          { icon: "miniPhone", value: "доб. 300" },
+          { icon: "miniMail", value: "fin@zavodshow.ru" },
+          { icon: "miniTelegram", value: "@Timofeev_ZS" },
         ],
       },
       {
         description: "АРЕНДА ЛИНОЛЕУМА",
         content: [
-          { icon: miniPhone, value: "доб. 800" },
-          { icon: miniMail, value: "delivery@zavodshow.ru" },
-          { icon: miniTelegram, value: "@afonnikova_irina_zavodshow" },
+          { icon: "miniPhone", value: "доб. 800" },
+          { icon: "miniMail", value: "delivery@zavodshow.ru" },
+          { icon: "miniTelegram", value: "@afonnikova_irina_zavodshow" },
         ],
       },
     ],
@@ -1445,30 +1441,30 @@ const teamOfficeInfo = [
       {
         description: "г. Москва, Реутов пл.Академика Челомея, оф. 105",
         content: [
-          { icon: miniPhone, value: "+7 (495)-720-12-82" },
-          { icon: miniClock, value: "Пн-Сб: 10-19 МСК" },
+          { icon: "miniPhone", value: "+7 (495)-720-12-82" },
+          { icon: "miniClock", value: "Пн-Сб: 10-19 МСК" },
         ],
       },
       {
         description: "ОТГРУЗКИ, ПРОЕЗД НА СКЛАД",
         content: [
-          { icon: miniPhone, value: "доб. 400" },
-          { icon: miniMail, value: "cargo@zavodshow.ru" },
-          { icon: miniTelegram, value: "@office_zavodshow" },
+          { icon: "miniPhone", value: "доб. 400" },
+          { icon: "miniMail", value: "cargo@zavodshow.ru" },
+          { icon: "miniTelegram", value: "@office_zavodshow" },
         ],
       },
       {
         description: "АРЕНДА ЗАЛА",
         content: [
-          { icon: miniPhone, value: "+7 (906)-052-28-80" },
-          { icon: miniTelegram, value: "@office_zavodshow" },
+          { icon: "miniPhone", value: "+7 (906)-052-28-80" },
+          { icon: "miniTelegram", value: "@office_zavodshow" },
         ],
       },
       {
         description: "ИНФОРМАЦИОННОЕ ОБЕСПЕЧЕНИЕ, РЕКЛАМА",
         content: [
-          { icon: miniPhone, value: "+7 (906)-051-78-79" },
-          { icon: miniTelegram, value: "@pr_zavodshow" },
+          { icon: "miniPhone", value: "+7 (906)-051-78-79" },
+          { icon: "miniTelegram", value: "@pr_zavodshow" },
         ],
       },
     ],

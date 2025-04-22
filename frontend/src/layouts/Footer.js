@@ -33,7 +33,10 @@ const FooterTop = () => (
           </Link>
         ))}
       </div>
-      <div style={{ display: "flex", gap: "10px" }} className="socialBtn footerButtons">
+      <div
+        style={{ display: "flex", gap: "10px" }}
+        className="socialBtn footerButtons"
+      >
         <ScrollSpyButton
           to="contactSection"
           content={
@@ -85,7 +88,7 @@ const FooterMiddle = () => {
           <Link href="/services/showdevelopment" className="middleTitle">
             РАЗРАБОТКА ШОУ
           </Link>
-          <Link href="/services/visualization" className="middleTitle">
+          <Link href="/services/visualization" className="middleLink">
             3D-визуализация
           </Link>
           <Link href="/services/rehearsal" className="middleLink">
@@ -152,41 +155,33 @@ const FooterBottom = () => {
   };
   return (
     <div className="footerBottom">
-        <div
+      <div
         className="footerBottomContact"
-          style={{
-            display: "grid",
-            gap: "8px",
-            color: `var(--secondaryWhiteColor)`,
-          }}
-        >
-          <p className="x18 alignCenter" style={{ gap: "12px" }}>
-            <Image src={whiteMail} alt="icon" />
-            <ToEmail email="pr@zavodshow.ru" />
-          </p>
-          <p className="x18 alignCenter" style={{ gap: "12px" }}>
-            <Image src={whitePhone} alt="icon" />
-            <ToPhone phoneNumber="+7 495 720 12-82" />
-          </p>
-        </div>
+        style={{
+          display: "grid",
+          gap: "8px",
+          color: `var(--secondaryWhiteColor)`,
+        }}
+      >
+        <p className="x18 alignCenter" style={{ gap: "12px" }}>
+          <Image src={whiteMail} alt="icon" />
+          <ToEmail email="pr@zavodshow.ru" />
+        </p>
+        <p className="x18 alignCenter" style={{ gap: "12px" }}>
+          <Image src={whitePhone} alt="icon" />
+          <ToPhone phoneNumber="+7 495 720 12-82" />
+        </p>
+      </div>
       <div className="footerBottomAddress">
-          Москва, г. Реутов, ул. Победы, 20
-          <br />
-          Пн-Сб: 10-19 МСК
+        Москва, г. Реутов, ул. Победы, 20
+        {/* <br /> */}
+        {/* Пн-Сб: 10-19 МСК */}
       </div>
       <div className="footerBottomLink" style={{ marginBottom: "20px" }}>
-        <span onClick={goPlantShowSection}>
-          © ЗАВОД ШОУ
-        </span>
+        <span onClick={goPlantShowSection}>© ЗАВОД ШОУ</span>
         {/* <a target="_blank" rel="noreferrer" href="https://linkedin.com">© ЗАВОД ШОУ</a> */}
-        <Link href="/policy">
-          Политика конфиденциальности
-        </Link>
-        <a
-          target="_blank"
-          rel="noreferrer"
-          href="https://lard.digital"
-        >
+        <Link href="/policy">Политика конфиденциальности</Link>
+        <a target="_blank" rel="noreferrer" href="https://lard.digital">
           Разработка сайта
         </a>
         <a
