@@ -33,26 +33,22 @@ class ContactInfoController extends Controller
     {
         try {
             // Validate the request data
-            $request->validate([
+            $validated = $request->validate([
                 'sections' => 'required|array',
             ]);
-
-            $data = [
-                'sections' => $request->all()
-            ];
-
+    
             $contactInfo = ContactInfo::latest()->first();
-
+    
             if ($contactInfo) {
-                $contactInfo->update($data);
+                $contactInfo->update(['sections' => $validated['sections']]);
                 return response()->json([
                     'message' => 'Contact info updated successfully',
                     'data' => $contactInfo->sections
                 ], 200);
             }
-
+    
             // Create a new record with the request data
-            $newContactInfo = ContactInfo::create($data);
+            $newContactInfo = ContactInfo::create(['sections' => $validated['sections']]);
             return response()->json([
                 'message' => 'Contact info created successfully',
                 'data' => $newContactInfo->sections
@@ -61,7 +57,7 @@ class ContactInfoController extends Controller
             Log::error('Error saving contact info: ' . $e->getMessage());
             return response()->json([
                 'error' => 'Error saving contact information',
-                'details' => config('app.debug') ? $e->getMessage() : null
+                'details' => $e->getMessage() // Temporarily show details for debugging
             ], 500);
         }
     }

@@ -14,11 +14,15 @@ export const getContactInfo = async () => {
 export const updateContactInfo = async (sections) => {
   try {
     const token = sessionStorage.getItem("token");
-    const response = await apiClient.post("/contact", sections, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await apiClient.post(
+      "/contact",
+      { sections },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (response.status !== 200)
       throw new Error(`Unexpected response status: ${response.status}`);
     return response.data;
