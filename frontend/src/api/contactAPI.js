@@ -11,10 +11,10 @@ export const getContactInfo = async () => {
   }
 };
 
-export const updateContactInfo = async (formdata) => {
+export const updateContactInfo = async (sections) => {
   try {
     const token = sessionStorage.getItem("token");
-    const response = await apiClient.post("/contact", formdata, {
+    const response = await apiClient.post("/contact", sections, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

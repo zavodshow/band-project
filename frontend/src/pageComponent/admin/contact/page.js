@@ -15,7 +15,7 @@ const icons = [
   { name: "miniTelegram", src: miniTelegram },
 ];
 
-// Memoized IconDropdown to prevent unnecessary re-renders
+// Memoized IconDropdown component
 const IconDropdown = memo(({ value, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectedIcon = value ? icons.find((icon) => icon.name === value) : null;
@@ -67,107 +67,178 @@ const IconDropdown = memo(({ value, onChange }) => {
 
 IconDropdown.displayName = "IconDropdown";
 
-// Memoized ContactField component
-const ContactField = memo(
-  ({ fieldName, label, contactData, onContactChange }) => {
-    const handleIconChange = useCallback(
-      (iconName) => {
-        onContactChange(fieldName, {
-          ...contactData,
-          icon: iconName,
-        });
+// Contact Field component
+const ContactField = memo(({ contact, index, onChange }) => {
+  const handleIconChange = useCallback(
+    (iconName) => {
+      onChange(index, { ...contact, icon: iconName });
+    },
+    [contact, index, onChange]
+  );
+
+  const handleLinkChange = useCallback(
+    (e) => {
+      onChange(index, { ...contact, link: e.target.value });
+    },
+    [contact, index, onChange]
+  );
+
+  return (
+    <div className="contact-field">
+      <IconDropdown value={contact.icon || ""} onChange={handleIconChange} />
+      <input
+        type="text"
+        value={contact.link || ""}
+        onChange={handleLinkChange}
+        placeholder="Контакт"
+        className="contact-input"
+      />
+    </div>
+  );
+});
+
+ContactField.displayName = "ContactField";
+
+// ContactSubSection component
+const ContactSubSection = memo(
+  ({ subSection, sectionIndex, subSectionIndex, onUpdate, onRemove }) => {
+    const handleTitleChange = useCallback(
+      (e) => {
+        const updatedSubSection = { ...subSection, title: e.target.value };
+        onUpdate(sectionIndex, subSectionIndex, updatedSubSection);
       },
-      [fieldName, contactData, onContactChange]
+      [subSection, sectionIndex, subSectionIndex, onUpdate]
     );
 
-    const handleLinkChange = useCallback(
-      (e) => {
-        onContactChange(fieldName, {
-          ...contactData,
-          link: e.target.value,
-        });
+    const handleContactChange = useCallback(
+      (contactIndex, updatedContact) => {
+        const updatedContacts = [...subSection.contacts];
+        updatedContacts[contactIndex] = updatedContact;
+
+        const updatedSubSection = { ...subSection, contacts: updatedContacts };
+        onUpdate(sectionIndex, subSectionIndex, updatedSubSection);
       },
-      [fieldName, contactData, onContactChange]
+      [subSection, sectionIndex, subSectionIndex, onUpdate]
     );
 
     return (
-      <div className="contact-field">
-        <IconDropdown
-          value={contactData.icon || ""}
-          onChange={handleIconChange}
-        />
-        <input
-          type="text"
-          value={contactData.link || ""}
-          onChange={handleLinkChange}
-          placeholder={label}
-          className="contact-input"
-        />
+      <div className="contact-subsection">
+        <p className="subsection-title">Подраздел {subSectionIndex + 1}</p>
+        <div className="subsection-header">
+          <input
+            type="text"
+            value={subSection.title || ""}
+            onChange={handleTitleChange}
+            placeholder="Название подраздела"
+            className="subsection-title-input"
+          />
+          <button
+            type="button"
+            className="remove-subsection-btn"
+            onClick={() => onRemove(sectionIndex, subSectionIndex)}
+          >
+            Удалить подраздел
+          </button>
+        </div>
+
+        {subSection.contacts.map((contact, contactIndex) => (
+          <ContactField
+            key={contactIndex}
+            contact={contact}
+            index={contactIndex}
+            onChange={handleContactChange}
+          />
+        ))}
       </div>
     );
   }
 );
 
-ContactField.displayName = "ContactField";
+ContactSubSection.displayName = "ContactSubSection";
 
-// Memoized Section component
-const ContactSection = memo(({ title, children }) => {
-  return (
-    <>
-      <p className="section-title">{title}</p>
-      {children}
-    </>
-  );
-});
+// ContactSection component
+const ContactSection = memo(
+  ({ section, sectionIndex, onUpdate, onRemove, onAddSubSection }) => {
+    const handleTitleChange = useCallback(
+      (e) => {
+        const updatedSection = { ...section, title: e.target.value };
+        onUpdate.updateSection(sectionIndex, updatedSection);
+      },
+      [section, sectionIndex, onUpdate]
+    );
+
+    return (
+      <div className="contact-section">
+        <p className="section-title">Раздел {sectionIndex + 1}</p>
+        <div className="section-header">
+          <input
+            type="text"
+            value={section.title || ""}
+            onChange={handleTitleChange}
+            placeholder="Название раздела"
+            className="section-title-input"
+          />
+          <button
+            type="button"
+            className="remove-section-btn"
+            onClick={() => onRemove(sectionIndex)}
+          >
+            Удалить раздел
+          </button>
+        </div>
+
+        {section.subSections.map((subSection, subSectionIndex) => (
+          <ContactSubSection
+            key={subSectionIndex}
+            subSection={subSection}
+            sectionIndex={sectionIndex}
+            subSectionIndex={subSectionIndex}
+            onUpdate={onUpdate.updateSubSection}
+            onRemove={onUpdate.removeSubSection}
+          />
+        ))}
+
+        <button
+          type="button"
+          className="add-subsection-btn"
+          onClick={() => onAddSubSection(sectionIndex)}
+        >
+          Добавить подраздел
+        </button>
+
+        <hr className="thirdLine" style={{ margin: "16px" }} />
+      </div>
+    );
+  }
+);
 
 ContactSection.displayName = "ContactSection";
-
-// Memoized SubSection component
-const ContactSubSection = memo(({ title, children }) => {
-  return (
-    <>
-      <p className="subsection-title">{title}</p>
-      {children}
-    </>
-  );
-});
-
-ContactSubSection.displayName = "ContactSubSection";
 
 const ContactEditPage = () => {
   const [loading, setLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
-  const [formData, setFormData] = useState({
-    team_office_address: "",
-    team_office_contact1: null,
-    team_office_contact2: null,
-    team_office_contact3: null,
-    project_manager_contact1: null,
-    project_manager_contact2: null,
-    project_manager_contact3: null,
-    account_manager_contact1: null,
-    account_manager_contact2: null,
-    account_manager_contact3: null,
-    delivery_manager_contact1: null,
-    delivery_manager_contact2: null,
-    delivery_manager_contact3: null,
-    warehouse_address: "",
-    warehouse_contact1: null,
-    warehouse_contact2: null,
-    warehouse_contact3: null,
-    travel_manager_contact1: null,
-    travel_manager_contact2: null,
-    travel_manager_contact3: null,
-    rental_hall_manager_contact1: null,
-    rental_hall_manager_contact2: null,
-    rental_hall_manager_contact3: null,
-    advertising_manager_contact1: null,
-    advertising_manager_contact2: null,
-    advertising_manager_contact3: null,
-    order_manager_contact1: null,
-    order_manager_contact2: null,
-    order_manager_contact3: null,
+  const [sections, setSections] = useState([]);
+
+  // Create empty contact object
+  const createEmptyContact = () => ({ icon: "", link: "" });
+
+  // Create empty subsection with 3 empty contacts
+  const createEmptySubSection = () => ({
+    title: "",
+    contacts: [
+      createEmptyContact(),
+      createEmptyContact(),
+      createEmptyContact(),
+    ],
   });
+
+  // Create empty section with one subsection
+  const createEmptySection = () => ({
+    title: "",
+    subSections: [createEmptySubSection()],
+  });
+
+  console.log(sections);
 
   // Fetch initial data
   useEffect(() => {
@@ -175,8 +246,9 @@ const ContactEditPage = () => {
       try {
         setLoading(true);
         const data = await getContactInfo();
+
         if (data) {
-          setFormData(data);
+          setSections(data);
         }
       } catch (error) {
         console.error("Error fetching contact info:", error);
@@ -189,19 +261,68 @@ const ContactEditPage = () => {
     fetchContactInfo();
   }, []);
 
-  const handleChange = useCallback((fieldName, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [fieldName]: value,
-    }));
+  // Add new section
+  const handleAddSection = useCallback(() => {
+    setSections((prev) => [...prev, createEmptySection()]);
   }, []);
 
-  const handleContactChange = useCallback((fieldName, contactData) => {
-    setFormData((prev) => ({
-      ...prev,
-      [fieldName]: contactData,
-    }));
+  // Remove section
+  const handleRemoveSection = useCallback((sectionIndex) => {
+    setSections((prev) => prev.filter((_, index) => index !== sectionIndex));
   }, []);
+
+  // Update section
+  const handleUpdateSection = useCallback((sectionIndex, updatedSection) => {
+    setSections((prev) => {
+      const newSections = [...prev];
+      newSections[sectionIndex] = updatedSection;
+      return newSections;
+    });
+  }, []);
+
+  // Add subsection to section
+  const handleAddSubSection = useCallback((sectionIndex) => {
+    setSections((prev) => {
+      // Create a new copy of the sections array
+      const newSections = [...prev];
+      // Add exactly one new subsection
+      newSections[sectionIndex] = {
+        ...newSections[sectionIndex],
+        subSections: [
+          ...newSections[sectionIndex].subSections,
+          createEmptySubSection(),
+        ],
+      };
+      return newSections;
+    });
+  }, []);
+
+  // Remove subsection
+  const handleRemoveSubSection = useCallback(
+    (sectionIndex, subSectionIndex) => {
+      setSections((prev) => {
+        const newSections = [...prev];
+        newSections[sectionIndex].subSections = newSections[
+          sectionIndex
+        ].subSections.filter((_, index) => index !== subSectionIndex);
+        return newSections;
+      });
+    },
+    []
+  );
+
+  // Update subsection
+  const handleUpdateSubSection = useCallback(
+    (sectionIndex, subSectionIndex, updatedSubSection) => {
+      setSections((prev) => {
+        const newSections = [...prev];
+        newSections[sectionIndex].subSections[subSectionIndex] =
+          updatedSubSection;
+        return newSections;
+      });
+    },
+    []
+  );
 
   // Handle form submission
   const handleSubmit = useCallback(
@@ -209,7 +330,7 @@ const ContactEditPage = () => {
       e.preventDefault();
       try {
         setLoading(true);
-        await updateContactInfo(formData);
+        await updateContactInfo(sections);
         alert("Contact information updated successfully");
       } catch (error) {
         console.error("Error updating contact info:", error);
@@ -218,7 +339,7 @@ const ContactEditPage = () => {
         setLoading(false);
       }
     },
-    [formData]
+    [sections]
   );
 
   if (initialLoad) {
@@ -232,272 +353,31 @@ const ContactEditPage = () => {
       link="/admin/contact"
       content={
         <>
-          <ContactSection title="ОФИС КОМАНДЫ">
-            <input
-              type="text"
-              name="team_office_address"
-              value={formData.team_office_address || ""}
-              onChange={(e) =>
-                handleChange("team_office_address", e.target.value)
-              }
-              placeholder="Адрес офиса"
-              className="text-input"
-            />
+          {sections.map((section, sectionIndex) => (
+            <div key={sectionIndex}>
+              <ContactSection
+                section={section}
+                sectionIndex={sectionIndex}
+                onUpdate={{
+                  updateSection: handleUpdateSection,
+                  updateSubSection: handleUpdateSubSection,
+                  removeSubSection: handleRemoveSubSection,
+                }}
+                onRemove={handleRemoveSection}
+                onAddSubSection={handleAddSubSection}
+              />
+            </div>
+          ))}
 
-            <ContactField
-              fieldName="team_office_contact1"
-              label="Контакт 1"
-              contactData={
-                formData.team_office_contact1 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-            <ContactField
-              fieldName="team_office_contact2"
-              label="Контакт 2"
-              contactData={
-                formData.team_office_contact2 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-            <ContactField
-              fieldName="team_office_contact3"
-              label="Контакт 3"
-              contactData={
-                formData.team_office_contact3 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-          </ContactSection>
+          <button
+            type="button"
+            className="add-section-btn"
+            onClick={handleAddSection}
+          >
+            Добавить раздел
+          </button>
 
-          <ContactSubSection title="МЕНЕДЖЕРЫ ПРОЕКТОВ, АРЕНДА ОБОРУДОВАНИЯ">
-            <ContactField
-              fieldName="project_manager_contact1"
-              label="Контакт менеджера проектов 1"
-              contactData={
-                formData.project_manager_contact1 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-            <ContactField
-              fieldName="project_manager_contact2"
-              label="Контакт менеджера проектов 2"
-              contactData={
-                formData.project_manager_contact2 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-            <ContactField
-              fieldName="project_manager_contact3"
-              label="Контакт менеджера проектов 3"
-              contactData={
-                formData.project_manager_contact3 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-          </ContactSubSection>
-
-          <ContactSubSection title="БУХГАЛТЕРИЯ">
-            <ContactField
-              fieldName="account_manager_contact1"
-              label="Контакт бухгалтерии 1"
-              contactData={
-                formData.account_manager_contact1 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-            <ContactField
-              fieldName="account_manager_contact2"
-              label="Контакт бухгалтерии 2"
-              contactData={
-                formData.account_manager_contact2 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-            <ContactField
-              fieldName="account_manager_contact3"
-              label="Контакт бухгалтерии 3"
-              contactData={
-                formData.account_manager_contact3 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-          </ContactSubSection>
-
-          <ContactSubSection title="АРЕНДА ЛИНОЛЕУМА">
-            <ContactField
-              fieldName="delivery_manager_contact1"
-              label="Контакт по аренде линолеума 1"
-              contactData={
-                formData.delivery_manager_contact1 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-            <ContactField
-              fieldName="delivery_manager_contact2"
-              label="Контакт по аренде линолеума 2"
-              contactData={
-                formData.delivery_manager_contact2 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-            <ContactField
-              fieldName="delivery_manager_contact3"
-              label="Контакт по аренде линолеума 3"
-              contactData={
-                formData.delivery_manager_contact3 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-          </ContactSubSection>
-
-          <hr className="thirdLine" />
-
-          <ContactSection title="СКЛАД (24 ЧАСА)">
-            <input
-              type="text"
-              name="warehouse_address"
-              value={formData.warehouse_address || ""}
-              onChange={(e) =>
-                handleChange("warehouse_address", e.target.value)
-              }
-              placeholder="Адрес склада"
-              className="text-input"
-            />
-
-            <ContactField
-              fieldName="warehouse_contact1"
-              label="Контакт склада 1"
-              contactData={
-                formData.warehouse_contact1 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-            <ContactField
-              fieldName="warehouse_contact2"
-              label="Контакт склада 2"
-              contactData={
-                formData.warehouse_contact2 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-            <ContactField
-              fieldName="warehouse_contact3"
-              label="Контакт склада 3"
-              contactData={
-                formData.warehouse_contact3 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-          </ContactSection>
-
-          <ContactSubSection title="ОТГРУЗКИ, ПРОЕЗД НА СКЛАД">
-            <ContactField
-              fieldName="travel_manager_contact1"
-              label="Контакт по отгрузкам 1"
-              contactData={
-                formData.travel_manager_contact1 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-            <ContactField
-              fieldName="travel_manager_contact2"
-              label="Контакт по отгрузкам 2"
-              contactData={
-                formData.travel_manager_contact2 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-            <ContactField
-              fieldName="travel_manager_contact3"
-              label="Контакт по отгрузкам 3"
-              contactData={
-                formData.travel_manager_contact3 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-          </ContactSubSection>
-
-          <ContactSubSection title="АРЕНДА ЗАЛА">
-            <ContactField
-              fieldName="rental_hall_manager_contact1"
-              label="Контакт по аренде зала 1"
-              contactData={
-                formData.rental_hall_manager_contact1 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-            <ContactField
-              fieldName="rental_hall_manager_contact2"
-              label="Контакт по аренде зала 2"
-              contactData={
-                formData.rental_hall_manager_contact2 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-            <ContactField
-              fieldName="rental_hall_manager_contact3"
-              label="Контакт по аренде зала 3"
-              contactData={
-                formData.rental_hall_manager_contact3 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-          </ContactSubSection>
-
-          <ContactSubSection title="ИНФОРМАЦИОННОЕ ОБЕСПЕЧЕНИЕ, РЕКЛАМА; ЗАКАЗ ИНТРО">
-            <ContactField
-              fieldName="advertising_manager_contact1"
-              label="Контакт по рекламе 1"
-              contactData={
-                formData.advertising_manager_contact1 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-            <ContactField
-              fieldName="advertising_manager_contact2"
-              label="Контакт по рекламе 2"
-              contactData={
-                formData.advertising_manager_contact2 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-            <ContactField
-              fieldName="advertising_manager_contact3"
-              label="Контакт по рекламе 3"
-              contactData={
-                formData.advertising_manager_contact3 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-          </ContactSubSection>
-
-          {/* <ContactSubSection title="ЗАКАЗ ИНТРО">
-            <ContactField
-              fieldName="order_manager_contact1"
-              label="Контакт менеджера по заказам 1"
-              contactData={
-                formData.order_manager_contact1 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-            <ContactField
-              fieldName="order_manager_contact2"
-              label="Контакт менеджера по заказам 2"
-              contactData={
-                formData.order_manager_contact2 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-            <ContactField
-              fieldName="order_manager_contact3"
-              label="Контакт менеджера по заказам 3"
-              contactData={
-                formData.order_manager_contact3 || { icon: "", link: "" }
-              }
-              onContactChange={handleContactChange}
-            />
-          </ContactSubSection> */}
+          <hr className="thirdLine" style={{ marginTop: "16px" }} />
 
           {loading && <LoadingProgress />}
         </>

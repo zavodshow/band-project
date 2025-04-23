@@ -45,7 +45,6 @@ import "@/styles/pages/teamOffice.css";
 import "@/styles/pages/teamPage.css";
 import { siteMetadata } from "@/config/metadata";
 
-
 export const metadata = {
   title: siteMetadata.home.title,
   description: siteMetadata.home.description,
@@ -57,6 +56,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ru">
       <body style={{ background: "var(--primaryBgColor)" }}>
+        <YandexMetrika />
         <Headers />
         {children}
         <Footer />

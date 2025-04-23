@@ -424,14 +424,59 @@ a {
   padding: 0 15px;
 }
 
+.section-header {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
 .section-title {
   font-size: 20px;
   margin: 20px 0 15px;
 }
 
+.section-title-input {
+  height: 40px;
+  width: 80%;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 0 15px;
+}
+
+.subsection-header {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  margin: 20px 0 10px;
+}
+
 .subsection-title {
   font-size: 16px;
   margin: 15px 0;
+}
+
+.subsection-title-input {
+  height: 40px;
+  width: 80%;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 0 15px;
+}
+
+.remove-section-btn,
+.remove-subsection-btn,
+.add-subsection-btn,
+.add-section-btn {
+  width: 180px;
+  height: 40px;
+  border-radius: 9999px;
+  font-weight: bold;
+  background: #cecbcb;
+}
+
+.contact-subsection {
+  margin-left: 16px;
 }
 
 .thirdLine {

@@ -91,10 +91,7 @@ const ContactMiddle = ({
           setError={setError}
           error={error}
         />
-        <p
-          className="x14 uploadDescription"
-          style={{ marginLeft: "32px" }}
-        >
+        <p className="x14 uploadDescription" style={{ marginLeft: "8px" }}>
           {sendData.file
             ? `${sendData.file.name} / ${(
                 sendData.file.size /
@@ -147,7 +144,6 @@ const ContactSection = ({ title }) => {
     name: "",
     email: "",
     content: "",
-    file: null,
   });
 
   const [error, setError] = useState(false);
@@ -224,7 +220,7 @@ const ContactSection = ({ title }) => {
           open: true,
         });
       }
-      setSendData({ name: "", email: "", content: "", file: null });
+      setSendData({ name: "", email: "", content: "" });
       setOpen(false);
     });
   };

@@ -20,176 +20,28 @@ const MemberSection = () => {
     const fetchContactInfo = async () => {
       try {
         setLoading(true);
-        const data = await getContactInfo();
+        const sectionsData = await getContactInfo();
 
-        if (data) {
-          // Transform API data to required format
-          const transformedData = [
-            {
-              title: "ОФИС КОМАНДЫ",
-              contents: [
-                {
-                  description: data.team_office_address,
-                  content: [
-                    {
-                      icon: data.team_office_contact1?.icon,
-                      value: data.team_office_contact1?.link || "",
-                    },
-                    {
-                      icon: data.team_office_contact2?.icon,
-                      value: data.team_office_contact2?.link || "",
-                    },
-                    {
-                      icon: data.team_office_contact3?.icon,
-                      value: data.team_office_contact3?.link || "",
-                    },
-                  ],
-                },
-                {
-                  description: "МЕНЕДЖЕРЫ ПРОЕКТОВ, АРЕНДА ОБОРУДОВАНИЯ",
-                  content: [
-                    {
-                      icon: data.project_manager_contact1?.icon,
-                      value: data.project_manager_contact1?.link || "",
-                    },
-                    {
-                      icon: data.project_manager_contact2?.icon,
-                      value: data.project_manager_contact2?.link || "",
-                    },
-                    {
-                      icon: data.project_manager_contact3?.icon,
-                      value: data.project_manager_contact3?.link || "",
-                    },
-                  ],
-                },
-                {
-                  description: "БУХГАЛТЕРИЯ",
-                  content: [
-                    {
-                      icon: data.account_manager_contact1?.icon,
-                      value: data.account_manager_contact1?.link || "",
-                    },
-                    {
-                      icon: data.account_manager_contact2?.icon,
-                      value: data.account_manager_contact2?.link || "",
-                    },
-                    {
-                      icon: data.account_manager_contact3?.icon,
-                      value: data.account_manager_contact3?.link || "",
-                    },
-                  ],
-                },
-                {
-                  description: "АРЕНДА ЛИНОЛЕУМА",
-                  content: [
-                    {
-                      icon: data.delivery_manager_contact1?.icon,
-                      value: data.delivery_manager_contact1?.link || "",
-                    },
-                    {
-                      icon: data.delivery_manager_contact2?.icon,
-                      value: data.delivery_manager_contact2?.link || "",
-                    },
-                    {
-                      icon: data.delivery_manager_contact3?.icon,
-                      value: data.delivery_manager_contact3?.link || "",
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              title: "СКЛАД (24 ЧАСА)",
-              contents: [
-                {
-                  description: data.warehouse_address,
-                  content: [
-                    {
-                      icon: data.warehouse_contact1?.icon,
-                      value: data.warehouse_contact1?.link || "",
-                    },
-                    {
-                      icon: data.warehouse_contact2?.icon,
-                      value: data.warehouse_contact2?.link || "",
-                    },
-                    {
-                      icon: data.warehouse_contact3?.icon,
-                      value: data.warehouse_contact3?.link || "",
-                    },
-                  ],
-                },
-                {
-                  description: "ОТГРУЗКИ, ПРОЕЗД НА СКЛАД",
-                  content: [
-                    {
-                      icon: data.travel_manager_contact1?.icon,
-                      value: data.travel_manager_contact1?.link || "",
-                    },
-                    {
-                      icon: data.travel_manager_contact2?.icon,
-                      value: data.travel_manager_contact2?.link || "",
-                    },
-                    {
-                      icon: data.travel_manager_contact3?.icon,
-                      value: data.travel_manager_contact3?.link || "",
-                    },
-                  ],
-                },
-                {
-                  description: "АРЕНДА ЗАЛА",
-                  content: [
-                    {
-                      icon: data.rental_hall_manager_contact1?.icon,
-                      value: data.rental_hall_manager_contact1?.link || "",
-                    },
-                    {
-                      icon: data.rental_hall_manager_contact2?.icon,
-                      value: data.rental_hall_manager_contact2?.link || "",
-                    },
-                    {
-                      icon: data.rental_hall_manager_contact3?.icon,
-                      value: data.rental_hall_manager_contact3?.link || "",
-                    },
-                  ],
-                },
-                {
-                  description:
-                    "ИНФОРМАЦИОННОЕ ОБЕСПЕЧЕНИЕ, РЕКЛАМА; ЗАКАЗ ИНТРО",
-                  content: [
-                    {
-                      icon: data.advertising_manager_contact1?.icon,
-                      value: data.advertising_manager_contact1?.link || "",
-                    },
-                    {
-                      icon: data.advertising_manager_contact2?.icon,
-                      value: data.advertising_manager_contact2?.link || "",
-                    },
-                    {
-                      icon: data.advertising_manager_contact3?.icon,
-                      value: data.advertising_manager_contact3?.link || "",
-                    },
-                  ],
-                },
-                // {
-                //   description: "ЗАКАЗ ИНТРО",
-                //   content: [
-                //     {
-                //       icon: data.order_manager_contact1?.icon,
-                //       value: data.order_manager_contact1?.link || "",
-                //     },
-                //     {
-                //       icon: data.order_manager_contact2?.icon,
-                //       value: data.order_manager_contact2?.link || "",
-                //     },
-                //     {
-                //       icon: data.order_manager_contact3?.icon,
-                //       value: data.order_manager_contact3?.link || "",
-                //     },
-                //   ],
-                // },
-              ],
-            },
-          ];
+        if (sectionsData && sectionsData.length > 0) {
+          // Transform API data from new structured format to the required display format
+          const transformedData = sectionsData.map(section => {
+            return {
+              title: section.title,
+              contents: section.subSections.map(subSection => {
+                return {
+                  description: subSection.title,
+                  content: subSection.contacts
+                    .filter(contact => contact.icon && contact.link)
+                    .map(contact => {
+                      return {
+                        icon: contact.icon,
+                        value: contact.link || ""
+                      };
+                    })
+                };
+              })
+            };
+          });
 
           setContactData(transformedData);
         }
@@ -207,9 +59,9 @@ const MemberSection = () => {
   // Helper function to render contact items with clickable links
   const renderContactItem = (item, index) => {
     if (!item?.icon || !item?.value) return null;
-    // Check if it's a phone number (miniPhone icon)
-
+    
     const iconSrc = iconMap[item.icon]; // Get actual image
+    if (!iconSrc) return null; // Skip if icon not found
 
     if (item.icon === "miniPhone") {
       // Clean phone number - remove all non-digit characters
@@ -260,7 +112,6 @@ const MemberSection = () => {
 
     // Check if it's an email address (miniMail icon)
     if (item.icon === "miniMail") {
-      console.log(item.name);
       return (
         <div key={index} className="alignCenter">
           <Image src={iconSrc} alt="icon" style={{ marginRight: "8px" }} />

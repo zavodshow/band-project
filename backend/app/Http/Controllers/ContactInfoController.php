@@ -14,11 +14,12 @@ class ContactInfoController extends Controller
             $contactInfo = ContactInfo::latest()->first();
 
             if (!$contactInfo) {
-                // Return empty record with proper structure
-                return response()->json(new ContactInfo(), 200);
+                // Return empty array when no data exists
+                return response()->json([], 200);
             }
 
-            return response()->json($contactInfo, 200);
+            // Return the sections data directly
+            return response()->json($contactInfo->sections, 200);
         } catch (\Exception $e) {
             Log::error('Error fetching contact info: ' . $e->getMessage());
             return response()->json([
@@ -28,28 +29,33 @@ class ContactInfoController extends Controller
         }
     }
 
-    public function createOrUpdateContactInfo(Request $request)
+    public function updateContactInfo(Request $request)
     {
         try {
-            // Validate the request data if needed
-            // $validated = $request->validate([...]);
-            
+            // Validate the request data
+            $request->validate([
+                'sections' => 'required|array',
+            ]);
+
+            $data = [
+                'sections' => $request->all()
+            ];
+
             $contactInfo = ContactInfo::latest()->first();
 
             if ($contactInfo) {
-                // Pass the validated data as an array to update()
-                $contactInfo->update($request->all());
+                $contactInfo->update($data);
                 return response()->json([
                     'message' => 'Contact info updated successfully',
-                    'data' => $contactInfo
+                    'data' => $contactInfo->sections
                 ], 200);
             }
 
             // Create a new record with the request data
-            $newContactInfo = ContactInfo::create($request->all());
+            $newContactInfo = ContactInfo::create($data);
             return response()->json([
                 'message' => 'Contact info created successfully',
-                'data' => $newContactInfo
+                'data' => $newContactInfo->sections
             ], 201);
         } catch (\Exception $e) {
             Log::error('Error saving contact info: ' . $e->getMessage());

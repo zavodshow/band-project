@@ -296,7 +296,7 @@ const blogTextCard = {
   url: textBlog,
   content:
     "Площадки ЗАВОД ШОУ - Площадки | Ивент | Концерт | Мероприятия | Решения и концепции",
-  viewNumber: "758",
+  viewNumber: "762",
 };
 
 const blogCardInfo = [
@@ -305,7 +305,7 @@ const blogCardInfo = [
     url: textBlog,
     content:
       "Площадки ЗАВОД ШОУ - Площадки | Ивент | Концерт | Мероприятия | Решения и концепции",
-    viewNumber: "758",
+    viewNumber: "762",
   },
   {
     type: "video",
