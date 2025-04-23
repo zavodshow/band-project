@@ -24,22 +24,22 @@ const MemberSection = () => {
 
         if (sectionsData && sectionsData.length > 0) {
           // Transform API data from new structured format to the required display format
-          const transformedData = sectionsData.map(section => {
+          const transformedData = sectionsData.map((section) => {
             return {
               title: section.title,
-              contents: section.subSections.map(subSection => {
+              contents: section.subSections.map((subSection) => {
                 return {
                   description: subSection.title,
                   content: subSection.contacts
-                    .filter(contact => contact.icon && contact.link)
-                    .map(contact => {
+                    .filter((contact) => contact.icon && contact.link)
+                    .map((contact) => {
                       return {
                         icon: contact.icon,
-                        value: contact.link || ""
+                        value: contact.link || "",
                       };
-                    })
+                    }),
                 };
-              })
+              }),
             };
           });
 
@@ -59,7 +59,7 @@ const MemberSection = () => {
   // Helper function to render contact items with clickable links
   const renderContactItem = (item, index) => {
     if (!item?.icon || !item?.value) return null;
-    
+
     const iconSrc = iconMap[item.icon]; // Get actual image
     if (!iconSrc) return null; // Skip if icon not found
 

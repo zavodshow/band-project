@@ -29,7 +29,7 @@ class ContactInfoController extends Controller
         }
     }
 
-    public function updateContactInfo(Request $request)
+    public function createOrUpdateContactInfo(Request $request)
     {
         try {
             // Validate the request data

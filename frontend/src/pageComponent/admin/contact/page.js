@@ -238,8 +238,6 @@ const ContactEditPage = () => {
     subSections: [createEmptySubSection()],
   });
 
-  console.log(sections);
-
   // Fetch initial data
   useEffect(() => {
     const fetchContactInfo = async () => {
