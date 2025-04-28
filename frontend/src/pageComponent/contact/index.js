@@ -1,13 +1,10 @@
-'use client';
+"use client";
 import * as React from "react";
 import useScrollToTop from "../../hooks/useScrollToTop";
 import ContactSection from "@/pageComponent/home/ContactSection";
 import LoadingChicha from "@/components/LoadingChicha/LoadingChicha";
 import MemberSection from "./MemberSection";
-import dynamic from "next/dynamic";
-
-const OpenStreetMap = dynamic(
-  () => import("./OpenStreetMap"),{ ssr: false });
+import MapComponent from "./MapComponent";
 
 const TeamOffice = () => {
   useScrollToTop();
@@ -18,7 +15,7 @@ const TeamOffice = () => {
         <div className="sectionWrapper">
           <div className="mapWrapper">
             <MemberSection />
-            <OpenStreetMap />
+            <MapComponent />
           </div>
         </div>
         <div className="sectionWrapper">

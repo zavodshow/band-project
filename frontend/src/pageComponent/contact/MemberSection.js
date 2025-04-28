@@ -136,7 +136,7 @@ const MemberSection = () => {
   };
 
   return (
-    <div className="contactAddress meberSquare">
+    <div className="contactAddress memberSquare">
       {loading ? (
         <div className="loading">Loading...</div>
       ) : (

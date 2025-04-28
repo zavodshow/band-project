@@ -13,7 +13,7 @@
   max-width: 560px;
 }
 
-.meberSquare {
+.memberSquare {
   display: grid;
   gap: clamp(15px, 3vw, 45px);
   padding-right: clamp(0px, 3vw, 50px);
@@ -35,7 +35,7 @@
   width: 160px;
 }
 
-.meberSquare + div {
+.memberSquare + div {
   margin-top: 50px;
 }
 
@@ -62,11 +62,11 @@
     height: 500px;
   }
 
-  .meberSquare {
+  .memberSquare {
     gap: 30px;
   }
 
-  .meberSquare + div {
+  .memberSquare + div {
     margin-top: 50px;
     display: flex;
     justify-content: center;
@@ -88,7 +88,7 @@
     height: 213px;
   }
 
-  .meberSquare {
+  .memberSquare {
     gap: 0;
   }
 
