@@ -5,9 +5,9 @@
 .caseTitle {
   margin-bottom: 20px;
   font-family: var(--font-russo-one);
+  font-weight: 400;
   font-size: 30px;
   line-height: 36.15px;
-  letter-spacing: -0.03em;
   color: var(--secondaryWhiteColor);
 }
 
