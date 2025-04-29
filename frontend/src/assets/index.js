@@ -12,6 +12,7 @@ import darkArrowup from "./icon/darkArrowup.png";
 import darkSmallUser from "./icon/darkSmallUser.svg";
 import darkTelegramRound from "./icon/darkTelegramRound.svg";
 import darkPlay from "./icon/darkPlay.png";
+import darkRead from "./icon/darkRead.png";
 import darkLogout from "./icon/darkLogout.svg";
 import darkPencil from "./icon/darkPencil.svg";
 import darkEmail from "./icon/darkEmail.svg";
@@ -279,6 +280,7 @@ export {
   coveringPlay,
   addressIcon,
   starIcon,
+  darkRead,
   greySearch,
   flagIcon,
   dateIcon,

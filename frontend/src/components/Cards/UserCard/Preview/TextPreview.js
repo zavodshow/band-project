@@ -21,7 +21,7 @@ const TextPreview = (props) => {
           <span className="closeIcon">&times;</span>
         </button>
       </div>
-      <div style={{ marginTop: "20px", textAlign: 'center' }}>
+      {/* <div style={{ marginTop: "20px", textAlign: 'center' }}>
         {file && <><Image
           width={500} // Default width
           height={300} // Default height
@@ -30,7 +30,7 @@ const TextPreview = (props) => {
           alt={file}
           unoptimized={true}
         /></>}
-      </div>
+      </div> */}
       <div className="videoPreviewDescription">{content}</div>
     </div>
   );

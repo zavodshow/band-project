@@ -16,7 +16,7 @@ const VideoCard = (props) => {
       <div className="alignCenter" style={{ height: "350px" }}>
         <div className="videoCard">
           <div className="videoActionArea">
-            <div className="circleVideoWrap">
+            <div className="circleVideoWrap" style={{ cursor: "pointer" }}>
               <Image
                 src={avatar}
                 alt="avatar"
