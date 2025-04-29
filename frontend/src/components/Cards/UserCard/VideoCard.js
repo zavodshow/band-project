@@ -31,9 +31,9 @@ const VideoCard = (props) => {
               </div>
             </div>
             <p className="cardBigTitle">{name}</p>
-            <button onClick={handlePlay} className="cardDescription">
+            {/* <button onClick={handlePlay} className="cardDescription">
               Читать отзыв
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

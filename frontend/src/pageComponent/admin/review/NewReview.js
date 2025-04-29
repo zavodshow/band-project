@@ -22,11 +22,11 @@ const NewReview = () => {
   const location = useRouter();
   const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
-  
+
   // Helper function to parse the initial data from URL parameters
   const getInitialData = () => {
     if (!searchParams.size) return null;
-    
+
     let data = {};
     searchParams.forEach((value, key) => {
       try {
@@ -48,6 +48,7 @@ const NewReview = () => {
     content: Data?.content || "",
     displayType: Data?.displayType || [],
   });
+
   const currency = {
     name: "type",
     option: ["Text", "Video"],
@@ -71,8 +72,8 @@ const NewReview = () => {
   };
 
   const handleAvatarChange = (e) => {
-    setFormData({...formData, avatar: e.target.files[0]});
-  }
+    setFormData({ ...formData, avatar: e.target.files[0] });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -128,17 +129,18 @@ const NewReview = () => {
               handleSelect={handleChange}
             />
           </div>
-          <TabButton
-            icon={darkAdd}
-            title={
-              formData.type === "Text" ? "Выбрать изображение" : "Выбрать видео"
-            }
-            onChange={handleFileChange}
-          />
-          {formData.files && (
-            <Typography> Выбрать видео: {formData.files.name}</Typography>
+          {formData.type === "Video" && (
+            <div>
+              <TabButton
+                icon={darkAdd}
+                title="Выбрать видео"
+                onChange={handleFileChange}
+              />
+              {formData.files && (
+                <Typography> Выбрать видео: {formData.files.name}</Typography>
+              )}
+            </div>
           )}
-
           <TabButton
             icon={darkAdd}
             title={"Выбрать аватар изображение"}
@@ -152,12 +154,14 @@ const NewReview = () => {
             item={inputinfo[0]}
             handleChange={handleChange}
           />
-          <TextArea
-            name={inputinfo[1].name}
-            placeholder={inputinfo[1].placeholder}
-            onChange={handleChange}
-            value={formData.content}
-          />
+          {formData.type === "Text" && (
+            <TextArea
+              name={inputinfo[1].name}
+              placeholder={inputinfo[1].placeholder}
+              onChange={handleChange}
+              value={formData.content}
+            />
+          )}
           {/* <div>
             <p className='x16'>{displayType.title}</p>
             <SelectBox value={formData[displayType.name]} item={displayType} handleSelect={handleChange} />
@@ -184,7 +188,6 @@ const NewReview = () => {
               )}
             />
           </Box>
-
           {loading && <LoadingProgress />}
         </>
       }
