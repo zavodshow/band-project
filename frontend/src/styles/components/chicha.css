@@ -19,12 +19,12 @@
 }
 
 .chicha-spin {
-  animation: spin 3s linear infinite;
+  animation: spin 6s linear infinite;
   display: inline-block;
 }
 
 .chicha-back-spin {
-  animation: back-spin 3s linear infinite;
+  animation: back-spin 6s linear infinite;
   display: inline-block;
 }
 
