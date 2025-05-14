@@ -388,7 +388,7 @@ const heroSectionInfo = [
     },
     defaultDarkBtn: {
       title: "узнать цены",
-      urlLink: "",
+      to: "rentalCost"
     },
     heroLinkTitle: [
       {
@@ -490,7 +490,7 @@ const heroSectionInfo = [
     },
     defaultDarkBtn: {
       title: "Заполнить бриф",
-      urlLink: "https://forms.yandex.com/admin/",
+      to: "eventWorkProcess",
     },
     heroLinkTitle: [
       {
@@ -565,7 +565,7 @@ const heroSectionInfo = [
     },
     defaultDarkBtn: {
       title: "Заполнить бриф",
-      urlLink: "",
+      to: "tourWorkProcess",
     },
     heroLinkTitle: [
       {

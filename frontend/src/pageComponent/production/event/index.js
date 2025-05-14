@@ -33,15 +33,17 @@ const EventPage = () => {
         <HeroSample heroSectionInfo={heroSectionInfo[3]} />
         <GallerySection title="Кейсы по событиям" galleryType="События" />
         <EventWorks />
-        <WorkProcess
-          arrowWidth="210px"
-          title1="Cобытие"
-          title2="Наш процесс работы"
-          data={workProcessInfo3}
-          url="/documents/Чек-лист Ивент.xls"
-          fileName="Чек-лист Ивент.xls"
-          sizeStr="XLS 1,8 Мб"
-        />
+        <section id="eventWorkProcess">
+          <WorkProcess
+            arrowWidth="210px"
+            title1="Cобытие"
+            title2="Наш процесс работы"
+            data={workProcessInfo3}
+            url="/documents/Чек-лист Ивент.xls"
+            fileName="Чек-лист Ивент.xls"
+            sizeStr="XLS 1,8 Мб"
+          />
+        </section>
       </div>
       <SwiperSection displayType="Продакшн" />
       <div className="container">

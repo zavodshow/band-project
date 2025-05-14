@@ -380,7 +380,7 @@ const NewCase = () => {
     }
   };
 
-  // console.log("formData", formData);
+  console.log("formData", formData);
 
   return (
     <CreatePageWrapper

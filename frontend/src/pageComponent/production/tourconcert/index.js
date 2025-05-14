@@ -27,21 +27,23 @@ const TourConcertPage = () => {
       <div className="container">
         <HeroSample heroSectionInfo={heroSectionInfo[4]} />
         <GallerySection title="Кейсы по турам" galleryType="Туры" />
-        <WorkProcess
-          arrowWidth="210px"
-          title1="Тур"
-          title2="Наш процесс работы"
-          data={workProcessInfo4}
-          fileName="Этапы работы над туром.docx"
-          url="/documents/Этапы работы над туром.docx"
-          sizeStr="DOC 1.8 Мб"
+        <section id="tourWorkProcess">
+          <WorkProcess
+            arrowWidth="210px"
+            title1="Тур"
+            title2="Наш процесс работы"
+            data={workProcessInfo4}
+            fileName="Этапы работы над туром.docx"
+            url="/documents/Этапы работы над туром.docx"
+            sizeStr="DOC 1.8 Мб"
+          />
+        </section>
 
-        />
         <BigVideoBox
           item={{
             titleCenter: false,
             title: "Видео из тура",
-            src: `${ProductionConcert}`,
+            src: `${caseData?.video || ProductionConcert}`,
             videoTitle: caseData?.venue,
             videoDescription: caseData?.name,
           }}

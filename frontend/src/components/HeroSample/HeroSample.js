@@ -86,7 +86,7 @@ const HeroSample = (props) => {
                 }
               />
               <ScrollSpyButton
-                to="rentalCost"
+                to={heroSectionInfo.defaultDarkBtn.to}
                 content={
                   <BlackButtonBorderWhite
                     title={heroSectionInfo.defaultDarkBtn.title}

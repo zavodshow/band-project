@@ -117,24 +117,29 @@ class BlogController extends Controller
         try {
             $blog = Blog::findOrFail($id);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Blog not found'], 404);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Blog not found'
+            ], 404);
         }
 
-        $data = $request->all();
-        $data['solution'] = $blog['solution'];
+        $data = $request->except('existing_images');
 
         // Handle images - combine existing and new
-        $existingImages = $blog->images ?? [];
-        $newImages = [];
+        $existingImages = is_array($blog->images) ? $blog->images : [];
 
+        // Parse existing_images from request (might be JSON string)
+        $keptImages = [];
+        if ($request->has('existing_images')) {
+            $keptImages = json_decode($request->input('existing_images'), true) ?? [];
+        }
+
+        $newImages = [];
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $file) {
                 $newImages[] = url('storage/' . $file->store('uploads/blog', 'public'));
             }
         }
-
-        // Get image URLs from request (existing images that weren't changed)
-        $keptImages = $request->input('existing_images', []);
 
         // Combine kept existing images and new images
         $data['images'] = array_merge(
@@ -144,29 +149,29 @@ class BlogController extends Controller
 
         // Handle video
         if ($request->hasFile('video')) {
+            // Delete old video if exists
             if ($blog->video) {
                 \Storage::disk('public')->delete(str_replace(url('storage') . '/', '', $blog->video));
             }
             $data['video'] = uploadVideoOrImage($request->file('video'), 'blog');
-        } else {
-            $data['video'] = $blog->video;
         }
 
         try {
             $blog->update($data);
-            $blog->save();
 
             return response()->json([
-                'message' => 'Blog successfully updated!',
+                'status' => 'success',
+                'message' => 'Successfully updated!',
                 'blog' => $blog
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'Error updating blog data: ' . $e->getMessage()
-            ], 400);
+                'status' => 'error',
+                'message' => 'Error updating blog data',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
-
 
     public function updateTagBlog(Request $request, $id)
     {
