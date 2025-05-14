@@ -328,7 +328,8 @@ const blogCardInfo = [
 const heroSectionInfo = [
   {
     flag: 1,
-    bgUrl: heroBgImg,
+    bgUrl: "",
+    // bgUrl: heroBgImg,
     title: "3D-визуализация для проверки идей и концепций",
     heroTopButton: "ФИРМЕННЫЕ УСЛУГИ",
     defaultBtn: {
@@ -341,7 +342,7 @@ const heroSectionInfo = [
     },
     heroLinkTitle: [
       {
-        title: "Раскрытие концепции",
+        title: "Создание концепции",
         url: "",
       },
       {
@@ -353,7 +354,7 @@ const heroSectionInfo = [
         url: "",
       },
       {
-        title: "Мягкий переход к реализации",
+        title: "Реализация концепции",
         url: "",
       },
     ],
@@ -367,11 +368,11 @@ const heroSectionInfo = [
         url: "",
       },
       {
-        title: "Раскрытие концепции",
+        title: "Создание концепции",
         url: "",
       },
       {
-        title: "Мягкий переход к реализации",
+        title: "Реализация концепции",
         url: "",
       },
     ],
@@ -428,7 +429,8 @@ const heroSectionInfo = [
   },
   {
     flag: 1,
-    bgUrl: heroLampImg,
+    // bgUrl: heroLampImg,
+    bgUrl: "",
     title: "Стейдж-дизайн: &&от идеи до реализации",
     heroTopButton: "ФИРМЕННЫЕ УСЛУГИ",
     defaultBtn: {
@@ -600,7 +602,7 @@ const heroSectionInfo = [
     title: "Световое оформление для концертов и событий",
     heroTopButton: "ТЕХНИЧЕСКИЕ УСЛУГИ",
     defaultBtn: {
-      title: "заказать cвет",
+      title: "Заказать расчёт",
       urlLink: "",
     },
     defaultDarkBtn: {
@@ -642,7 +644,7 @@ const heroSectionInfo = [
     title: "Звуковая поддержка для концертов и событий",
     heroTopButton: "ТЕХНИЧЕСКИЕ УСЛУГИ",
     defaultBtn: {
-      title: "заказать звук",
+      title: "Заказать расчёт",
       urlLink: "",
     },
     defaultDarkBtn: {
@@ -681,10 +683,10 @@ const heroSectionInfo = [
   {
     flag: 1,
     bgUrl: videoHeroImg,
-    title: "Видео экраны для концертов и событий",
+    title: "Экраны для концертов и событий",
     heroTopButton: "ТЕХНИЧЕСКИЕ УСЛУГИ",
     defaultBtn: {
-      title: "заказать видео",
+      title: "Заказать расчёт",
       urlLink: "",
     },
     defaultDarkBtn: {
@@ -1029,7 +1031,7 @@ const creationInfo = [
     ],
     contentTitle: "Что входит в концепцию:",
     contentText: [
-      "— Стейдждизайн с нуля",
+      "— Стейдж-дизайн с нуля",
       "— Световая концепция",
       "— Звуковое обеспечение",
       "— Доп. услуги: спецэффекты, трансляция по запросу",
@@ -1080,32 +1082,32 @@ const eventCardInfo = [
   {
     img: event1,
     title: "Частные мероприятия",
-    tags: ["Дни рождения", "Свадьбы"],
+    tags: ["Дни рождения", "Свадьбы", "Свидания", "Другие мероприятия"],
   },
   {
     img: event2,
     title: "Корпоративные и деловые",
-    tags: ["Корпоративы", "Конференции"],
+    tags: ["Корпоративы", "Конференции", "Форумы"],
   },
   {
     img: event3,
     title: "Городские праздники",
-    tags: ["Государства", "Муниципалитеты"],
+    tags: ["Государственные", "Муниципальные", "Другие"],
   },
   {
     img: event4,
     title: "Концерты",
-    tags: ["Студия", "Открытые площадки"],
+    tags: ["Концертные залы", "Открытые площадки", "Камерные" ],
   },
   {
     img: event5,
     title: "Благотворительные мероприятия",
-    tags: ["Мемориальные концерты"],
+    tags: ["Мемориальные концерты", "Концерты"],
   },
   {
     img: event6,
     title: "Cпортивные события",
-    tags: ["Стадионы", "Спорткомлексы"],
+    tags: ["Соревнования", "Олимпиады", "Другие"],
   },
 ];
 

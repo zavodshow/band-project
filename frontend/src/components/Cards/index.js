@@ -232,7 +232,7 @@ const EventWorksCard = ({ item, handleMoveToCase }) => (
     >
       {item.title}
     </h3>
-    <div className="itemCenter" style={{ gap: "5px" }}>
+    <div className="itemCenter flexWrap" style={{ gap: "5px" }}>
       {item.tags.map((title, index) => (
         <EventTagButton
           handleMoveToCase={handleMoveToCase}

@@ -24,7 +24,6 @@ const GallerySection = ({ title, galleryType }) => {
       .catch((error) => {
         console.error("Error fetching cases:", error);
       });
-    console.log("galleryInfo", galleryInfo);
   }, [galleryType]);
 
   useEffect(() => {

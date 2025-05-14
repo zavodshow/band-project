@@ -40,11 +40,11 @@ const ThreeChichas = ({ img1, img2, img3 }) => (
         <Image src={img2} alt={img2} />
       </span>
     </div>
-    <div style={{ margin: "65px 0 0 -12px" }}>
+    {/* <div style={{ margin: "65px 0 0 -12px" }}>
       <span className="chicha-spin">
         <Image src={img3} alt={img3} />
       </span>
-    </div>
+    </div> */}
   </div>
 );
 
@@ -62,11 +62,11 @@ const ThreeChichas1 = ({ img1, img2, img3 }) => (
         <Image src={img2} alt={img2} />
       </span>
     </div>
-    <div style={{ margin: "65px 0 0 -12px" }}>
+    {/* <div style={{ margin: "65px 0 0 -12px" }}>
       <span className="chicha-spin">
         <Image src={img3} alt={img3} />
       </span>
-    </div>
+    </div> */}
   </div>
 );
 

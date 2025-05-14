@@ -126,7 +126,7 @@ const HeroSection = () => {
                 <DefaultButton title="КЕЙСЫ" />
               </Link>
               <BlackButton
-                title="зАПОЛНИТЬ БРИФ"
+                title="Заполнить бриф"
                 onClick={() => {
                   const link = document.createElement("a");
                   link.href = "/documents/Бриф по проекту.xlsx";

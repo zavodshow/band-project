@@ -155,6 +155,13 @@ const NewCase = () => {
   }, []);
 
   useEffect(() => {
+    return () => {
+      // Cleanup any file references if needed
+      setFormData((prev) => ({ ...prev, images: [] }));
+    };
+  }, []);
+
+  useEffect(() => {
     if (currentId) {
       getCaseById(currentId).then((data) => {
         if (data) {
@@ -262,14 +269,18 @@ const NewCase = () => {
     setFormData((prev) => ({ ...prev, video: e.target.files[0] }));
 
   const updateFiles = (incomingFiles) => {
-    const updatedFiles = incomingFiles.map((file) => {
-      if (file instanceof File) {
-        return file;
-      }
-      return file.file;
-    });
+    // Separate existing files (strings) from new files (File objects)
+    const existingFiles = formData.images.filter(
+      (file) => typeof file === "string"
+    );
+    const newFiles = incomingFiles
+      .filter((file) => file instanceof File || file?.file instanceof File)
+      .map((file) => (file instanceof File ? file : file.file));
 
-    setFormData((prev) => ({ ...prev, images: updatedFiles }));
+    setFormData((prev) => ({
+      ...prev,
+      images: [...existingFiles, ...newFiles],
+    }));
   };
 
   const handleDateChange = (date, isStartDate) => {
@@ -292,15 +303,22 @@ const NewCase = () => {
     setLoading(true);
 
     const newFormData = new FormData();
-    const appendArray = (key, array) =>
-      array.forEach((item) => newFormData.append(key, item));
 
+    // Add all form data
     Object.entries(formData).forEach(([key, value]) => {
       if (Array.isArray(value)) {
         if (key === "images") {
-          value.forEach((file) => newFormData.append("images[]", file));
+          // Separate existing URLs and new files
+          const existingUrls = value.filter((item) => typeof item === "string");
+          const newFiles = value.filter((item) => item instanceof File);
+
+          // Add existing URLs as a JSON array
+          newFormData.append("existing_images", JSON.stringify(existingUrls));
+
+          // Add new files
+          newFiles.forEach((file) => newFormData.append("images[]", file));
         } else {
-          appendArray(`${key}[]`, value);
+          value.forEach((item) => newFormData.append(`${key}[]`, item));
         }
       } else {
         newFormData.append(key, value);
@@ -362,6 +380,8 @@ const NewCase = () => {
     }
   };
 
+  // console.log("formData", formData);
+
   return (
     <CreatePageWrapper
       title="Введите данные нового кейса события здесь"
@@ -391,7 +411,9 @@ const NewCase = () => {
                 key={index}
                 {...{
                   name: file.name || `${index + 1}.png`,
-                  imageUrl: file, // Directly use the File object
+                  imageUrl:
+                    file instanceof File ? URL.createObjectURL(file) : file,
+                  type: file instanceof File ? file.type : "image/*",
                 }}
                 preview
                 darkMode

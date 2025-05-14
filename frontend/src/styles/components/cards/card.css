@@ -1,5 +1,5 @@
 .pendingCard {
-  max-width: 559px;
+  max-width: 560px;
   flex: 1 1 auto;
   transition: flex-basis 0.5s ease;
 }
@@ -32,19 +32,23 @@
   letter-spacing: -3%;
 }
 
-.publicationCard video {
-  height: clamp(189px, 20vw, 237px);
-}
-
 .pendingCard img,
 .publicationCard video {
+  display: block;
   width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
   border-radius: 10px;
 }
 
-.pendingCard img {
+/* .pendingCard img {
   height: clamp(154px, 20vw, 290px);
 }
+
+.publicationCard video {
+  height: clamp(189px, 20vw, 237px);
+} */
 
 .whitePlayImg {
   width: clamp(55px, 5vw, 58px);
@@ -73,7 +77,7 @@
 /* Media query for devices wider than 640px */
 @media (min-width: 640px) {
   .blogPadding {
-    padding:0 50px; /* Set left padding to 50px */
+    padding: 0 50px; /* Set left padding to 50px */
   }
 }
 

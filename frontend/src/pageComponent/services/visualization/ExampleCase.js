@@ -17,14 +17,33 @@ const ExampleCase = () => {
       });
   }, []);
 
+  const MediaElement = ({ item }) => {
+    if (!item) return null;
+    
+    const isVideo = item?.video?.endsWith('.mp4') || item?.video?.endsWith('.webm') || item?.video?.endsWith('.mov');
+    const isImage = item?.video?.endsWith('.jpg') || item?.video?.endsWith('.jpeg') || item?.video?.endsWith('.png') || item?.video?.endsWith('.webp');
+
+    return (
+      <>
+        {isVideo ? (
+          <video
+            src={item.video}
+            onClick={() => navigate.push(`/case-one/${item?.id}`)}
+          />
+        ) : isImage ? (
+          <img
+            src={item.video}
+            alt={item.name}
+            onClick={() => navigate.push(`/case-one/${item?.id}`)}
+          />
+        ) : null}
+      </>
+    );
+  };
+
   const SmallMediaCard = ({ item }) => (
-    <div>
-      <video
-        src={`${item?.video}`}
-        onClick={() => {
-          navigate.push(`/case-one/${item?.id}`);
-        }}
-      />
+    <div className="smallMediaCard">
+      <MediaElement item={item} />
       <div>
         <p className="caseImgTitle">{item?.name}</p>
         <p className="caseImgText">{item?.venue}</p>
@@ -39,31 +58,18 @@ const ExampleCase = () => {
           Примеры кейсов с 3D-визуализацией
         </h2>
       </div>
-      <div className="flexWrapBetween" style={{ gap: "30px" }}>
-        <div className="caseLeftSection itemCenter">
+      <div className="casesContainer">
+        <div className="mainCase">
+          <MediaElement item={caseExampleInfo[0]} />
           <div>
-            <video
-              src={`${caseExampleInfo[0]?.video}`}
-              onClick={() => {
-                navigate.push(`/case-one/${caseExampleInfo[0]?.id}`);
-              }}
-            />
             <p className="caseImgTitle">{caseExampleInfo[0]?.name}</p>
             <p className="caseImgText">{caseExampleInfo[0]?.venue}</p>
           </div>
         </div>
-        <div
-          className="caseRightSection"
-          style={{ display: "grid", gap: "26px" }}
-        >
-          <div className="spaceBetween" style={{ gap: "28px" }}>
-            <SmallMediaCard item={caseExampleInfo[1]} />
-            <SmallMediaCard item={caseExampleInfo[2]} />
-          </div>
-          <div className="spaceBetween" style={{ gap: "28px" }}>
-            <SmallMediaCard item={caseExampleInfo[3]} />
-            <SmallMediaCard item={caseExampleInfo[4]} />
-          </div>
+        <div className="smallCasesGrid">
+          {[1, 2, 3, 4].map((index) => (
+            <SmallMediaCard key={index} item={caseExampleInfo[index]} />
+          ))}
         </div>
       </div>
     </section>

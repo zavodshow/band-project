@@ -1,9 +1,9 @@
+/* Process Item Styles */
 .processItem {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   gap: 20px;
-  /* padding-top: clamp(40px, 10vw, 60px); */
 }
 
 .processItem .cardDescription {
@@ -31,83 +31,54 @@
   rotate: 50deg;
 }
 
-/* Show horizontal arrows only on desktop */
+/* Arrow Visibility */
 .arrowShow {
   display: flex;
 }
 
-/* Hide horizontal arrows on mobile */
-@media (max-width: 1140px) {
-  .arrowShow {
-    display: none !important;
-  }
+/* ExampleCase Styles */
+.casesContainer {
+  display: flex;
+  gap: 30px;
 }
 
-/* Ensure vertical arrows appear only in mobile view */
-@media (max-width: 550px) {
-  .verticalBorder {
-    border-right: 2px solid black;
-  }
-
-  .verticalBorder::after {
-    content: "";
-    position: absolute;
-    right: -2px;
-    bottom: 0;
-    transform: translateY(-50%);
-    width: 8px;
-    height: 8px;
-    background-color: black;
-    rotate: 45deg;
-  }
-
-  .processItem {
-    flex: 1 1 auto;
-    transition: flex-basis 0.5s ease;
-    position: relative; /* Ensure absolute positioning works properly */
-  }
-
-  .processItem .cardDescription {
-    width: 220px;
-    letter-spacing: -0.03em;
-  }
-
-  .ArrowRect {
-    margin-top: 10px; /* Adjust the top margin for better alignment */
-  }
-
-  /* Adjust arrow for each item */
-  .processItem .arrowShow {
-    display: none; /* Hide horizontal arrows on mobile */
-  }
-}
-
-/* ExampleCase */
-.caseLeftSection {
+.mainCase {
   width: 40.6%;
 }
 
-.caseLeftSection video {
-  width: 472px;
-  max-width: 100%;
-  height: clamp(300px, 40vw, 455px);
-  border-radius: 10px;
-  object-fit: cover;
-}
-
-.caseRightSection {
+.smallCasesGrid {
   width: 56.7%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 28px;
 }
 
-.caseRightSection video {
-  width: 315px;
-  max-width: 100%;
+/* Media Elements */
+.mainCase video,
+.mainCase img,
+.caseLeftSection video,
+.caseLeftSection img {
+  width: 100%;
+  max-width: 472px;
+  height: clamp(300px, 40vw, 455px);
+  border-radius: 10px;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.smallMediaCard video,
+.smallMediaCard img,
+.caseRightSection video,
+.caseRightSection img {
+  width: 100%;
+  max-width: 315px;
   height: 181px;
   border-radius: 10px;
   object-fit: cover;
+  cursor: pointer;
 }
 
+/* Text Styles */
 .caseImgTitle {
   margin: 18px 0 8px 0;
   font-family: var(--font-mulish);
@@ -126,7 +97,7 @@
   color: var(--secondaryWhiteColor);
 }
 
-/* Ensure case sections take full width in smaller screens */
+/* Responsive Adjustments */
 @media (max-width: 1430px) {
   .caseRightSection,
   .caseLeftSection {
@@ -134,26 +105,47 @@
   }
 }
 
-/* Ensure horizontal arrows only appear on large screens */
-@media (min-width: 1141px) {
-  .arrowShow {
-    display: flex !important;
-  }
-}
-
-/* Adjustments for medium-sized screens */
 @media (max-width: 1140px) {
+  .arrowShow {
+    display: none !important;
+  }
+  
   .workProcessSquare {
     justify-content: space-around !important;
   }
-
+  
   .caseImgTitle,
   .caseImgText {
     display: none;
   }
 }
 
-/* Adjustments for small screens */
+@media (max-width: 1100px) {
+  .casesContainer {
+    flex-direction: column;
+  }
+  
+  .mainCase,
+  .smallCasesGrid,
+  .caseRightSection,
+  .caseLeftSection {
+    width: 100%;
+  }
+  
+  .smallCasesGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .smallMediaCard video,
+  .smallMediaCard img,
+  .caseRightSection video,
+  .caseRightSection img {
+    height: auto;
+    aspect-ratio: 16/9;
+    max-width: 100%;
+  }
+}
+
 @media (max-width: 636px) {
   .workProcessSquare {
     justify-content: space-between !important;
@@ -169,7 +161,6 @@
   }
 }
 
-/* Ensure vertical arrows appear in mobile view */
 @media (max-width: 550px) {
   .processItem {
     flex: 1 1 auto;
@@ -178,15 +169,38 @@
   }
 
   .processItem .cardDescription {
-    width: 221px;
+    width: 220px;
     letter-spacing: -0.03em;
   }
 
   .ArrowRect {
-    margin-top: 10px; /* Adjust the top margin for better alignment */
+    margin-top: 10px;
   }
 
   .processItem .arrowShow {
-    display: none; /* Hide horizontal arrows on mobile */
+    display: none;
+  }
+
+  .verticalBorder {
+    border-right: 2px solid black;
+  }
+
+  .verticalBorder::after {
+    content: "";
+    position: absolute;
+    right: -2px;
+    bottom: 0;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background-color: black;
+    rotate: 45deg;
+  }
+}
+
+/* Large screens */
+@media (min-width: 1141px) {
+  .arrowShow {
+    display: flex !important;
   }
 }

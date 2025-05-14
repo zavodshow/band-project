@@ -100,9 +100,11 @@
 }
 
 .cristalLeft img,
-video {
+.cristalLeft video {
   /* width: 205px;
   height: 151px; */
+  aspect-ratio: 16 / 9;
+  width: 100%;
   object-fit: cover;
   border-radius: 10px;
 }
@@ -110,14 +112,15 @@ video {
 .cristalRight {
   width: 760px;
   padding-left: 40px;
+  gap: 30px;
 }
 
 .cristalItem1,
 .cristalItem2 {
-  height: 200px;
   display: flex;
-  justify-content: space-between;
   flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .cristalItem2Text {
@@ -127,6 +130,7 @@ video {
   line-height: 20.08px;
   letter-spacing: -0.01em;
   color: var(--secondaryWhiteColor);
+  margin: 0; /* Remove default margins */
 }
 
 .caseEvent1 {
@@ -192,11 +196,6 @@ video {
   .caseTopWrapper {
     flex-direction: column;
   }
-
-  .cristalItem1,
-  .cristalItem2 {
-    height: 143px;
-  }
 }
 
 @media (max-width: 920px) {
@@ -223,16 +222,14 @@ video {
 
 @media (max-width: 631px) {
   .cristalItem2 {
-    height: 130px;
-    margin-top: 30px;
     flex-direction: column-reverse;
+    gap: 15px;
   }
 }
 
 @media (max-width: 581px) {
   .cristalLeft {
-    width: 299px;
-    height: 213px;
+    width: 100%;
   }
 }
 

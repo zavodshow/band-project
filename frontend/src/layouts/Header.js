@@ -11,6 +11,7 @@ import { useMediaQuery } from "../hooks/useMediaQuery";
 import { ToPhone } from "../components/ToText";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 
 const DEBOUNCE_DELAY = 500;
 
@@ -156,12 +157,9 @@ const Header = () => {
           <div
             className={`spaceBetween topHeader ${isShrunk ? "scrolled" : ""}`}
           >
-            <Image
-              onClick={() => navigate.push("/")}
-              src={logo}
-              alt="logo"
-              className="logo"
-            />
+            <Link href="/">
+              <Image src={logo} alt="logo" className="logo" />
+            </Link>
             <div className="headerInput">
               <div className="alignCenter">
                 <Image

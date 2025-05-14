@@ -123,21 +123,26 @@ class BlogController extends Controller
         $data = $request->all();
         $data['solution'] = $blog['solution'];
 
+        // Handle images - combine existing and new
+        $existingImages = $blog->images ?? [];
+        $newImages = [];
+
         if ($request->hasFile('images')) {
-            if ($blog->images) {
-                foreach ($blog->images as $oldImage) {
-                    \Storage::disk('public')->delete(str_replace(url('storage') . '/', '', $oldImage));
-                }
-            }
-            $filePaths = [];
             foreach ($request->file('images') as $file) {
-                $filePaths[] = url('storage/' . $file->store('uploads/blog', 'public'));
+                $newImages[] = url('storage/' . $file->store('uploads/blog', 'public'));
             }
-            $data['images'] = $filePaths;
-        } else {
-            $data['images'] = $blog->images;
         }
 
+        // Get image URLs from request (existing images that weren't changed)
+        $keptImages = $request->input('existing_images', []);
+
+        // Combine kept existing images and new images
+        $data['images'] = array_merge(
+            array_intersect($existingImages, $keptImages),
+            $newImages
+        );
+
+        // Handle video
         if ($request->hasFile('video')) {
             if ($blog->video) {
                 \Storage::disk('public')->delete(str_replace(url('storage') . '/', '', $blog->video));
@@ -149,27 +154,20 @@ class BlogController extends Controller
 
         try {
             $blog->update($data);
-
             $blog->save();
 
-            // if ($request->input('equipment')) {
-            //     $oldEquipments = $blog->equipment;
-            //     foreach ($oldEquipments as $oldEquip) {
-            //         $oldEquip->blogs()->detach($blog->id);
-            //     }
-            //     foreach ($request->input('equipment') as $equipId) {
-            //         $equipment = Equipment::find($equipId);
-            //         if ($equipment) {
-            //             $equipment->blogs()->attach($blog->id);
-            //         }
-            //     }
-            // }
-
-            return response()->json(['message' => 'Blog successfully updated!', 'blog' => $blog], 200);
+            return response()->json([
+                'message' => 'Blog successfully updated!',
+                'blog' => $blog
+            ], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Error updating blog data: ' . $e->getMessage()], 400);
+            return response()->json([
+                'error' => 'Error updating blog data: ' . $e->getMessage()
+            ], 400);
         }
     }
+
+
     public function updateTagBlog(Request $request, $id)
     {
         try {

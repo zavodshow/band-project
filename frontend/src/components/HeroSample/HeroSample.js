@@ -28,10 +28,13 @@ const HeroSample = (props) => {
         className="sectionWrapper section2 heroBg"
         style={{ paddingTop: "clamp(30px, 4vw, 50px)" }}
       >
-        <Image src={heroSectionInfo.bgUrl} alt="bgUrl" />
+        {heroSectionInfo.bgURL && <Image src={heroSectionInfo.bgUrl} alt="bgUrl" />}
         {heroSectionInfo.text ? (
           <div className="spaceEnd heroRow">
-            <h1 className="heroTitle heroTitleWidth" style={{ marginTop: "25px" }}>
+            <h1
+              className="heroTitle heroTitleWidth"
+              style={{ marginTop: "25px" }}
+            >
               {heroSectionInfo.title.split("&&").map((text, index) => (
                 <React.Fragment key={index}>
                   {text}
@@ -85,7 +88,9 @@ const HeroSample = (props) => {
               <ScrollSpyButton
                 to="rentalCost"
                 content={
-                  <BlackButtonBorderWhite title={heroSectionInfo.defaultDarkBtn.title} />
+                  <BlackButtonBorderWhite
+                    title={heroSectionInfo.defaultDarkBtn.title}
+                  />
                 }
               />
             </div>

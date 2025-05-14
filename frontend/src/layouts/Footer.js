@@ -173,9 +173,7 @@ const FooterBottom = () => {
         </p>
       </div>
       <div className="footerBottomAddress">
-        Москва, г. Реутов, ул. Победы, 20
-        {/* <br /> */}
-        {/* Пн-Сб: 10-19 МСК */}
+        Москва, Реутов, пл.Академика Челомея, 1
       </div>
       <div className="footerBottomLink" style={{ marginBottom: "20px" }}>
         <span onClick={goPlantShowSection}>© ЗАВОД ШОУ</span>
