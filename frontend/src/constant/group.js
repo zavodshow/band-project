@@ -490,7 +490,8 @@ const heroSectionInfo = [
     },
     defaultDarkBtn: {
       title: "Заполнить бриф",
-      to: "eventWorkProcess",
+      to: "contactSection",
+      // to: "eventWorkProcess",
     },
     heroLinkTitle: [
       {
@@ -565,7 +566,8 @@ const heroSectionInfo = [
     },
     defaultDarkBtn: {
       title: "Заполнить бриф",
-      to: "tourWorkProcess",
+      to: "contactSection",
+      // to: "tourWorkProcess",
     },
     heroLinkTitle: [
       {

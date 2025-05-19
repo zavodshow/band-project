@@ -123,29 +123,30 @@ class BlogController extends Controller
             ], 404);
         }
 
-        $data = $request->except('existing_images');
+        $data = $request->except(['existing_images', 'images']);
 
-        // Handle images - combine existing and new
-        $existingImages = is_array($blog->images) ? $blog->images : [];
+        // Handle images - maintain order from the request
+        $orderedImages = [];
 
-        // Parse existing_images from request (might be JSON string)
-        $keptImages = [];
-        if ($request->has('existing_images')) {
-            $keptImages = json_decode($request->input('existing_images'), true) ?? [];
-        }
+        // Get all image entries from the request (both URLs and files)
+        $allImages = $request->allFiles()['images'] ?? [];
 
-        $newImages = [];
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $file) {
-                $newImages[] = url('storage/' . $file->store('uploads/blog', 'public'));
+        // Combine them in the order they were sent
+        foreach ($request->all() as $key => $value) {
+            if (str_starts_with($key, 'images[')) {
+                $index = (int) trim($key, 'images[]');
+                $orderedImages[$index] = $value;
             }
         }
 
-        // Combine kept existing images and new images
-        $data['images'] = array_merge(
-            array_intersect($existingImages, $keptImages),
-            $newImages
-        );
+        // Now add the file uploads to their correct positions
+        foreach ($allImages as $index => $file) {
+            $orderedImages[$index] = url('storage/' . $file->store('uploads/blog', 'public'));
+        }
+
+        // Sort by index and get values to maintain order
+        ksort($orderedImages);
+        $data['images'] = array_values($orderedImages);
 
         // Handle video
         if ($request->hasFile('video')) {

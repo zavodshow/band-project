@@ -1,8 +1,27 @@
 "use client";
 
+import { useEffect } from "react";
 import Script from "next/script";
 
 export default function YandexMetrika() {
+  useEffect(() => {
+    // Delay loading of the tracking pixel
+    const loadTrackingPixel = () => {
+      const img = new Image();
+      img.src = "https://mc.yandex.ru/watch/101145505";
+      img.style.position = "absolute";
+      img.style.left = "-9999px";
+      document.body.appendChild(img);
+    };
+
+    // Load the tracking pixel after the page has loaded completely
+    if (window.requestIdleCallback) {
+      window.requestIdleCallback(loadTrackingPixel);
+    } else {
+      setTimeout(loadTrackingPixel, 2000);
+    }
+  }, []);
+
   return (
     <>
       <Script id="yandex-metrika" strategy="afterInteractive">
@@ -15,22 +34,14 @@ export default function YandexMetrika() {
           })
           (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
           ym(101145505, "init", {
-            clickmap:true,
-            trackLinks:true,
-            accurateTrackBounce:true,
-            webvisor:true
+            clickmap: true,
+            trackLinks: true,
+            accurateTrackBounce: true,
+            webvisor: true,
+            ecommerce: "dataLayer"
           });
         `}
       </Script>
-      <noscript>
-        <div>
-          <img
-            src="https://mc.yandex.ru/watch/101145505"
-            style={{ position: "absolute", left: "-9999px" }}
-            alt=""
-          />
-        </div>
-      </noscript>
     </>
   );
 }

@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   Autocomplete,
   Box,
   FormControl,
   FormControlLabel,
-  // FormGroup,
   Radio,
   RadioGroup,
   TextField,
@@ -14,12 +13,14 @@ import {
   Alert,
   Snackbar,
   Tooltip,
+  MenuItem,
+  Select,
+  Button,
 } from "@mui/material";
 import DatePicker from "react-datepicker";
 import { insertCase, updateCase, getCaseById } from "@/api/caseAPI";
 import { getSite } from "@/api/siteAPI";
 import MultipleValueTextInput from "react-multivalue-text-input";
-import { Dropzone, FileMosaic } from "@files-ui/react";
 import { getThrees } from "@/api/threeAPI";
 import { CreatePageWrapper } from "../AdminSection";
 import { TabButton } from "@/components/Buttons";
@@ -27,6 +28,7 @@ import { darkAdd } from "@/assets";
 import { Input, SelectBox, TextArea } from "@/components/Inputs";
 import LoadingProgress from "@/components/Loading/Loading";
 import { useRouter, useSearchParams } from "next/navigation";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 const inputInfo = [
   {
@@ -119,6 +121,7 @@ const NewCase = () => {
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const navigate = useRouter();
+  const fileInputRef = useRef(null);
 
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
@@ -268,18 +271,49 @@ const NewCase = () => {
   const handleVideoChange = (e) =>
     setFormData((prev) => ({ ...prev, video: e.target.files[0] }));
 
-  const updateFiles = (incomingFiles) => {
-    // Separate existing files (strings) from new files (File objects)
-    const existingFiles = formData.images.filter(
-      (file) => typeof file === "string"
-    );
-    const newFiles = incomingFiles
-      .filter((file) => file instanceof File || file?.file instanceof File)
-      .map((file) => (file instanceof File ? file : file.file));
+  // Handle drag and drop
+  const handleDragEnd = (result) => {
+    if (!result.destination) return;
+
+    const items = Array.from(formData.images);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
 
     setFormData((prev) => ({
       ...prev,
-      images: [...existingFiles, ...newFiles],
+      images: items,
+    }));
+  };
+
+  // Handle file selection
+  const handleFileChange = (e) => {
+    const selectedFiles = Array.from(e.target.files);
+    setFormData((prev) => ({
+      ...prev,
+      images: [...prev.images, ...selectedFiles],
+    }));
+  };
+
+  // Trigger file input click
+  const handleAddImage = () => {
+    fileInputRef.current.click();
+  };
+
+  // Remove image by index
+  const handleRemoveImage = (index) => {
+    const updatedImages = [...formData.images];
+    updatedImages.splice(index, 1);
+    setFormData((prev) => ({
+      ...prev,
+      images: updatedImages,
+    }));
+  };
+
+  // Clear all images
+  const handleClearImages = () => {
+    setFormData((prev) => ({
+      ...prev,
+      images: [],
     }));
   };
 
@@ -312,11 +346,15 @@ const NewCase = () => {
           const existingUrls = value.filter((item) => typeof item === "string");
           const newFiles = value.filter((item) => item instanceof File);
 
-          // Add existing URLs as a JSON array
-          newFormData.append("existing_images", JSON.stringify(existingUrls));
+          // Add existing URLs in their current order
+          existingUrls.forEach((url, index) => {
+            newFormData.append(`images[${index}]`, url);
+          });
 
-          // Add new files
-          newFiles.forEach((file) => newFormData.append("images[]", file));
+          // Add new files in their current order
+          newFiles.forEach((file, index) => {
+            newFormData.append(`images[${existingUrls.length + index}]`, file);
+          });
         } else {
           value.forEach((item) => newFormData.append(`${key}[]`, item));
         }
@@ -341,7 +379,7 @@ const NewCase = () => {
       {
         condition: formData.title.length > 250 || formData.keyword.length > 250,
         message:
-          "Длина заголовка и ключевых слов не должна превышать 250 символов.",
+          "Длина заголовка и ключевых слов не должна превышать 250 символов.",
       },
       {
         condition: formData.description.length > 500,
@@ -398,34 +436,159 @@ const NewCase = () => {
             <Typography> Выбрать видео: {formData.video.name}</Typography>
           )}
 
-          <Dropzone
-            onChange={updateFiles}
-            value={formData.images}
-            localization="RU-ru"
-            label="Выбрать изображения"
-            footer={false}
-            onClean={() => setFormData((prev) => ({ ...prev, images: [] }))} // Clear images when Dropzone is cleaned
-          >
-            {formData.images.map((file, index) => (
-              <FileMosaic
-                key={index}
-                {...{
-                  name: file.name || `${index + 1}.png`,
-                  imageUrl:
-                    file instanceof File ? URL.createObjectURL(file) : file,
-                  type: file instanceof File ? file.type : "image/*",
-                }}
-                preview
-                darkMode
-                onDelete={() => {
-                  const updatedFiles = formData.images.filter(
-                    (_, i) => i !== index
-                  );
-                  setFormData((prev) => ({ ...prev, images: updatedFiles }));
-                }}
-              />
-            ))}
-          </Dropzone>
+          {/* Custom Image Upload and Drag & Drop Section */}
+          <div style={{ marginBottom: "20px" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: "10px",
+              }}
+            >
+              <p className="x16">Изображения</p>
+              <div>
+                <Button
+                  variant="contained"
+                  onClick={handleAddImage}
+                  style={{ marginRight: "10px", fontSize: "18px" }}
+                >
+                  +
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  onClick={handleClearImages}
+                  style={{ fontSize: "18px" }}
+                >
+                  &times;
+                </Button>
+              </div>
+            </div>
+
+            {/* Hidden file input */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              multiple
+              accept="image/*"
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+            />
+
+            {/* Drag and drop area */}
+            <DragDropContext onDragEnd={handleDragEnd}>
+              <Droppable droppableId="image-droppable" direction="horizontal">
+                {(provided) => (
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                    style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: "10px",
+                      padding: "15px",
+                      minHeight: "150px",
+                      border: "2px dashed #ccc",
+                      borderRadius: "5px",
+                      backgroundColor: "#f9f9f9",
+                    }}
+                  >
+                    {formData.images && formData.images.length > 0 ? (
+                      formData.images.map((file, index) => (
+                        <Draggable
+                          key={`image-${index}`}
+                          draggableId={`image-${index}`}
+                          index={index}
+                        >
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              style={{
+                                position: "relative",
+                                width: "120px",
+                                height: "120px",
+                                ...provided.draggableProps.style,
+                              }}
+                            >
+                              <img
+                                src={
+                                  file instanceof File
+                                    ? URL.createObjectURL(file)
+                                    : file
+                                }
+                                alt={`Image ${index + 1}`}
+                                style={{
+                                  width: "100%",
+                                  height: "100%",
+                                  objectFit: "cover",
+                                  borderRadius: "4px",
+                                }}
+                              />
+                              <Button
+                                variant="contained"
+                                color="error"
+                                size="small"
+                                onClick={() => handleRemoveImage(index)}
+                                style={{
+                                  position: "absolute",
+                                  top: "5px",
+                                  right: "5px",
+                                  minWidth: "30px",
+                                  width: "30px",
+                                  height: "30px",
+                                  padding: "0",
+                                  borderRadius: "50%",
+                                }}
+                              >
+                                ✕
+                              </Button>
+                              <Typography
+                                variant="caption"
+                                style={{
+                                  position: "absolute",
+                                  bottom: "5px",
+                                  left: "5px",
+                                  right: "5px",
+                                  backgroundColor: "rgba(0,0,0,0.5)",
+                                  color: "white",
+                                  padding: "2px 5px",
+                                  borderRadius: "2px",
+                                  textOverflow: "ellipsis",
+                                  overflow: "hidden",
+                                  whiteSpace: "nowrap",
+                                }}
+                              >
+                                {file instanceof File
+                                  ? file.name
+                                  : `Image ${index + 1}`}
+                              </Typography>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))
+                    ) : (
+                      <div
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: "#999",
+                        }}
+                      >
+                        Перетащите изображения для изменения порядка или
+                        добавьте новые
+                      </div>
+                    )}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+          </div>
 
           <div>
             <p className="x16" style={{ marginBottom: "12px" }}>
@@ -533,7 +696,6 @@ const NewCase = () => {
               name="headliner-input"
               placeholder={inputInfo[9].placeholder}
               values={formData?.eventTitle}
-              // required={false}
             />
           </div>
           <div>
@@ -602,95 +764,133 @@ const NewCase = () => {
             />
           </div>
           <Box>
-            <FormControl>
+            <FormControl fullWidth>
               <p className="x16" style={{ marginBottom: "12px" }}>
                 Выбор площадки
               </p>
-              <RadioGroup
-                row
-                value={formData.site_id}
+              <Select
+                value={formData.site_id || ""}
                 onChange={handleChange}
                 name="site_id"
+                displayEmpty
+                sx={{
+                  backgroundColor: "white",
+                  "& .MuiSelect-select": {
+                    display: "flex",
+                    alignItems: "center",
+                  },
+                }}
+                renderValue={(selected) => {
+                  if (!selected) {
+                    return "Выберите площадку";
+                  }
+                  const selectedSite = site.find((s) => s.id === selected);
+                  return selectedSite ? selectedSite.name : "Выберите площадку";
+                }}
               >
-                {site.map((item, index) => (
-                  <FormControlLabel
-                    key={index}
-                    value={item.id}
-                    control={
-                      <Radio
-                        sx={{
-                          "& .MuiSvgIcon-root": {
-                            fontSize: "20px",
-                            color: "#CFCFCF",
-                          },
-                        }}
-                      />
-                    }
-                    label={
-                      <div className="alignCenter">
-                        <Tooltip
-                          title={<span className="tooltip">{item.name}</span>}
-                        >
+                {site.length > 0 ? (
+                  site.map((item) => (
+                    <MenuItem key={item.id} value={item.id}>
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        {item.video.endsWith(".mp4") ||
+                        item.video.endsWith(".webm") ? (
                           <video
                             src={item.video}
                             alt={item.name}
-                            style={{ width: 80, height: 80, marginRight: 8 }}
+                            style={{
+                              width: 80,
+                              height: 80,
+                              marginRight: 8,
+                            }}
                             controls
                           >
                             Ваш браузер не поддерживает тег видео.
                           </video>
-                        </Tooltip>
+                        ) : (
+                          <img
+                            src={item.video}
+                            alt={item.name}
+                            style={{
+                              width: 80,
+                              height: 80,
+                              marginRight: 8,
+                            }}
+                          />
+                        )}
+                        <span>{item.name}</span>
                       </div>
-                    }
-                  />
-                ))}
-              </RadioGroup>
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem disabled>Загрузка площадок...</MenuItem>
+                )}
+              </Select>
             </FormControl>
           </Box>
           <Box>
-            <FormControl>
+            <FormControl fullWidth>
               <p className="x16" style={{ marginBottom: "12px" }}>
                 3D визуализация
               </p>
-              <RadioGroup
-                row
-                value={formData.three_id}
+              <Select
+                value={formData.three_id || ""}
                 onChange={handleChange}
                 name="three_id"
+                displayEmpty
+                sx={{
+                  backgroundColor: "white",
+                  "& .MuiSelect-select": {
+                    display: "flex",
+                    alignItems: "center",
+                  },
+                }}
+                renderValue={(selected) => {
+                  if (!selected) {
+                    return "Выберите 3D визуализацию";
+                  }
+                  const selectedThree = dData.find((d) => d.id === selected);
+                  return selectedThree
+                    ? selectedThree.title1
+                    : "Выберите 3D визуализацию";
+                }}
               >
-                {dData.map((item, index) => (
-                  <FormControlLabel
-                    key={index}
-                    value={item.id}
-                    control={
-                      <Radio
-                        sx={{
-                          "& .MuiSvgIcon-root": {
-                            fontSize: "20px",
-                            color: "#CFCFCF",
-                          },
-                        }}
-                      />
-                    }
-                    label={
+                {dData.length > 0 ? (
+                  dData.map((item) => (
+                    <MenuItem key={item.id} value={item.id}>
                       <div style={{ display: "flex", alignItems: "center" }}>
-                        <Tooltip
-                          title={<span className="tooltip">{item.title1}</span>}
-                        >
+                        {item.video.endsWith(".mp4") ||
+                        item.video.endsWith(".webm") ? (
                           <video
                             src={item.video}
-                            alt={index}
-                            style={{ width: 80, height: 80, marginRight: 8 }}
+                            alt={item.title1}
+                            style={{
+                              width: 80,
+                              height: 80,
+                              marginRight: 8,
+                            }}
                             controls
                           >
                             Ваш браузер не поддерживает тег видео.
                           </video>
-                        </Tooltip>
+                        ) : (
+                          <img
+                            src={item.video}
+                            alt={item.title1}
+                            style={{
+                              width: 80,
+                              height: 80,
+                              marginRight: 8,
+                            }}
+                          />
+                        )}
+                        <span>{item.title1}</span>
                       </div>
-                    }
-                  />
-                ))}
-              </RadioGroup>
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem disabled>Загрузка 3D визуализаций...</MenuItem>
+                )}
+              </Select>
             </FormControl>
           </Box>
           {loading && <LoadingProgress />}
