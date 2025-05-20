@@ -122,23 +122,23 @@ class BlogController extends Controller
                 'message' => 'Blog not found'
             ], 404);
         }
-
+    
         $data = $request->except(['images']);
-
+        
         // Initialize array for final images
         $finalImages = [];
-
+        
         // Get the existing images from the blog
         $existingImages = is_array($blog->images) ? $blog->images : [];
-
-        // Process any string-based images from the request (existing images)
+        
+        // Process all inputs in request to find string-based images
         foreach ($request->all() as $key => $value) {
-            if (preg_match('/^images\[(\d+)\]$/', $key, $matches) && !is_object($value) && !is_array($value)) {
+            if (preg_match('/^images\[(\d+)\]$/', $key, $matches) && is_string($value) && !empty($value)) {
                 $index = (int) $matches[1];
                 $finalImages[$index] = $value;
             }
         }
-
+        
         // Handle directly uploaded files
         foreach ($request->allFiles() as $key => $file) {
             if (preg_match('/^images\[(\d+)\]$/', $key, $matches)) {
@@ -147,18 +147,18 @@ class BlogController extends Controller
                 $finalImages[$index] = url('storage/' . $path);
             }
         }
-
+        
         // Sort by keys to maintain order and reindex
         ksort($finalImages);
-        $finalImages = array_values($finalImages);
-
+        $finalImages = array_values(array_filter($finalImages)); // Remove any null/empty values
+        
         // If no images were processed but we had existing images, keep them
         if (empty($finalImages) && !empty($existingImages)) {
             $finalImages = $existingImages;
         }
-
+        
         $data['images'] = $finalImages;
-
+    
         // Handle video upload if present
         if ($request->hasFile('video')) {
             // Delete old video if exists
@@ -170,10 +170,10 @@ class BlogController extends Controller
             }
             $data['video'] = uploadVideoOrImage($request->file('video'), 'blog');
         }
-
+    
         try {
             $blog->update($data);
-
+    
             return response()->json([
                 'status' => 'success',
                 'message' => 'Successfully updated!',
@@ -188,7 +188,6 @@ class BlogController extends Controller
         }
     }
 
-    public function updateTagBlog(Request $request, $id)
     {
         try {
             $blog = Blog::findOrFail($id);
