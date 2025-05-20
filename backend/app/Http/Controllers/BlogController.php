@@ -125,25 +125,28 @@ class BlogController extends Controller
     
         $data = $request->except(['images']);
         
-        // Initialize array for final images
-        $finalImages = [];
-        
         // Get the existing images from the blog
         $existingImages = is_array($blog->images) ? $blog->images : [];
+        $finalImages = [];
         
-        // Handle directly uploaded files first
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $index => $file) {
-                $path = $file->store('uploads/blog', 'public');
-                $finalImages[$index] = url('storage/' . $path);
+        // Process all image inputs (could be URLs or files)
+        foreach ($request->all() as $key => $value) {
+            if (strpos($key, 'images[') === 0) {
+                $index = (int) str_replace(['images[', ']'], '', $key);
+                // Only keep existing URLs that are still being referenced
+                if (filter_var($value, FILTER_VALIDATE_URL)) {
+                    $finalImages[$index] = $value;
+                }
             }
         }
         
-        // Process any string-based images from the request (existing images)
-        foreach ($request->all() as $key => $value) {
-            if (preg_match('/^images\[(\d+)\]$/', $key, $matches) && !is_object($value) && !is_array($value)) {
-                $index = (int) $matches[1];
-                $finalImages[$index] = $value;
+        // Process any newly uploaded files
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $key => $file) {
+                if ($file->isValid()) {
+                    $path = $file->store('uploads/blog', 'public');
+                    $finalImages[$key] = url('storage/' . $path);
+                }
             }
         }
         
@@ -151,8 +154,8 @@ class BlogController extends Controller
         ksort($finalImages);
         $finalImages = array_values($finalImages);
         
-        // If no images were processed but we had existing images, keep them
-        if (empty($finalImages) && !empty($existingImages)) {
+        // If no images were processed, keep existing ones
+        if (empty($finalImages)) {
             $finalImages = $existingImages;
         }
         
