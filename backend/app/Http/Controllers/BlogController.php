@@ -124,36 +124,58 @@ class BlogController extends Controller
         }
     
         $data = $request->except(['images']);
-    
+        
         // Initialize array for final images
         $finalImages = [];
-    
-        // Get all image entries from the request
-        $allImages = $request->all()['images'] ?? [];
-    
-        // Process each image in order
-        foreach ($allImages as $index => $image) {
-            if (is_string($image)) {
-                // This is an existing image URL - keep it
-                $finalImages[] = $image;
-            } elseif ($image instanceof UploadedFile) {
-                // This is a new file - upload it
-                $finalImages[] = url('storage/' . $image->store('uploads/blog', 'public'));
+        
+        // Get the existing images from the blog
+        $existingImages = is_array($blog->images) ? $blog->images : [];
+        
+        // Process the images data
+        if ($request->has('images')) {
+            $imageKeys = array_filter(array_keys($request->all()), function($key) {
+                return strpos($key, 'images[') === 0;
+            });
+            
+            // Sort keys to maintain order
+            sort($imageKeys, SORT_NATURAL);
+            
+            foreach ($imageKeys as $key) {
+                $image = $request->get($key);
+                if ($image instanceof UploadedFile) {
+                    // This is a new uploaded file
+                    $path = $image->store('uploads/blog', 'public');
+                    $finalImages[] = url('storage/' . $path);
+                } elseif (is_string($image)) {
+                    // This is an existing image URL
+                    $finalImages[] = $image;
+                }
             }
         }
-    
-        // Handle case where no images were sent (keep existing ones)
-        if (empty($finalImages) && !empty($blog->images)) {
-            $finalImages = $blog->images;
+        
+        // Process any directly uploaded files
+        foreach ($request->allFiles() as $key => $file) {
+            if (strpos($key, 'images') === 0) {
+                $path = $file->store('uploads/blog', 'public');
+                $finalImages[] = url('storage/' . $path);
+            }
         }
-    
+        
+        // If no images were processed but we had existing images, keep them
+        if (empty($finalImages) && !empty($existingImages)) {
+            $finalImages = $existingImages;
+        }
+        
         $data['images'] = $finalImages;
     
-        // Handle video
+        // Handle video upload if present
         if ($request->hasFile('video')) {
             // Delete old video if exists
             if ($blog->video) {
-                \Storage::disk('public')->delete(str_replace(url('storage') . '/', '', $blog->video));
+                $oldPath = str_replace(url('storage') . '/', '', $blog->video);
+                if (\Storage::disk('public')->exists($oldPath)) {
+                    \Storage::disk('public')->delete($oldPath);
+                }
             }
             $data['video'] = uploadVideoOrImage($request->file('video'), 'blog');
         }
