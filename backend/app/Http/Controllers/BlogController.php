@@ -122,56 +122,46 @@ class BlogController extends Controller
                 'message' => 'Blog not found'
             ], 404);
         }
-    
-        $data = $request->except(['images']);
-        
-        // Initialize array for final images
+
+        $data = $request->except('images');
+
+        $existingImages = is_array($blog->images) ? $blog->images : [];
         $finalImages = [];
-        
-        // Get all image inputs from request (both strings and files)
-        $allInputs = $request->all();
-        
-        // Find all image inputs (both string URLs and files)
-        foreach ($allInputs as $key => $value) {
-            if (preg_match('/^images\[(\d+)\]$/', $key, $matches)) {
+
+        // Loop over images in index order
+        foreach ($request->all() as $key => $value) {
+            if (preg_match('/^images\[(\d+)]\[type\]$/', $key, $matches)) {
                 $index = (int) $matches[1];
-                if (is_string($value) && !empty($value)) {
-                    // This is an existing image URL
-                    $finalImages[$index] = $value;
+                $type = $value;
+                $valKey = "images[$index][value]";
+
+                if ($type === 'existing') {
+                    $url = $request->input($valKey);
+                    if (in_array($url, $existingImages)) {
+                        $finalImages[$index] = $url;
+                    }
+                } elseif ($type === 'new' && $request->hasFile($valKey)) {
+                    $file = $request->file($valKey);
+                    $path = $file->store('uploads/blog', 'public');
+                    $finalImages[$index] = url('storage/' . $path);
                 }
             }
         }
-        
-        // Handle file uploads and maintain their positions
-        foreach ($request->allFiles() as $key => $file) {
-            if (preg_match('/^images\[(\d+)\]$/', $key, $matches)) {
-                $index = (int) $matches[1];
-                $path = $file->store('uploads/blog', 'public');
-                $finalImages[$index] = url('storage/' . $path);
-            }
-        }
-        
-        // Sort by keys to maintain original order and reindex
+
         ksort($finalImages);
-        $finalImages = array_values(array_filter($finalImages));
-        
-        $data['images'] = $finalImages;
-    
-        // Handle video upload if present
+        $data['images'] = array_values($finalImages); // Re-indexed ordered list
+
+        // Handle video
         if ($request->hasFile('video')) {
-            // Delete old video if exists
             if ($blog->video) {
-                $oldPath = str_replace(url('storage') . '/', '', $blog->video);
-                if (\Storage::disk('public')->exists($oldPath)) {
-                    \Storage::disk('public')->delete($oldPath);
-                }
+                \Storage::disk('public')->delete(str_replace(url('storage') . '/', '', $blog->video));
             }
             $data['video'] = uploadVideoOrImage($request->file('video'), 'blog');
         }
-    
+
         try {
             $blog->update($data);
-    
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Successfully updated!',

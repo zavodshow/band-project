@@ -335,89 +335,74 @@ const NewCase = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
-    try {
-      // Validate form data before processing
-      const validationErrors = [];
-
-      if (!formData.video && !searchParams.size) {
-        validationErrors.push("Перед отправкой выберите видеофайл.");
+  
+    const newFormData = new FormData();
+  
+    // Add form data except images (we handle images separately)
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key === "images") return;
+  
+      if (Array.isArray(value)) {
+        value.forEach((item) => newFormData.append(`${key}[]`, item));
+      } else {
+        newFormData.append(key, value);
       }
-
-      if (formData.images.length === 0) {
-        validationErrors.push(
-          "Пожалуйста, загрузите хотя бы одно изображение."
-        );
+    });
+  
+    // ✅ Add ordered images with index, type, and value
+    formData.images.forEach((item, index) => {
+      if (typeof item === "string") {
+        newFormData.append(`images[${index}][type]`, "existing");
+        newFormData.append(`images[${index}][value]`, item);
+      } else if (item instanceof File) {
+        newFormData.append(`images[${index}][type]`, "new");
+        newFormData.append(`images[${index}][value]`, item);
       }
-
-      if (formData.cities.length === 0) {
-        validationErrors.push("Пожалуйста, выберите хотя бы один город.");
-      }
-
-      if (formData.title.length > 250 || formData.keyword.length > 250) {
-        validationErrors.push(
-          "Длина заголовка и ключевых слов не должна превышать 250 символов."
-        );
-      }
-
-      if (formData.description.length > 500) {
-        validationErrors.push("Описание не должно превышать 500 символов.");
-      }
-
-      if (validationErrors.length > 0) {
-        setAlertMessage(validationErrors.join("\n"));
+    });
+  
+    // Validations
+    const validations = [
+      {
+        condition: !newFormData.get("video"),
+        message: "Перед отправкой выберите видеофайл.",
+      },
+      {
+        condition: formData.images.length === 0,
+        message: "Пожалуйста, загрузите хотя бы одно изображение.",
+      },
+      {
+        condition: formData.cities.length === 0,
+        message: "Пожалуйста, выберите хотя бы один город.",
+      },
+      {
+        condition: formData.title.length > 250 || formData.keyword.length > 250,
+        message: "Длина заголовка и ключевых слов не должна превышать 250 символов.",
+      },
+      {
+        condition: formData.description.length > 500,
+        message: "Описание не должно превышать 500 символов.",
+      },
+    ];
+  
+    for (const { condition, message } of validations) {
+      if (condition) {
+        setAlertMessage(message);
         setAlertOpen(true);
         setLoading(false);
         return;
       }
-
-      // Prepare FormData
-      const newFormData = new FormData();
-
-      // Add all non-file fields
-      Object.keys(formData).forEach((key) => {
-        if (key !== "images" && key !== "video" && key !== "solution") {
-          if (Array.isArray(formData[key])) {
-            newFormData.append(key, JSON.stringify(formData[key]));
-          } else {
-            newFormData.append(key, formData[key]);
-          }
-        }
-      });
-
-      // Handle video upload
-      if (formData.video instanceof File) {
-        newFormData.append("video", formData.video);
-      } else if (typeof formData.video === "string") {
-        newFormData.append("video", formData.video);
-      }
-
-      // Handle images - maintain original order
-      formData.images.forEach((item, index) => {
-        if (item instanceof File) {
-          newFormData.append(`images[${index}]`, item);
-        } else if (typeof item === "string") {
-          newFormData.append(`images[${index}]`, item);
-        }
-      });
-
-      // Handle solution data if exists
-      if (formData.solution && formData.solution.length > 0) {
-        newFormData.append("solution", JSON.stringify(formData.solution));
-      }
-
-      // Make API request
+    }
+  
+    try {
       const request = searchParams.size
         ? updateCase(searchParams.get("id"), newFormData)
         : insertCase(newFormData);
-
       const data = await request;
-
       if (data?.error) {
         setAlertMessage(
           data.error === 400
             ? "Ошибка: Имя блога уже существует. Пожалуйста, выберите другое имя."
-            : data.message || "Произошла ошибка при сохранении данных."
+            : data.message
         );
         setAlertOpen(true);
       } else {
@@ -425,14 +410,11 @@ const NewCase = () => {
       }
     } catch (error) {
       console.error("Error:", error);
-      setAlertMessage(
-        "Произошла непредвиденная ошибка. Пожалуйста, попробуйте снова."
-      );
-      setAlertOpen(true);
     } finally {
       setLoading(false);
     }
   };
+  
 
   console.log("formData", formData);
 
