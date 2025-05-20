@@ -131,21 +131,19 @@ class BlogController extends Controller
         // Get the existing images from the blog
         $existingImages = is_array($blog->images) ? $blog->images : [];
         
-        // Process all images in the order they were received
-        $allInputs = $request->all();
-        foreach ($allInputs as $key => $value) {
-            if (strpos($key, 'images[') === 0) {
-                $index = (int) str_replace(['images[', ']'], '', $key);
-                $finalImages[$index] = $value;
+        // Handle directly uploaded files first
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $index => $file) {
+                $path = $file->store('uploads/blog', 'public');
+                $finalImages[$index] = url('storage/' . $path);
             }
         }
         
-        // Process any directly uploaded files in order
-        foreach ($request->allFiles() as $key => $file) {
-            if (strpos($key, 'images') === 0) {
-                $index = (int) str_replace(['images[', ']'], '', $key);
-                $path = $file->store('uploads/blog', 'public');
-                $finalImages[$index] = url('storage/' . $path);
+        // Process any string-based images from the request (existing images)
+        foreach ($request->all() as $key => $value) {
+            if (preg_match('/^images\[(\d+)\]$/', $key, $matches) && !is_object($value) && !is_array($value)) {
+                $index = (int) $matches[1];
+                $finalImages[$index] = $value;
             }
         }
         
@@ -154,7 +152,7 @@ class BlogController extends Controller
         $finalImages = array_values($finalImages);
         
         // If no images were processed but we had existing images, keep them
-        if (empty($finalImages)) {
+        if (empty($finalImages) && !empty($existingImages)) {
             $finalImages = $existingImages;
         }
         
