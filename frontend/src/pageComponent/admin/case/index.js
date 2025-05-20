@@ -336,62 +336,88 @@ const NewCase = () => {
     e.preventDefault();
     setLoading(true);
 
-    const newFormData = new FormData();
+    try {
+      // Validate form data before processing
+      const validationErrors = [];
 
-    // Add all form data
-    formData.images.forEach((item, index) => {
-      if (item instanceof File) {
-        newFormData.append(`images[${index}]`, item);
-      } else if (typeof item === "string") {
-        newFormData.append(`images[${index}]`, item);
-      } else {
-        console.log(`Skipping empty image at index ${index}`);
+      if (!formData.video && !searchParams.size) {
+        validationErrors.push("Перед отправкой выберите видеофайл.");
       }
-    });
 
-    const validations = [
-      {
-        condition: !newFormData.get("video"),
-        message: "Перед отправкой выберите видеофайл.",
-      },
-      {
-        condition: formData.images.length === 0,
-        message: "Пожалуйста, загрузите хотя бы одно изображение.",
-      },
-      {
-        condition: formData.cities.length === 0,
-        message: "Пожалуйста, выберите хотя бы один город.",
-      },
-      {
-        condition: formData.title.length > 250 || formData.keyword.length > 250,
-        message:
-          "Длина заголовка и ключевых слов не должна превышать 250 символов.",
-      },
-      {
-        condition: formData.description.length > 500,
-        message: "Описание не должно превышать 500 символов.",
-      },
-    ];
+      if (formData.images.length === 0) {
+        validationErrors.push(
+          "Пожалуйста, загрузите хотя бы одно изображение."
+        );
+      }
 
-    for (const { condition, message } of validations) {
-      if (condition) {
-        setAlertMessage(message);
+      if (formData.cities.length === 0) {
+        validationErrors.push("Пожалуйста, выберите хотя бы один город.");
+      }
+
+      if (formData.title.length > 250 || formData.keyword.length > 250) {
+        validationErrors.push(
+          "Длина заголовка и ключевых слов не должна превышать 250 символов."
+        );
+      }
+
+      if (formData.description.length > 500) {
+        validationErrors.push("Описание не должно превышать 500 символов.");
+      }
+
+      if (validationErrors.length > 0) {
+        setAlertMessage(validationErrors.join("\n"));
         setAlertOpen(true);
         setLoading(false);
         return;
       }
-    }
 
-    try {
+      // Prepare FormData
+      const newFormData = new FormData();
+
+      // Add all non-file fields
+      Object.keys(formData).forEach((key) => {
+        if (key !== "images" && key !== "video" && key !== "solution") {
+          if (Array.isArray(formData[key])) {
+            newFormData.append(key, JSON.stringify(formData[key]));
+          } else {
+            newFormData.append(key, formData[key]);
+          }
+        }
+      });
+
+      // Handle video upload
+      if (formData.video instanceof File) {
+        newFormData.append("video", formData.video);
+      } else if (typeof formData.video === "string") {
+        newFormData.append("video", formData.video);
+      }
+
+      // Handle images
+      formData.images.forEach((item, index) => {
+        if (item instanceof File) {
+          newFormData.append(`images[${index}]`, item);
+        } else if (typeof item === "string") {
+          newFormData.append(`images[${index}]`, item);
+        }
+      });
+
+      // Handle solution data if exists
+      if (formData.solution && formData.solution.length > 0) {
+        newFormData.append("solution", JSON.stringify(formData.solution));
+      }
+
+      // Make API request
       const request = searchParams.size
         ? updateCase(searchParams.get("id"), newFormData)
         : insertCase(newFormData);
+
       const data = await request;
+
       if (data?.error) {
         setAlertMessage(
           data.error === 400
             ? "Ошибка: Имя блога уже существует. Пожалуйста, выберите другое имя."
-            : data.message
+            : data.message || "Произошла ошибка при сохранении данных."
         );
         setAlertOpen(true);
       } else {
@@ -399,6 +425,10 @@ const NewCase = () => {
       }
     } catch (error) {
       console.error("Error:", error);
+      setAlertMessage(
+        "Произошла непредвиденная ошибка. Пожалуйста, попробуйте снова."
+      );
+      setAlertOpen(true);
     } finally {
       setLoading(false);
     }
