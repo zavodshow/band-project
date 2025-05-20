@@ -121,14 +121,9 @@ const AdminHeader = () => {
               className={`spaceBetween topHeader ${isShrunk ? "scrolled" : ""}`}
             >
               <div className="alignCenter">
-                <Image
-                  onClick={() => {
-                    navigate.push("/");
-                  }}
-                  src={logo}
-                  alt="Company Logo"
-                  className="logo"
-                />
+                <Link href="/">
+                  <Image src={logo} alt="logo" className="logo" />
+                </Link>
                 <div className="adminHeaderLink adminPageText">
                   <Link href="/admin">Страница администратора</Link>
                   {(addLink.link === "create" || addLink.link === "edit") && (

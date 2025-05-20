@@ -340,26 +340,21 @@ const NewCase = () => {
 
     // Add all form data
     Object.entries(formData).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
-        if (key === "images") {
-          // Separate existing URLs and new files
-          const existingUrls = value.filter((item) => typeof item === "string");
-          const newFiles = value.filter((item) => item instanceof File);
-
-          // Add existing URLs in their current order
-          existingUrls.forEach((url, index) => {
-            newFormData.append(`images[${index}]`, url);
-          });
-
-          // Add new files in their current order
-          newFiles.forEach((file, index) => {
-            newFormData.append(`images[${existingUrls.length + index}]`, file);
-          });
-        } else {
+      if (key !== "images") {
+        if (Array.isArray(value)) {
           value.forEach((item) => newFormData.append(`${key}[]`, item));
+        } else {
+          newFormData.append(key, value);
         }
-      } else {
-        newFormData.append(key, value);
+      }
+    });
+
+    // Process images with their correct order
+    formData.images.forEach((item, index) => {
+      if (item instanceof File) {
+        newFormData.append(`images[${index}]`, item);
+      } else if (typeof item === "string") {
+        newFormData.append(`images[${index}]`, item);
       }
     });
 

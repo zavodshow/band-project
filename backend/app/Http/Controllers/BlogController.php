@@ -131,38 +131,30 @@ class BlogController extends Controller
         // Get the existing images from the blog
         $existingImages = is_array($blog->images) ? $blog->images : [];
         
-        // Process the images data
-        if ($request->has('images')) {
-            $imageKeys = array_filter(array_keys($request->all()), function($key) {
-                return strpos($key, 'images[') === 0;
-            });
-            
-            // Sort keys to maintain order
-            sort($imageKeys, SORT_NATURAL);
-            
-            foreach ($imageKeys as $key) {
-                $image = $request->get($key);
-                if ($image instanceof UploadedFile) {
-                    // This is a new uploaded file
-                    $path = $image->store('uploads/blog', 'public');
-                    $finalImages[] = url('storage/' . $path);
-                } elseif (is_string($image)) {
-                    // This is an existing image URL
-                    $finalImages[] = $image;
-                }
+        // Process all images in the order they were received
+        $allInputs = $request->all();
+        foreach ($allInputs as $key => $value) {
+            if (strpos($key, 'images[') === 0) {
+                $index = (int) str_replace(['images[', ']'], '', $key);
+                $finalImages[$index] = $value;
             }
         }
         
-        // Process any directly uploaded files
+        // Process any directly uploaded files in order
         foreach ($request->allFiles() as $key => $file) {
             if (strpos($key, 'images') === 0) {
+                $index = (int) str_replace(['images[', ']'], '', $key);
                 $path = $file->store('uploads/blog', 'public');
-                $finalImages[] = url('storage/' . $path);
+                $finalImages[$index] = url('storage/' . $path);
             }
         }
         
+        // Sort by keys to maintain order and reindex
+        ksort($finalImages);
+        $finalImages = array_values($finalImages);
+        
         // If no images were processed but we had existing images, keep them
-        if (empty($finalImages) && !empty($existingImages)) {
+        if (empty($finalImages) {
             $finalImages = $existingImages;
         }
         
