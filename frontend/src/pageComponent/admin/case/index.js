@@ -339,14 +339,15 @@ const NewCase = () => {
     const newFormData = new FormData();
 
     // Add all form data
-formData.images.forEach((item, index) => {
-  if (item instanceof File) {
-    newFormData.append(`images[${index}]`, item);
-  } else if (typeof item === "string") {
-    newFormData.append(`images[${index}]`, item);
-  } else {
-    console.log(`Skipping empty image at index ${index}`);
-  }
+    formData.images.forEach((item, index) => {
+      if (item instanceof File) {
+        newFormData.append(`images[${index}]`, item);
+      } else if (typeof item === "string") {
+        newFormData.append(`images[${index}]`, item);
+      } else {
+        console.log(`Skipping empty image at index ${index}`);
+      }
+    });
 
     const validations = [
       {
