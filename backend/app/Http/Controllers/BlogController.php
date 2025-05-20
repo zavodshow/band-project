@@ -154,7 +154,7 @@ class BlogController extends Controller
         $finalImages = array_values($finalImages);
         
         // If no images were processed but we had existing images, keep them
-        if (empty($finalImages) {
+        if (empty($finalImages)) {
             $finalImages = $existingImages;
         }
         
