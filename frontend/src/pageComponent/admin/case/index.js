@@ -392,7 +392,7 @@ const NewCase = () => {
         newFormData.append("video", formData.video);
       }
 
-      // Handle images
+      // Handle images - maintain original order
       formData.images.forEach((item, index) => {
         if (item instanceof File) {
           newFormData.append(`images[${index}]`, item);

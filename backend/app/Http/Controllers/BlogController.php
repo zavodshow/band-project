@@ -128,18 +128,21 @@ class BlogController extends Controller
         // Initialize array for final images
         $finalImages = [];
         
-        // Get the existing images from the blog
-        $existingImages = is_array($blog->images) ? $blog->images : [];
+        // Get all image inputs from request (both strings and files)
+        $allInputs = $request->all();
         
-        // Process all inputs in request to find string-based images
-        foreach ($request->all() as $key => $value) {
-            if (preg_match('/^images\[(\d+)\]$/', $key, $matches) && is_string($value) && !empty($value)) {
+        // Find all image inputs (both string URLs and files)
+        foreach ($allInputs as $key => $value) {
+            if (preg_match('/^images\[(\d+)\]$/', $key, $matches)) {
                 $index = (int) $matches[1];
-                $finalImages[$index] = $value;
+                if (is_string($value) && !empty($value)) {
+                    // This is an existing image URL
+                    $finalImages[$index] = $value;
+                }
             }
         }
         
-        // Handle directly uploaded files
+        // Handle file uploads and maintain their positions
         foreach ($request->allFiles() as $key => $file) {
             if (preg_match('/^images\[(\d+)\]$/', $key, $matches)) {
                 $index = (int) $matches[1];
@@ -148,14 +151,9 @@ class BlogController extends Controller
             }
         }
         
-        // Sort by keys to maintain order and reindex
+        // Sort by keys to maintain original order and reindex
         ksort($finalImages);
-        $finalImages = array_values(array_filter($finalImages)); // Remove any null/empty values
-        
-        // If no images were processed but we had existing images, keep them
-        if (empty($finalImages) && !empty($existingImages)) {
-            $finalImages = $existingImages;
-        }
+        $finalImages = array_values(array_filter($finalImages));
         
         $data['images'] = $finalImages;
     
