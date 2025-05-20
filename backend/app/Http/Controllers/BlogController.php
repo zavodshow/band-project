@@ -112,6 +112,7 @@ class BlogController extends Controller
         }
     }
 
+
     public function updateBlog(Request $request, $id)
     {
         try {
@@ -123,36 +124,36 @@ class BlogController extends Controller
             ], 404);
         }
 
-        $data = $request->except('images');
+        $data = $request->except('existing_images');
 
+        // Handle images - combine existing and new
         $existingImages = is_array($blog->images) ? $blog->images : [];
-        $finalImages = [];
 
-        // Loop over images in index order
-        foreach ($request->all() as $key => $value) {
-            if (preg_match('/^images\[(\d+)]\[type\]$/', $key, $matches)) {
-                $index = (int) $matches[1];
-                $type = $value;
-                $valKey = "images[$index][value]";
+        // Parse existing_images from request (might be JSON string)
+        $keptImages = [];
+        if ($request->has('existing_images')) {
+            $keptImages = json_decode($request->input('existing_images'), true) ?? [];
+        }
 
-                if ($type === 'existing') {
-                    $url = $request->input($valKey);
-                    if (in_array($url, $existingImages)) {
-                        $finalImages[$index] = $url;
-                    }
-                } elseif ($type === 'new' && $request->hasFile($valKey)) {
-                    $file = $request->file($valKey);
-                    $path = $file->store('uploads/blog', 'public');
-                    $finalImages[$index] = url('storage/' . $path);
-                }
+        $newImages = [];
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $file) {
+                $newImages[] = url('storage/' . $file->store('uploads/blog', 'public'));
             }
         }
 
-        ksort($finalImages);
-        $data['images'] = array_values($finalImages); // Re-indexed ordered list
-
+        // Combine kept existing images and new images
+        $finalImages = [];
+        foreach ($keptImages as $image) {
+            if (in_array($image, $existingImages)) {
+                $finalImages[] = $image;
+            }
+        }
+        $data['images'] = array_merge($finalImages, $newImages);
+        
         // Handle video
         if ($request->hasFile('video')) {
+            // Delete old video if exists
             if ($blog->video) {
                 \Storage::disk('public')->delete(str_replace(url('storage') . '/', '', $blog->video));
             }

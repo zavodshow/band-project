@@ -335,32 +335,30 @@ const NewCase = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-  
+
     const newFormData = new FormData();
-  
-    // Add form data except images (we handle images separately)
+
+    // Add all form data
     Object.entries(formData).forEach(([key, value]) => {
-      if (key === "images") return;
-  
       if (Array.isArray(value)) {
-        value.forEach((item) => newFormData.append(`${key}[]`, item));
+        if (key === "images") {
+          // Separate existing URLs and new files
+          const existingUrls = value.filter((item) => typeof item === "string");
+          const newFiles = value.filter((item) => item instanceof File);
+
+          // Add existing URLs as a JSON array
+          newFormData.append("existing_images", JSON.stringify(existingUrls));
+
+          // Add new files
+          newFiles.forEach((file) => newFormData.append("images[]", file));
+        } else {
+          value.forEach((item) => newFormData.append(`${key}[]`, item));
+        }
       } else {
         newFormData.append(key, value);
       }
     });
-  
-    // ✅ Add ordered images with index, type, and value
-    formData.images.forEach((item, index) => {
-      if (typeof item === "string") {
-        newFormData.append(`images[${index}][type]`, "existing");
-        newFormData.append(`images[${index}][value]`, item);
-      } else if (item instanceof File) {
-        newFormData.append(`images[${index}][type]`, "new");
-        newFormData.append(`images[${index}][value]`, item);
-      }
-    });
-  
-    // Validations
+
     const validations = [
       {
         condition: !newFormData.get("video"),
@@ -376,14 +374,15 @@ const NewCase = () => {
       },
       {
         condition: formData.title.length > 250 || formData.keyword.length > 250,
-        message: "Длина заголовка и ключевых слов не должна превышать 250 символов.",
+        message:
+          "Длина заголовка и ключевых слов не должна превышать 250 символов.",
       },
       {
         condition: formData.description.length > 500,
         message: "Описание не должно превышать 500 символов.",
       },
     ];
-  
+
     for (const { condition, message } of validations) {
       if (condition) {
         setAlertMessage(message);
@@ -392,7 +391,7 @@ const NewCase = () => {
         return;
       }
     }
-  
+
     try {
       const request = searchParams.size
         ? updateCase(searchParams.get("id"), newFormData)
