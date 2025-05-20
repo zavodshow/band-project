@@ -122,32 +122,33 @@ class BlogController extends Controller
                 'message' => 'Blog not found'
             ], 404);
         }
-
-        $data = $request->except(['existing_images', 'images']);
-
-        // Handle images - maintain order from the request
-        $orderedImages = [];
-
-        // Get all image entries from the request (both URLs and files)
-        $allImages = $request->allFiles()['images'] ?? [];
-
-        // Combine them in the order they were sent
-        foreach ($request->all() as $key => $value) {
-            if (str_starts_with($key, 'images[')) {
-                $index = (int) trim($key, 'images[]');
-                $orderedImages[$index] = $value;
+    
+        $data = $request->except(['images']);
+    
+        // Initialize array for final images
+        $finalImages = [];
+    
+        // Get all image entries from the request
+        $allImages = $request->all()['images'] ?? [];
+    
+        // Process each image in order
+        foreach ($allImages as $index => $image) {
+            if (is_string($image)) {
+                // This is an existing image URL - keep it
+                $finalImages[] = $image;
+            } elseif ($image instanceof UploadedFile) {
+                // This is a new file - upload it
+                $finalImages[] = url('storage/' . $image->store('uploads/blog', 'public'));
             }
         }
-
-        // Now add the file uploads to their correct positions
-        foreach ($allImages as $index => $file) {
-            $orderedImages[$index] = url('storage/' . $file->store('uploads/blog', 'public'));
+    
+        // Handle case where no images were sent (keep existing ones)
+        if (empty($finalImages) && !empty($blog->images)) {
+            $finalImages = $blog->images;
         }
-
-        // Sort by index and get values to maintain order
-        ksort($orderedImages);
-        $data['images'] = array_values($orderedImages);
-
+    
+        $data['images'] = $finalImages;
+    
         // Handle video
         if ($request->hasFile('video')) {
             // Delete old video if exists
@@ -156,10 +157,10 @@ class BlogController extends Controller
             }
             $data['video'] = uploadVideoOrImage($request->file('video'), 'blog');
         }
-
+    
         try {
             $blog->update($data);
-
+    
             return response()->json([
                 'status' => 'success',
                 'message' => 'Successfully updated!',
