@@ -122,45 +122,43 @@ class BlogController extends Controller
                 'message' => 'Blog not found'
             ], 404);
         }
-    
+
         $data = $request->except(['images']);
-        
+
+        // Initialize array for final images
+        $finalImages = [];
+
         // Get the existing images from the blog
         $existingImages = is_array($blog->images) ? $blog->images : [];
-        $finalImages = [];
-        
-        // Process all image inputs (could be URLs or files)
+
+        // Process any string-based images from the request (existing images)
         foreach ($request->all() as $key => $value) {
-            if (strpos($key, 'images[') === 0) {
-                $index = (int) str_replace(['images[', ']'], '', $key);
-                // Only keep existing URLs that are still being referenced
-                if (filter_var($value, FILTER_VALIDATE_URL)) {
-                    $finalImages[$index] = $value;
-                }
+            if (preg_match('/^images\[(\d+)\]$/', $key, $matches) && !is_object($value) && !is_array($value)) {
+                $index = (int) $matches[1];
+                $finalImages[$index] = $value;
             }
         }
-        
-        // Process any newly uploaded files
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $key => $file) {
-                if ($file->isValid()) {
-                    $path = $file->store('uploads/blog', 'public');
-                    $finalImages[$key] = url('storage/' . $path);
-                }
+
+        // Handle directly uploaded files
+        foreach ($request->allFiles() as $key => $file) {
+            if (preg_match('/^images\[(\d+)\]$/', $key, $matches)) {
+                $index = (int) $matches[1];
+                $path = $file->store('uploads/blog', 'public');
+                $finalImages[$index] = url('storage/' . $path);
             }
         }
-        
+
         // Sort by keys to maintain order and reindex
         ksort($finalImages);
         $finalImages = array_values($finalImages);
-        
-        // If no images were processed, keep existing ones
-        if (empty($finalImages)) {
+
+        // If no images were processed but we had existing images, keep them
+        if (empty($finalImages) && !empty($existingImages)) {
             $finalImages = $existingImages;
         }
-        
+
         $data['images'] = $finalImages;
-    
+
         // Handle video upload if present
         if ($request->hasFile('video')) {
             // Delete old video if exists
@@ -172,10 +170,10 @@ class BlogController extends Controller
             }
             $data['video'] = uploadVideoOrImage($request->file('video'), 'blog');
         }
-    
+
         try {
             $blog->update($data);
-    
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Successfully updated!',
