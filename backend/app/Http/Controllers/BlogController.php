@@ -188,6 +188,7 @@ class BlogController extends Controller
         }
     }
 
+    public function updateTagBlog(Request $request, $id)
     {
         try {
             $blog = Blog::findOrFail($id);
