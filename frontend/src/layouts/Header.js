@@ -96,18 +96,17 @@ const Header = () => {
 
   // Handle search result click
   const headerSearchClick = (link, scrollSpy) => {
-    navigate.push(link);
-    if (scrollSpy) {
-      setTimeout(() => {
-        const section = document.getElementById(scrollSpy);
-        if (section) {
-          const sectionY =
-            section.getBoundingClientRect().top + window.pageYOffset - 200;
-          window.scrollTo({ top: sectionY, behavior: "smooth" });
-        }
-      }, 300);
-    }
+    // Open in new tab
+    window.open(link, "_blank");
+
+    // Close the search results dropdown
     setIsVisible(false);
+
+    // Clear the search term
+    setSearchTerm("");
+
+    // Optional: Clear search results
+    setSearchResult([]);
   };
 
   const BottomHeader = () => (
@@ -183,12 +182,16 @@ const Header = () => {
                     const parts = item.value.split(regex);
                     return (
                       <React.Fragment key={index}>
-                        <div
+                        <a
+                          href={item.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           className="x12_3"
-                          onClick={() =>
-                            headerSearchClick(item.link, item.scrollSpy)
-                          }
-                          style={{ width: "475px", overflow: "hidden" }}
+                          style={{
+                            width: "475px",
+                            overflow: "hidden",
+                            display: "block",
+                          }}
                         >
                           {parts.map((part, idx) =>
                             part.toLowerCase() === searchTerm.toLowerCase() ? (
@@ -206,7 +209,7 @@ const Header = () => {
                               part
                             )
                           )}
-                        </div>
+                        </a>
                         <div
                           style={{ padding: "0 16px", boxSizing: "border-box" }}
                         >
