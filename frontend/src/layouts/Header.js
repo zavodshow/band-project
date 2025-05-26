@@ -40,8 +40,10 @@ const Header = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchTerm)}`);
+      const url = `/search?q=${encodeURIComponent(searchTerm)}`;
+      window.open(url, "_blank", "noopener,noreferrer"); // Opens in a new tab
     }
+    setSearchTerm(""); // Clear the search input after submission
   };
 
   const handleKeyDown = (e) => {
