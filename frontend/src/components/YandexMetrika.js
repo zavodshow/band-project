@@ -5,7 +5,7 @@ import Script from "next/script";
 
 export default function YandexMetrika() {
   useEffect(() => {
-    // Delay loading of the tracking pixel
+    // Load Yandex pixel after idle
     const loadTrackingPixel = () => {
       const img = new Image();
       img.src = "https://mc.yandex.ru/watch/101145505";
@@ -14,7 +14,6 @@ export default function YandexMetrika() {
       document.body.appendChild(img);
     };
 
-    // Load the tracking pixel after the page has loaded completely
     if (window.requestIdleCallback) {
       window.requestIdleCallback(loadTrackingPixel);
     } else {
@@ -24,15 +23,18 @@ export default function YandexMetrika() {
 
   return (
     <>
+      {/* Yandex Metrika Script */}
       <Script id="yandex-metrika" strategy="afterInteractive">
         {`
           (function(m,e,t,r,i,k,a){
             m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
             m[i].l=1*new Date();
-            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            for (var j = 0; j < document.scripts.length; j++) {
+              if (document.scripts[j].src === r) return;
+            }
             k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-          })
-          (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+          })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
           ym(101145505, "init", {
             clickmap: true,
             trackLinks: true,
@@ -40,6 +42,31 @@ export default function YandexMetrika() {
             webvisor: true,
             ecommerce: "dataLayer"
           });
+        `}
+      </Script>
+
+      {/* ClickFraud Script */}
+      <Script id="clickfraud-loader" strategy="beforeInteractive">
+        {`
+          var _mtm = window._mtm = window._mtm || [];
+          _mtm.push({ 'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start' });
+          (function() {
+            var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+            g.src = 'https://stat1.clickfraud.dev/js/container_TYt4coYS.js';
+            s.parentNode.insertBefore(g, s);
+          })();
+        `}
+      </Script>
+
+      {/* Optional: Yandex Meta Tag Injection (if not in <head> directly) */}
+      <Script id="yandex-meta" strategy="beforeInteractive">
+        {`
+          (function() {
+            var meta = document.createElement('meta');
+            meta.name = "yandex-verification";
+            meta.content = "9c7162fe8393ca88";
+            document.getElementsByTagName('head')[0].appendChild(meta);
+          })();
         `}
       </Script>
     </>

@@ -1,6 +1,6 @@
 import Headers from "@/layouts/Headers";
 import Footer from "@/layouts/Footer";
-import YandexMetrika from '@/components/YandexMetrika';
+import YandexMetrika from "@/components/YandexMetrika";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "swiper/css";

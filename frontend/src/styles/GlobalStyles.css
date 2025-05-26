@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root {
   --primaryBgColor: #171717;
   --primaryWhiteColor: #ffffff;

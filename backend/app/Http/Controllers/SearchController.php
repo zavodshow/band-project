@@ -17,7 +17,7 @@ class SearchController extends Controller
 
         try {
             $regex = "%$searchTerm%";
-            
+
             // Searching in Case Model
             $caseData = Blog::where(function ($query) use ($regex) {
                 $query->where('name', 'LIKE', $regex)
@@ -31,9 +31,10 @@ class SearchController extends Controller
                 $matchedField = $item->name ?? $item->blog_type ?? $item->startDate ?? $item->endDate ?? $item->guests ?? $item->venue;
                 return [
                     'link' => "/case-one/{$item->id}",
-                    'scrollSpy' =>'',
+                    'scrollSpy' => '',
                     'id' => $item->id,
                     'value' => $matchedField,
+                    'image' => $item->video ?? "",
                 ];
             });
 
@@ -52,9 +53,10 @@ class SearchController extends Controller
                 $matchedField = $item->name ?? $item->categoryType ?? $item->brand ?? $item->description ?? $item->manufacturer ?? $item->weight ?? $item->series;
                 return [
                     'link' => "/equipment-one/{$item->id}",
-                    'scrollSpy' =>'',
+                    'scrollSpy' => '',
                     'id' => $item->id,
                     'value' => $matchedField,
+                    'image' => $item->images[0] ?? "",
                 ];
             });
 
@@ -71,6 +73,7 @@ class SearchController extends Controller
                     'scrollSpy' => 'blogSection',
                     'id' => $item->id,
                     'value' => $matchedField,
+                    'image' => $item->video ?? "",
                 ];
             });
 
@@ -87,6 +90,7 @@ class SearchController extends Controller
                     'scrollSpy' => 'customerReviewSection',
                     'id' => $item->id,
                     'value' => $matchedField,
+                    'image' => $item->avatar ?? "",
                 ];
             });
 
@@ -101,9 +105,10 @@ class SearchController extends Controller
                 $matchedField = $item->name ?? $item->capacity ?? $item->address;
                 return [
                     'link' => "/site-one/{$item->id}",
-                    'scrollSpy' =>'',
+                    'scrollSpy' => '',
                     'id' => $item->id,
                     'value' => $matchedField,
+                    'image' => $item->video ?? "",
                 ];
             });
 
@@ -111,21 +116,21 @@ class SearchController extends Controller
             foreach ($caseMatchedData as $item) {
                 $equipmentMatchedData->push($item);
             }
-            
+
             foreach ($factoryMatchedData as $item) {
                 $equipmentMatchedData->push($item);
             }
-            
+
             foreach ($reviewMatchedData as $item) {
                 $equipmentMatchedData->push($item);
             }
-            
+
             foreach ($siteMatchedData as $item) {
                 $equipmentMatchedData->push($item);
             }
-            
+
             $searchResult = $equipmentMatchedData;
-            
+
 
             return response()->json($searchResult);
         } catch (\Exception $e) {

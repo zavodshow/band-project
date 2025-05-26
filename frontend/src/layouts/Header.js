@@ -5,7 +5,6 @@ import { logo, search, darkVK, darkTelegram, hambuger } from "@/assets";
 import { CircleButton, DefaultButton, RectButton } from "@/components/Buttons";
 import HeaderLink from "./HeaderLink/HeaderLink";
 import MobileHeaderLink from "./HeaderLink/MobileHeaderLink";
-import { getSearchData } from "../api/searchAPI";
 import HeaderWrapper from "./HeaderWrapp";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { ToPhone } from "../components/ToText";
@@ -13,25 +12,12 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
-const DEBOUNCE_DELAY = 500;
-
 const Header = () => {
-  const navigate = useRouter();
-  const [isVisible, setIsVisible] = useState(true);
-  const componentRef = useRef(null);
+  const router = useRouter();
   const [isHamburger, setisHamburger] = useState(false);
   const isMobile = useMediaQuery("(max-width: 850px)");
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResult, setSearchResult] = useState([]);
-
   const [isShrunk, setIsShrunk] = useState(false);
-  const debounceTimeout = useRef(null); // Ref to track timeout for debouncing
-
-  const handleClickOutSide = (event) => {
-    if (componentRef.current && !componentRef.current.contains(event.target)) {
-      setIsVisible(false);
-    }
-  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,66 +33,21 @@ const Header = () => {
     };
   }, []);
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutSide);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutSide);
-    };
-  }, []);
-
-  // Handle hamburger menu click
   const handleClick = () => {
-    isHamburger === false ? setisHamburger(true) : setisHamburger(false);
+    setisHamburger(!isHamburger);
   };
 
-  // Handle change in the search input
-  const handleChange = (e) => {
-    const newSearchTerm = e.target.value;
-    setSearchTerm(newSearchTerm);
-
-    // Clear previous debounce timeout and set a new one
-    if (debounceTimeout.current) {
-      clearTimeout(debounceTimeout.current);
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchTerm)}`);
     }
-
-    // Set new timeout to call search after DEBOUNCE_DELAY
-    debounceTimeout.current = setTimeout(() => {
-      handleSearch(newSearchTerm);
-    }, DEBOUNCE_DELAY);
   };
 
-  // Perform search API call based on the search term
-  const handleSearch = (searchTerm) => {
-    if (searchTerm.trim() === "") {
-      setSearchResult([]);
-      return;
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearch(e);
     }
-
-    getSearchData(searchTerm).then((data) => {
-      if (data?.length > 0) {
-        setSearchResult(data);
-        setIsVisible(true);
-      } else {
-        setSearchResult([]);
-        setIsVisible(false);
-      }
-    });
-  };
-
-  // Handle search result click
-  const headerSearchClick = (link, scrollSpy) => {
-    // Open in new tab
-    window.open(link, "_blank");
-
-    // Close the search results dropdown
-    setIsVisible(false);
-
-    // Clear the search term
-    setSearchTerm("");
-
-    // Optional: Clear search results
-    setSearchResult([]);
   };
 
   const BottomHeader = () => (
@@ -115,7 +56,7 @@ const Header = () => {
         <>
           <HeaderLink />
           <RectButton
-            onClick={() => navigate.push("/development")}
+            onClick={() => router.push("/development")}
             title="Наш мерч →"
           />
         </>
@@ -126,7 +67,7 @@ const Header = () => {
   const goContactus = () => {
     let section = document.getElementById("contactSection");
     if (!section) {
-      navigate.push("/contact");
+      router.push("/contact");
       setTimeout(() => {
         section = document.getElementById("contactSection");
         if (section) {
@@ -142,13 +83,6 @@ const Header = () => {
     }
   };
 
-  // Handle key press for Enter key on search input
-  // const handleKeyDown = (e) => {
-  //   if (e.key === "Enter") {
-  //     handleSearch(searchTerm);
-  //   }
-  // };
-
   return (
     <HeaderWrapper
       content={
@@ -159,68 +93,20 @@ const Header = () => {
             <Link href="/">
               <Image src={logo} alt="logo" className="logo" />
             </Link>
-            <div className="headerInput">
+            <form onSubmit={handleSearch} className="headerInput">
               <div className="alignCenter">
-                <Image
-                  src={search}
-                  alt="search"
-                  className="searchIcon"
-                  onClick={() => handleSearch(searchTerm)}
-                />
+                <button type="submit">
+                  <Image src={search} alt="search" className="searchIcon" />
+                </button>
                 <input
                   placeholder="ПОИСК"
-                  // onKeyDown={handleKeyDown}
+                  onKeyDown={handleKeyDown}
                   value={searchTerm}
-                  onChange={handleChange}
-                  style={{}}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="bg-red-900"
                 />
               </div>
-              {isVisible && searchResult.length > 0 && (
-                <div ref={componentRef} className="headerSearchPosition">
-                  {searchResult.map((item, index) => {
-                    const regex = new RegExp(`(${searchTerm})`, "gi");
-                    const parts = item.value.split(regex);
-                    return (
-                      <React.Fragment key={index}>
-                        <a
-                          href={item.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="x12_3"
-                          style={{
-                            width: "475px",
-                            overflow: "hidden",
-                            display: "block",
-                          }}
-                        >
-                          {parts.map((part, idx) =>
-                            part.toLowerCase() === searchTerm.toLowerCase() ? (
-                              <span key={idx} style={{ fontWeight: 700 }}>
-                                {part}
-                              </span>
-                            ) : part[0] === " " &&
-                              part[part.length - 1] === " " ? (
-                              `\u00A0${part}\u00A0`
-                            ) : part[0] === " " ? (
-                              `\u00A0${part}`
-                            ) : part[part.length - 1] === " " ? (
-                              `${part}\u00A0`
-                            ) : (
-                              part
-                            )
-                          )}
-                        </a>
-                        <div
-                          style={{ padding: "0 16px", boxSizing: "border-box" }}
-                        >
-                          <hr style={{ borderColor: "#CFCFCF" }} />
-                        </div>
-                      </React.Fragment>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
+            </form>
             <ToPhone className="phoneNumber" phoneNumber="+7 (495) 720-12-82" />
             <div className="circleBtnWrapper">
               <a href="https://t.me/zavodshow" rel="noreferrer" target="_blank">
