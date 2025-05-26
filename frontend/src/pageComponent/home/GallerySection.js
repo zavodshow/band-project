@@ -70,7 +70,8 @@ const GallerySection = ({ title, galleryType }) => {
                 width: `${screenSize > 768 ? image.width + "px" : "100%"}`,
                 zIndex: 10
               }}
-            >
+              className="rounded-lg"
+            > 
               {isVideo(image.video) ? (
                 <video
                   src={image.video}

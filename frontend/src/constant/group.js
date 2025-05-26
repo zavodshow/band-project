@@ -209,7 +209,7 @@ const gallery = [
   { img: portfolio5, width: 400, top: 136 },
   { img: portfolio6, width: 480, top: 0 },
   { img: portfolio7, width: 400, top: 212 },
-  { img: portfolio8, width: 400, top: 145 },
+  { img: portfolio8, width: 400, top: 50 },
   { img: portfolio9, width: 660, top: 249 },
 ];
 
