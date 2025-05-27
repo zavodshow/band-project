@@ -16,7 +16,7 @@ const TopCaseEventSection = ({ caseOne }) => {
     <section className="section1" style={{ paddingTop: "30px" }}>
       <div className="caseTopSection">
         <TitleGoBack title="← ВСЕ КЕЙСЫ" />
-        <div className="flexWrapBetween caseTopWrapper">
+        <div className="flexWrapBetween caseTopWrapper items-start">
           <div className="caseTitleWrapper">
             <h2 className="caseTitle">{caseOne?.name}</h2>
             <CaseButton title={caseOne?.blog_type || ""} />

@@ -9,7 +9,7 @@ const TopSiteEventSection = ({ siteOne }) => {
     <section className="section1">
       <div className="caseTopSection">
         <TitleGoBack title="← ВСЕ ПЛОЩАДКИ" />
-        <div className="flexWrap caseTopWrapper">
+        <div className="flexWrap caseTopWrapper items-start">
           <div className="caseTitleWrapper">
             <h2 className="caseTitle">{siteOne?.name}</h2>{" "}
             <div className="flexWrap" style={{ gap: "5px" }}>

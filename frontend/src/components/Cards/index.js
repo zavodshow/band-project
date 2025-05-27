@@ -370,7 +370,7 @@ const CaseCatalogCard = ({ type, item, onClick }) => {
             </p>
           </div>
           <div
-            className="x12 alignCenter"
+            className="x12 alignCenter flex"
             style={{ color: "white", gap: "5px" }}
           >
             <Image

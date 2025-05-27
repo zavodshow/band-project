@@ -21,10 +21,11 @@ const CaseCatalogCardBadge = ({ type, label }) => {
     <>
       {type === "platform" ? (
         <button
-          className="caseCatalogCardBadgeButton"
-          style={{ display: "flex", gap: "10px" }}
+          className="caseCatalogCardBadgeButton items-center"
+          style={{ display: "flex", gap: "10px",}}
         >
-          <Image src={whiteUser} alt="whiteUser" /> {label}
+          <Image src={whiteUser} alt="whiteUser" />
+          <p>{label}</p>
         </button>
       ) : type === "equipment" ? (
         <button
