@@ -70,7 +70,7 @@ const GallerySection = ({ title, galleryType }) => {
                 width: `${screenSize > 768 ? image.width + "px" : "100%"}`,
                 zIndex: 10
               }}
-              className="rounded-lg"
+              className="cursor-pointer"
             > 
               {isVideo(image.video) ? (
                 <video
@@ -86,6 +86,7 @@ const GallerySection = ({ title, galleryType }) => {
                   onClick={() => {
                     navigate.push(`/case-one/${image?.id}`);
                   }}
+                  className="rounded-lg"
                 />
               ) : (
                 <img
@@ -101,6 +102,7 @@ const GallerySection = ({ title, galleryType }) => {
                   onClick={() => {
                     navigate.push(`/case-one/${image?.id}`);
                   }}
+                                    className="rounded-lg"
                 />
               )}
 

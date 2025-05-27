@@ -85,15 +85,9 @@ const PublicationCard = ({ item }) => {
         )}
         <CardViewNumber value={item.capacity} />
       </div>
-      <div
-        className="spaceBetween"
-        style={{ padding: "clamp(20px, 4vw, 25px) 0 clamp(8px, 2vw, 12px) 0" }}
-      >
+      <div className="w-full flex justify-between items-center py-4">
         <h3 className="cardTitle">{item.name}</h3>
-        <div
-          className="alignCenter flexWrap itemEnd"
-          style={{ float: "right" }}
-        >
+        <div className="flex shrink-0 space-2">
           <CardBadge title="Ресторан" />
           <CardBadge title="Ещё 6" />
         </div>

@@ -58,7 +58,7 @@ export default function YandexMetrika() {
         `}
       </Script>
 
-      {/* Optional: Yandex Meta Tag Injection (if not in <head> directly) */}
+      {/* Yandex Meta Tag Injection (if not in <head> directly) */}
       <Script id="yandex-meta" strategy="beforeInteractive">
         {`
           (function() {

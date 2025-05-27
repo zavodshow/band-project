@@ -21,7 +21,7 @@ const TopSiteEventSection = ({ siteOne }) => {
           <div className="caseTopItem spaceBetween">
             <div className="caseTopGap">
               <div
-                className="x24Font_5"
+                className="x24Font_5 flex items-center"
                 style={{ color: "var(--secondaryWhiteColor)" }}
               >
                 <Image
@@ -29,12 +29,14 @@ const TopSiteEventSection = ({ siteOne }) => {
                   alt="flagImg"
                   src={positionIcon}
                 />
-                <b>{siteOne?.cities}, </b>
-                {siteOne?.address}
+                <p>
+                  <span className="font-bold">{siteOne?.cities}, </span>
+                  {siteOne?.address}
+                </p>
               </div>
               <div className="spaceBetween">
                 <div
-                  className="x24Font_5"
+                  className="x24Font_5 flex items-center"
                   style={{
                     color: "var(--secondaryWhiteColor)",
                     marginRight: "24px",
@@ -45,10 +47,10 @@ const TopSiteEventSection = ({ siteOne }) => {
                     alt="flagImg"
                     src={worldIcon}
                   />
-                  {siteOne?.link_page}
+                  <p>{siteOne?.link_page}</p>
                 </div>
                 <div
-                  className="x24Font_5"
+                  className="x24Font_5 flex items-center"
                   style={{ color: "var(--secondaryWhiteColor)" }}
                 >
                   <Image
@@ -56,7 +58,7 @@ const TopSiteEventSection = ({ siteOne }) => {
                     alt="flagImg"
                     src={userIcon}
                   />
-                  {siteOne?.capacity} гостей
+                  <p>{siteOne?.capacity} гостей</p>
                 </div>
               </div>
             </div>

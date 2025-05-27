@@ -24,38 +24,35 @@ const TopCaseEventSection = ({ caseOne }) => {
           <div className="caseTopItem spaceBetween">
             <div className="caseTopGap">
               <div
-                className="x24Font_5"
+                className="x24Font_5 flex items-center"
                 style={{ color: "var(--secondaryWhiteColor)" }}
               >
                 <Image
                   style={{ marginRight: "clamp(6px, 2vw, 12px)" }}
                   alt="flagImg"
-                  src={
-                    caseOne?.blog_type === "Тур" ? positionIcon : flagIcon
-                  }
+                  src={caseOne?.blog_type === "Тур" ? positionIcon : flagIcon}
                 />
-                {caseOne.blog_type === "Тур"
-                  ? caseOne?.cities?.length
-                  : caseOne?.cities}
-                {/* {`${caseOne?.cities?.length}`} */}
+                <p>
+                  {caseOne.blog_type === "Тур"
+                    ? caseOne?.cities?.length
+                    : caseOne?.cities}
+                </p>
               </div>
               <div
-                className="x24Font_5"
+                className="x24Font_5 flex items-center"
                 style={{ color: "var(--secondaryWhiteColor)" }}
               >
                 <Image
                   style={{ marginRight: "clamp(6px, 2vw, 12px)" }}
                   alt="positionImg"
-                  src={
-                    caseOne?.blog_type === "Тур" ? starIcon1 : positionIcon
-                  }
+                  src={caseOne?.blog_type === "Тур" ? starIcon1 : positionIcon}
                 />
-                {caseOne?.venue}
+                <p>{caseOne?.venue}</p>
               </div>
             </div>
             <div className="caseTopGap">
               <div
-                className="x24Font_5"
+                className="x24Font_5 flex items-center"
                 style={{ color: "var(--secondaryWhiteColor)" }}
               >
                 <Image
@@ -63,24 +60,26 @@ const TopCaseEventSection = ({ caseOne }) => {
                   alt="dateIcon"
                   src={dateIcon}
                 />
-                {caseOne?.startDate === caseOne?.endDate
-                  ? caseOne?.endDate
-                  : `${caseOne?.startDate} - ${caseOne?.endDate}`}
+                <p>
+                  {caseOne?.startDate === caseOne?.endDate
+                    ? caseOne?.endDate
+                    : `${caseOne?.startDate} - ${caseOne?.endDate}`}
+                </p>
               </div>
               <div
-                className="x24Font_5"
+                className="x24Font_5 flex items-center"
                 style={{ color: "var(--secondaryWhiteColor)" }}
               >
                 <Image
                   style={{ marginRight: "clamp(6px, 2vw, 12px)" }}
                   alt="userIcon"
-                  src={
-                    caseOne?.blog_type === "Тур" ? lengthIcon : userIcon
-                  }
-                />{" "}
-                {caseOne.blog_type === "Тур"
-                  ? `${caseOne?.guests}`
-                  : caseOne?.guests}{" "}
+                  src={caseOne?.blog_type === "Тур" ? lengthIcon : userIcon}
+                />
+                <p>
+                  {caseOne.blog_type === "Тур"
+                    ? `${caseOne?.guests}`
+                    : caseOne?.guests}
+                </p>
               </div>
             </div>
           </div>
