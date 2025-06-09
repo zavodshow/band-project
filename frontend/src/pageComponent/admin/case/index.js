@@ -112,6 +112,9 @@ const optionsWhatWeDid = [
   "Одежда сцены",
   "3д-визуализация",
   "Репетиционная база",
+  "Сцена",
+  "Нет линолеума",
+  "Кабуки",
 ];
 
 const NewCase = () => {
@@ -264,7 +267,8 @@ const NewCase = () => {
     if (type === "radio") {
       setFormData((prev) => ({ ...prev, [name]: parseInt(value, 10) }));
     } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
+      const newValue = value === "" ? null : value;
+      setFormData((prev) => ({ ...prev, [name]: newValue }));
     }
   };
 
@@ -413,7 +417,6 @@ const NewCase = () => {
       setLoading(false);
     }
   };
-  
 
   console.log("formData", formData);
 
@@ -785,6 +788,9 @@ const NewCase = () => {
                   return selectedSite ? selectedSite.name : "Выберите площадку";
                 }}
               >
+                <MenuItem value="" className="h-20">
+                  Не выбрано
+                </MenuItem>
                 {site.length > 0 ? (
                   site.map((item) => (
                     <MenuItem key={item.id} value={item.id}>
@@ -851,6 +857,9 @@ const NewCase = () => {
                     : "Выберите 3D визуализацию";
                 }}
               >
+                <MenuItem value="" className="h-20">
+                  Не выбрано
+                </MenuItem>
                 {dData.length > 0 ? (
                   dData.map((item) => (
                     <MenuItem key={item.id} value={item.id}>
